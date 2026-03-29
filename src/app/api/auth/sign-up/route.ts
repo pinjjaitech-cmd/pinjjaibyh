@@ -1,21 +1,18 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import UserModel from '@/models/User';
-import bcryptjs from 'bcryptjs';
 
 // In-memory OTP storage (in production, use Redis or database)
 const otpStore = new Map<string, { otp: string; expires: number; email: string }>();
 
-// Generate 6-digit OTP
 function generateOTP(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
 export async function POST(request: Request) {
   try {
-    const { email, password, fullName } = await request.json();
+    const { email, password, fullName, phone } = await request.json();
 
-    // Validate input
     if (!email || !password || !fullName) {
       return NextResponse.json(
         { error: 'Email, password, and full name are required' },
@@ -23,7 +20,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
@@ -32,7 +28,6 @@ export async function POST(request: Request) {
       );
     }
 
-    // Validate password strength
     if (password.length < 8) {
       return NextResponse.json(
         { error: 'Password must be at least 8 characters long' },
@@ -40,10 +35,8 @@ export async function POST(request: Request) {
       );
     }
 
-    // Connect to database
     await connectDB();
 
-    // Check if user already exists
     const existingUser = await UserModel.findOne({ email });
     if (existingUser) {
       return NextResponse.json(
@@ -52,35 +45,26 @@ export async function POST(request: Request) {
       );
     }
 
-    // Generate OTP and set expiry (5 minutes)
     const otp = generateOTP();
-    const expires = Date.now() + 5 * 60 * 1000; // 5 minutes from now
-
-    // Store OTP (in production, use Redis or database)
+    const expires = Date.now() + 5 * 60 * 1000;
     otpStore.set(email, { otp, expires, email });
 
-    // Hash password
-    const hashedPassword = await bcryptjs.hash(password, 12);
-
-    // Create user with isVerified set to false
     const user = new UserModel({
       email,
-      password: hashedPassword,
+      password,
       fullName,
+      phone: phone || '0000000000',
       isVerified: false,
-      role: 'user', // Default role
+      role: 'user',
     });
 
     await user.save();
 
-    // Log OTP for development (in production, send via email/SMS)
-    console.log(`OTP for ${email}: ${otp}`); // Remove this in production
-    
-    // For demo purposes, we'll include the OTP in the response
-    // In production, remove this and send via email/SMS
+    console.log(`OTP for ${email}: ${otp}`);
+
     return NextResponse.json({
       message: 'User created successfully. Please verify your email with the OTP sent.',
-      otp: otp, // Remove this in production
+      otp,
       userId: user._id,
       requiresVerification: true
     }, { status: 201 });
@@ -94,7 +78,6 @@ export async function POST(request: Request) {
   }
 }
 
-// Verify OTP endpoint
 export async function PUT(request: Request) {
   try {
     const { email, otp } = await request.json();
@@ -106,7 +89,6 @@ export async function PUT(request: Request) {
       );
     }
 
-    // Check OTP in store
     const storedOTP = otpStore.get(email);
     if (!storedOTP) {
       return NextResponse.json(
@@ -115,7 +97,6 @@ export async function PUT(request: Request) {
       );
     }
 
-    // Check if OTP has expired
     if (Date.now() > storedOTP.expires) {
       otpStore.delete(email);
       return NextResponse.json(
@@ -124,7 +105,6 @@ export async function PUT(request: Request) {
       );
     }
 
-    // Verify OTP
     if (storedOTP.otp !== otp) {
       return NextResponse.json(
         { error: 'Invalid OTP' },
@@ -132,10 +112,8 @@ export async function PUT(request: Request) {
       );
     }
 
-    // Connect to database
     await connectDB();
 
-    // Update user verification status
     const user = await UserModel.findOneAndUpdate(
       { email },
       { isVerified: true },
@@ -149,7 +127,6 @@ export async function PUT(request: Request) {
       );
     }
 
-    // Clean up OTP from store
     otpStore.delete(email);
 
     return NextResponse.json({
@@ -172,7 +149,6 @@ export async function PUT(request: Request) {
   }
 }
 
-// Resend OTP endpoint
 export async function PATCH(request: Request) {
   try {
     const { email } = await request.json();
@@ -184,10 +160,8 @@ export async function PATCH(request: Request) {
       );
     }
 
-    // Connect to database
     await connectDB();
 
-    // Check if user exists
     const user = await UserModel.findOne({ email });
     if (!user) {
       return NextResponse.json(
@@ -196,19 +170,16 @@ export async function PATCH(request: Request) {
       );
     }
 
-    // Generate new OTP
     const otp = generateOTP();
-    const expires = Date.now() + 5 * 60 * 1000; // 5 minutes from now
+    const expires = Date.now() + 5 * 60 * 1000;
 
-    // Store new OTP
     otpStore.set(email, { otp, expires, email });
 
-    // Log OTP for development (in production, send via email/SMS)
-    console.log(`New OTP for ${email}: ${otp}`); // Remove this in production
+    console.log(`New OTP for ${email}: ${otp}`);
 
     return NextResponse.json({
       message: 'New OTP sent successfully',
-      otp: otp // Remove this in production
+      otp
     });
 
   } catch (error) {

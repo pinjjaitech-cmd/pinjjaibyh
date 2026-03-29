@@ -6,8 +6,20 @@ const WishlistSchema = new mongoose.Schema<Wishlist>({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
         required: [true, 'User ID is required'],
-        unique: true,
         index: true,
+    },
+    name: {
+        type: String,
+        required: [true, 'Wishlist name is required'],
+        trim: true,
+        maxlength: 100,
+        default: 'My Wishlist',
+    },
+    notes: {
+        type: String,
+        trim: true,
+        maxlength: 500,
+        default: '',
     },
     productIds: [{
         type: mongoose.Schema.Types.ObjectId,
@@ -17,9 +29,11 @@ const WishlistSchema = new mongoose.Schema<Wishlist>({
     timestamps: true,
 })
 
+WishlistSchema.index({ userId: 1, name: 1 })
+
 // Method to add product to wishlist
 WishlistSchema.methods.addProduct = function(productId: string) {
-    if (!this.productIds.includes(productId)) {
+    if (!this.productIds.some((id: any) => id.toString() === productId)) {
         this.productIds.push(productId);
     }
 };

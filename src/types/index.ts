@@ -37,6 +37,7 @@ export interface Product {
   category?: string,
   variants: {
       _id: string,
+      skuCode: string,
       attributes: { name: string, value: string }[],
       images: string[],
       price: number,
@@ -86,7 +87,11 @@ export interface Address {
 export interface Wishlist {
   _id?: string
   userId: any
+  name: string
+  notes?: string
   productIds: string[]
+  createdAt?: string
+  updatedAt?: string
 }
 
 

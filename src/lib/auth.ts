@@ -17,22 +17,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             return null
           }
 
-          // Connect to database
           await connectDB()
 
-          // Find user by email
-          const user = await UserModel.findOne({ email: credentials.email })
+          const user = await UserModel.findOne({ email: credentials.email }).select('+password')
 
           if (!user) {
             return null
           }
 
-          // Check if user is verified
           if (!user.isVerified) {
             throw new Error("Please verify your email before logging in")
           }
 
-          // Verify password
           const isPasswordValid = await bcryptjs.compare(
             credentials.password as string,
             user.password
@@ -42,7 +38,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             return null
           }
 
-          // Return user object for session
           return {
             id: user._id.toString(),
             email: user.email,
