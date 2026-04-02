@@ -25,6 +25,9 @@ interface StoreSettings {
   heroBanners: Array<{
     desktopImg?: string;
     mobileImg?: string;
+    title?: string;
+    subtitle?: string;
+    cta?: string;
     link?: string;
   }>;
   productGroup1?: {
@@ -38,11 +41,11 @@ interface StoreSettings {
     products: string[];
   };
   browseByCategory?: {
-    category1?: { categoryName: string; categoryImage?: string };
-    category2?: { categoryName: string; categoryImage?: string };
-    category3?: { categoryName: string; categoryImage?: string };
-    category4?: { categoryName: string; categoryImage?: string };
-    category5?: { categoryName: string; categoryImage?: string };
+    category1?: { categoryName: string; categoryImage?: string; categorySlug?: string; bgColor?: string; ctaLabel?: string };
+    category2?: { categoryName: string; categoryImage?: string; categorySlug?: string; bgColor?: string; ctaLabel?: string };
+    category3?: { categoryName: string; categoryImage?: string; categorySlug?: string; bgColor?: string; ctaLabel?: string };
+    category4?: { categoryName: string; categoryImage?: string; categorySlug?: string; bgColor?: string; ctaLabel?: string };
+    category5?: { categoryName: string; categoryImage?: string; categorySlug?: string; bgColor?: string; ctaLabel?: string };
   };
   testimonials?: {
     testimonialSectionHeading?: string;

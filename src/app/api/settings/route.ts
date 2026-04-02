@@ -4,12 +4,20 @@ import { StoreSettings } from '@/models/StoreSettings'
 import { requireAdmin } from '@/lib/admin-auth'
 import { z } from 'zod'
 
+const linkSchema = z.string().trim().refine(
+  (value) => !value || value.startsWith('/') || /^https?:\/\//.test(value),
+  { message: 'Link must be an absolute URL or start with /' }
+).optional()
+
 // Store settings update schema
 const storeSettingsSchema = z.object({
   heroBanners: z.array(z.object({
     desktopImg: z.string().url().optional(),
     mobileImg: z.string().url().optional(),
-    link: z.string().url().optional()
+    title: z.string().optional(),
+    subtitle: z.string().optional(),
+    cta: z.string().optional(),
+    link: linkSchema
   })).optional(),
   productGroup1: z.object({
     name: z.string().min(1, 'Product group name is required'),
@@ -24,23 +32,38 @@ const storeSettingsSchema = z.object({
   browseByCategory: z.object({
     category1: z.object({
       categoryName: z.string().min(1, 'Category name is required'),
-      categoryImage: z.string().url().optional()
+      categoryImage: z.string().url().optional(),
+      categorySlug: z.string().optional(),
+      bgColor: z.string().optional(),
+      ctaLabel: z.string().optional()
     }).optional(),
     category2: z.object({
       categoryName: z.string().min(1, 'Category name is required'),
-      categoryImage: z.string().url().optional()
+      categoryImage: z.string().url().optional(),
+      categorySlug: z.string().optional(),
+      bgColor: z.string().optional(),
+      ctaLabel: z.string().optional()
     }).optional(),
     category3: z.object({
       categoryName: z.string().min(1, 'Category name is required'),
-      categoryImage: z.string().url().optional()
+      categoryImage: z.string().url().optional(),
+      categorySlug: z.string().optional(),
+      bgColor: z.string().optional(),
+      ctaLabel: z.string().optional()
     }).optional(),
     category4: z.object({
       categoryName: z.string().min(1, 'Category name is required'),
-      categoryImage: z.string().url().optional()
+      categoryImage: z.string().url().optional(),
+      categorySlug: z.string().optional(),
+      bgColor: z.string().optional(),
+      ctaLabel: z.string().optional()
     }).optional(),
     category5: z.object({
       categoryName: z.string().min(1, 'Category name is required'),
-      categoryImage: z.string().url().optional()
+      categoryImage: z.string().url().optional(),
+      categorySlug: z.string().optional(),
+      bgColor: z.string().optional(),
+      ctaLabel: z.string().optional()
     }).optional()
   }).optional(),
   testimonials: z.object({
