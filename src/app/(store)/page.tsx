@@ -1,19 +1,19 @@
 import FeaturedBanner from '@/components/FeaturedBanner'
 import FeaturedCategory from '@/components/FeaturedCategory'
 import FeaturedProducts from '@/components/FeaturedProducts'
-import Navbar from '@/components/Navbar'
-import OfferMarquee from '@/components/OfferMarquee'
-import { TextGenerateEffect } from '@/components/ui/text-generate-effect'
+import { getHomepageData } from '@/lib/homepage'
 import Link from 'next/link'
 
-const Homepage = () => {
+const Homepage = async () => {
+  const homepageData = await getHomepageData()
+
   return (
     <div className='w-full font-sans h-full bg-(--brand-white) text-black'>
       <div className='px-2 '>
 
-        <FeaturedBanner />
-        <FeaturedCategory />
-        <FeaturedProducts />
+        <FeaturedBanner slides={homepageData.heroBanners} />
+        <FeaturedCategory categories={homepageData.browseCategories} />
+        <FeaturedProducts products={homepageData.featuredProducts as any[]} />
 
       </div>
       <section className="relative py-10 px-6 lg:px-12 max-w-7xl mx-auto">

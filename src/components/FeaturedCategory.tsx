@@ -2,22 +2,36 @@ import Image from 'next/image'
 import React from 'react'
 import Link from 'next/link'
 
-const FeaturedCategory = () => {
-  const categories = [
+interface BrowseCategory {
+  title: string
+  image: string
+  bgColor?: string
+  slug: string
+  ctaLabel?: string
+}
+
+const FeaturedCategory = ({ categories: configuredCategories }: { categories?: BrowseCategory[] }) => {
+  const categories: BrowseCategory[] = configuredCategories && configuredCategories.length > 0 ? configuredCategories : [
     {
       title: "Best collection",
       image: "https://sanova-demo.myshopify.com/cdn/shop/files/banner-1.png?v=1734242399&width=550",
-      bgColor: "bg-[#eef1d7]",
+      bgColor: "#eef1d7",
+      slug: "best-collection",
+      ctaLabel: "Shop Now",
     },
     {
       title: "What's new?",
       image: "https://sanova-demo.myshopify.com/cdn/shop/files/banner-2.png?v=1734242399&width=550",
-      bgColor: "bg-[#e3e7e3]",
+      bgColor: "#e3e7e3",
+      slug: "whats-new",
+      ctaLabel: "Shop Now",
     },
     {
       title: "Tips & trends",
       image: "https://sanova-demo.myshopify.com/cdn/shop/files/banner-3.png?v=1734242399&width=550",
-      bgColor: "bg-[#f2e2da]",
+      bgColor: "#f2e2da",
+      slug: "tips-trends",
+      ctaLabel: "Shop Now",
     },
   ]
 
@@ -27,14 +41,15 @@ const FeaturedCategory = () => {
         <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
           {categories.map((category, index) => (
             <Link
-              href={`/category/${category.title.toLowerCase().replace(/ /g, '-')}`}
+              href={`/category/${category.slug}`}
               key={category.title}
-              className={`relative h-[400px] rounded-lg overflow-hidden group ${category.bgColor} transition-all duration-300 hover:shadow-xl `}
+              className="relative h-[400px] rounded-lg overflow-hidden group transition-all duration-300 hover:shadow-xl "
+              style={{ backgroundColor: category.bgColor || "#f5f5f5" }}
             >
               <div className='absolute inset-0 z-10 flex flex-col justify-between p-8'>
                 <h3 className='text-2xl font-bold text-gray-800'>{category.title}</h3>
                 <button className='flex items-center text-gray-800 group-hover:text-brand-primary transition-colors duration-300'>
-                  Shop Now <span className='ml-2 group-hover:translate-x-2 transition-transform duration-300'>→</span>
+                  {category.ctaLabel || 'Shop Now'} <span className='ml-2 group-hover:translate-x-2 transition-transform duration-300'>→</span>
                 </button>
               </div>
               <div className='absolute inset-0'>

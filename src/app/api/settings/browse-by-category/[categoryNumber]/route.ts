@@ -8,7 +8,10 @@ import { z } from 'zod'
 // Category schema
 const categorySchema = z.object({
   categoryName: z.string().min(1, 'Category name is required'),
-  categoryImage: z.string().url().optional()
+  categoryImage: z.string().url().optional(),
+  categorySlug: z.string().optional(),
+  bgColor: z.string().optional(),
+  ctaLabel: z.string().optional()
 })
 
 // GET /api/settings/browse-by-category/[categoryNumber] - Fetch specific category

@@ -5,11 +5,19 @@ import { requireAdmin } from '@/lib/admin-auth'
 import { uploadImage } from '@/lib/cloudinary'
 import { z } from 'zod'
 
+const linkSchema = z.string().trim().refine(
+  (value) => !value || value.startsWith('/') || /^https?:\/\//.test(value),
+  { message: 'Link must be an absolute URL or start with /' }
+).optional()
+
 // Hero banner schema
 const heroBannerSchema = z.object({
   desktopImg: z.string().url().optional(),
   mobileImg: z.string().url().optional(),
-  link: z.string().url().optional()
+  title: z.string().optional(),
+  subtitle: z.string().optional(),
+  cta: z.string().optional(),
+  link: linkSchema
 })
 
 const heroBannersArraySchema = z.array(heroBannerSchema)

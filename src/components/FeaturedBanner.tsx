@@ -2,12 +2,23 @@
 
 import React, { useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import Link from 'next/link'
 
-const FeaturedBanner = () => {
+interface HeroSlide {
+  id: string | number
+  desktopImage: string
+  mobileImage: string
+  title?: string
+  subtitle?: string
+  cta?: string
+  link?: string
+}
+
+const FeaturedBanner = ({ slides: configuredSlides }: { slides?: HeroSlide[] }) => {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
 
-  const slides = [
+  const slides: HeroSlide[] = configuredSlides && configuredSlides.length > 0 ? configuredSlides : [
     {
       id: 1,
       desktopImage: '/banner1.png',
@@ -74,17 +85,19 @@ const FeaturedBanner = () => {
           >
             <div className="relative w-full h-full">
               {/* Background Image */}
-              <picture className="absolute inset-0">
-                <source media="(min-width: 768px)" srcSet={slide.desktopImage} />
-                <img 
-                  src={slide.mobileImage} 
-                  alt={slide.title}
-                  className="w-full h-full object-cover transition-transform duration-8000 ease-out"
-                  style={{
-                    transform: index === currentSlide ? 'scale(1)' : 'scale(1.1)',
-                  }}
-                />
-              </picture>
+              <Link href={slide.link || '/search'} className="block absolute inset-0">
+                <picture className="absolute inset-0">
+                  <source media="(min-width: 768px)" srcSet={slide.desktopImage} />
+                  <img 
+                    src={slide.mobileImage} 
+                    alt={slide.title || `Slide ${index + 1}`}
+                    className="w-full h-full object-cover transition-transform duration-8000 ease-out"
+                    style={{
+                      transform: index === currentSlide ? 'scale(1)' : 'scale(1.1)',
+                    }}
+                  />
+                </picture>
+              </Link>
               
               {/* Overlay */}
               {/* <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-transparent" /> */}
