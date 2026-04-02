@@ -40,23 +40,16 @@ export default async function RootLayout({
 
   const cookieStore = await cookies()
   const defaultOpen = cookieStore.get("sidebar_state")?.value === "true"
-  
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${lexendDeca.variable} ${cormorantGaramond.variable} ${geistSans.variable} ${geistMono.variable} antialiased flex`}
       >
         <SessionProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <SidebarProvider defaultOpen={defaultOpen}>
-              {children}
-            </SidebarProvider>
-          </ThemeProvider>
+          <SidebarProvider defaultOpen={defaultOpen}>
+            {children}
+          </SidebarProvider>
         </SessionProvider>
       </body>
     </html>

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import connectDB from '@/lib/db'
 import Product from '@/models/Product'
+import Category from '@/models/Category'
 import { requireAdmin } from '@/lib/admin-auth'
 import { uploadImage } from '@/lib/cloudinary'
 import { z } from 'zod'
@@ -47,6 +48,7 @@ const productCreateSchema = z.object({
 export async function GET(request: NextRequest) {
   try {
     await connectDB()
+    Category.modelName
 
     const { searchParams } = new URL(request.url)
     const validatedQuery = querySchema.parse(Object.fromEntries(searchParams))
