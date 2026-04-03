@@ -4,13 +4,26 @@ import { StoreSettings } from '@/models/StoreSettings'
 import { requireAdmin } from '@/lib/admin-auth'
 import { z } from 'zod'
 
+const linkSchema = z.string().trim().refine(
+  (value) => !value || value.startsWith('/') || /^https?:\/\//.test(value),
+  { message: 'Link must be an absolute URL or start with /' }
+).optional()
+const imageUrlSchema = z.string().trim().refine(
+  (value) => !value || (/^https?:\/\//.test(value) && !value.startsWith('data:')),
+  { message: 'Images must be uploaded URLs (use Cloudinary), not base64 data.' }
+).optional()
+
 // Store settings update schema
 const storeSettingsSchema = z.object({
   heroBanners: z.array(z.object({
-    desktopImg: z.string().url().optional(),
-    mobileImg: z.string().url().optional(),
-    link: z.string().url().optional()
+    desktopImg: imageUrlSchema,
+    mobileImg: imageUrlSchema,
+    title: z.string().optional(),
+    subtitle: z.string().optional(),
+    cta: z.string().optional(),
+    link: linkSchema
   })).optional(),
+  featuredProducts: z.array(z.string()).optional(),
   productGroup1: z.object({
     name: z.string().min(1, 'Product group name is required'),
     description: z.string().optional(),
@@ -24,23 +37,38 @@ const storeSettingsSchema = z.object({
   browseByCategory: z.object({
     category1: z.object({
       categoryName: z.string().min(1, 'Category name is required'),
-      categoryImage: z.string().url().optional()
+      categoryImage: imageUrlSchema,
+      categorySlug: z.string().optional(),
+      bgColor: z.string().optional(),
+      ctaLabel: z.string().optional()
     }).optional(),
     category2: z.object({
       categoryName: z.string().min(1, 'Category name is required'),
-      categoryImage: z.string().url().optional()
+      categoryImage: imageUrlSchema,
+      categorySlug: z.string().optional(),
+      bgColor: z.string().optional(),
+      ctaLabel: z.string().optional()
     }).optional(),
     category3: z.object({
       categoryName: z.string().min(1, 'Category name is required'),
-      categoryImage: z.string().url().optional()
+      categoryImage: imageUrlSchema,
+      categorySlug: z.string().optional(),
+      bgColor: z.string().optional(),
+      ctaLabel: z.string().optional()
     }).optional(),
     category4: z.object({
       categoryName: z.string().min(1, 'Category name is required'),
-      categoryImage: z.string().url().optional()
+      categoryImage: imageUrlSchema,
+      categorySlug: z.string().optional(),
+      bgColor: z.string().optional(),
+      ctaLabel: z.string().optional()
     }).optional(),
     category5: z.object({
       categoryName: z.string().min(1, 'Category name is required'),
-      categoryImage: z.string().url().optional()
+      categoryImage: imageUrlSchema,
+      categorySlug: z.string().optional(),
+      bgColor: z.string().optional(),
+      ctaLabel: z.string().optional()
     }).optional()
   }).optional(),
   testimonials: z.object({
@@ -48,7 +76,7 @@ const storeSettingsSchema = z.object({
     testimonialSectionDescription: z.string().optional(),
     reviews: z.array(z.object({
       customerName: z.string().min(1, 'Customer name is required'),
-      customerProfile: z.string().url().optional(),
+      customerProfile: imageUrlSchema,
       customerMessage: z.string().min(1, 'Customer message is required'),
       customerRating: z.number().min(1).max(5)
     })).optional()

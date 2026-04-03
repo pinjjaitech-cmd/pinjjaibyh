@@ -4,10 +4,18 @@ import { StoreSettings } from '@/models/StoreSettings'
 import { requireAdmin } from '@/lib/admin-auth'
 import { z } from 'zod'
 
+const imageUrlSchema = z.string().trim().refine(
+  (value) => !value || (/^https?:\/\//.test(value) && !value.startsWith('data:')),
+  { message: 'Images must be uploaded URLs (use Cloudinary), not base64 data.' }
+).optional()
+
 // Category schema
 const categorySchema = z.object({
   categoryName: z.string().min(1, 'Category name is required'),
-  categoryImage: z.string().url().optional()
+  categoryImage: imageUrlSchema,
+  categorySlug: z.string().optional(),
+  bgColor: z.string().optional(),
+  ctaLabel: z.string().optional()
 })
 
 // Browse by category schema

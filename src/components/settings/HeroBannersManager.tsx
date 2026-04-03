@@ -44,6 +44,9 @@ import { FileUpload } from "@/components/ui/file-upload";
 interface HeroBanner {
   desktopImg?: string;
   mobileImg?: string;
+  title?: string;
+  subtitle?: string;
+  cta?: string;
   link?: string;
 }
 
@@ -64,7 +67,7 @@ const HeroBannersManager = ({ settings, onUpdate }: HeroBannersManagerProps) => 
   const [saving, setSaving] = useState(false);
 
   const handleAddBanner = () => {
-    setEditingBanner({ desktopImg: "", mobileImg: "", link: "" });
+    setEditingBanner({ desktopImg: "", mobileImg: "", title: "", subtitle: "", cta: "", link: "" });
     setEditIndex(null);
     setIsDialogOpen(true);
   };
@@ -189,9 +192,10 @@ const HeroBannersManager = ({ settings, onUpdate }: HeroBannersManagerProps) => 
       const data = await response.json();
 
       if (data.success) {
+        const savedBanner = data.data || editingBanner
         const newBanners = editIndex !== null 
-          ? banners.map((banner, index) => index === editIndex ? editingBanner : banner)
-          : [...banners, editingBanner];
+          ? banners.map((banner, index) => index === editIndex ? savedBanner : banner)
+          : [...banners, savedBanner];
         
         setBanners(newBanners);
         onUpdate({ heroBanners: newBanners });
@@ -246,10 +250,37 @@ const HeroBannersManager = ({ settings, onUpdate }: HeroBannersManagerProps) => 
                 />
               </div>
               <div className="space-y-2">
+                <Label htmlFor="title">Title</Label>
+                <Input
+                  id="title"
+                  placeholder="Premium Collection"
+                  value={editingBanner?.title || ""}
+                  onChange={(e) => setEditingBanner(prev => prev ? { ...prev, title: e.target.value } : null)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="subtitle">Subtitle</Label>
+                <Input
+                  id="subtitle"
+                  placeholder="Discover our curated selection..."
+                  value={editingBanner?.subtitle || ""}
+                  onChange={(e) => setEditingBanner(prev => prev ? { ...prev, subtitle: e.target.value } : null)}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="cta">CTA Label</Label>
+                <Input
+                  id="cta"
+                  placeholder="Shop Now"
+                  value={editingBanner?.cta || ""}
+                  onChange={(e) => setEditingBanner(prev => prev ? { ...prev, cta: e.target.value } : null)}
+                />
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="link">Banner Link URL</Label>
                 <Input
                   id="link"
-                  placeholder="https://example.com/product"
+                  placeholder="/search or https://example.com/product"
                   value={editingBanner?.link || ""}
                   onChange={(e) => setEditingBanner(prev => prev ? { ...prev, link: e.target.value } : null)}
                 />

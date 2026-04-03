@@ -36,6 +36,9 @@ import { FileUpload } from "@/components/ui/file-upload";
 interface Category {
   categoryName: string;
   categoryImage?: string;
+  categorySlug?: string;
+  bgColor?: string;
+  ctaLabel?: string;
 }
 
 interface StoreSettings {
@@ -69,7 +72,7 @@ const BrowseByCategoryManager = ({ settings, onUpdate }: BrowseByCategoryManager
 
   const handleEditCategory = (categoryNumber: number) => {
     const categoryData = settings?.browseByCategory?.[`category${categoryNumber}` as keyof typeof settings.browseByCategory];
-    setEditingCategory(categoryData || { categoryName: "", categoryImage: "" });
+    setEditingCategory(categoryData || { categoryName: "", categoryImage: "", categorySlug: "", bgColor: "", ctaLabel: "" });
     setEditingCategoryNumber(categoryNumber);
     setIsDialogOpen(true);
   };
@@ -131,11 +134,12 @@ const BrowseByCategoryManager = ({ settings, onUpdate }: BrowseByCategoryManager
       const data = await response.json();
 
       if (data.success) {
+        const savedCategory = data.data || editingCategory
         const updatedSettings = {
           ...settings,
           browseByCategory: {
             ...settings?.browseByCategory,
-            [`category${editingCategoryNumber}`]: editingCategory
+            [`category${editingCategoryNumber}`]: savedCategory
           }
         };
         onUpdate(updatedSettings);
@@ -296,6 +300,36 @@ const BrowseByCategoryManager = ({ settings, onUpdate }: BrowseByCategoryManager
               />
             </div>
             
+            <div className="space-y-2">
+              <Label htmlFor="categorySlug">Category Slug (optional)</Label>
+              <Input
+                id="categorySlug"
+                placeholder="best-collection"
+                value={editingCategory?.categorySlug || ""}
+                onChange={(e) => setEditingCategory(prev => prev ? { ...prev, categorySlug: e.target.value } : null)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="bgColor">Background Color (optional)</Label>
+              <Input
+                id="bgColor"
+                placeholder="#eef1d7"
+                value={editingCategory?.bgColor || ""}
+                onChange={(e) => setEditingCategory(prev => prev ? { ...prev, bgColor: e.target.value } : null)}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="ctaLabel">CTA Label (optional)</Label>
+              <Input
+                id="ctaLabel"
+                placeholder="Shop Now"
+                value={editingCategory?.ctaLabel || ""}
+                onChange={(e) => setEditingCategory(prev => prev ? { ...prev, ctaLabel: e.target.value } : null)}
+              />
+            </div>
+
             <div className="space-y-2">
               <Label>Category Image</Label>
               <FileUpload

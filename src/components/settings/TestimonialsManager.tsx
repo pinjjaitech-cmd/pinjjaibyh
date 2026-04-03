@@ -174,9 +174,10 @@ const TestimonialsManager = ({ settings, onUpdate }: TestimonialsManagerProps) =
       const data = await response.json();
 
       if (data.success) {
+        const savedReview = data.data || editingReview
         const newReviews = editIndex !== null 
-          ? reviews.map((review, index) => index === editIndex ? editingReview : review)
-          : [...reviews, editingReview];
+          ? reviews.map((review, index) => index === editIndex ? savedReview : review)
+          : [...reviews, savedReview];
         
         const updatedTestimonials = {
           ...settings?.testimonials,

@@ -1,16 +1,8 @@
-import connectDB from '@/lib/db'
-import Product from '@/models/Product'
 import StoreProductCard from './store/StoreProductCard'
 import Link from 'next/link'
 
-const FeaturedProducts = async () => {
-  await connectDB()
-
-  const featuredProducts = await Product.find({ status: 'published' })
-    .populate('category', 'name slug')
-    .sort({ createdAt: -1 })
-    .limit(6)
-    .lean()
+const FeaturedProducts = ({ products }: { products?: any[] }) => {
+  let featuredProducts = products || []
 
   if (!featuredProducts.length) {
     return null

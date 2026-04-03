@@ -8,7 +8,18 @@ const productGroupSchema = new mongoose.Schema({
 
 const storeSettingsSchema = new mongoose.Schema({
     heroBanners: {
-        type: [{ desktopImg: String, mobileImg: String }],
+        type: [{
+            desktopImg: String,
+            mobileImg: String,
+            title: String,
+            subtitle: String,
+            cta: String,
+            link: String
+        }],
+        default: []
+    },
+    featuredProducts: {
+        type: [String],
         default: []
     },
     productGroup1: productGroupSchema,
@@ -16,23 +27,38 @@ const storeSettingsSchema = new mongoose.Schema({
     browseByCategory: {
         category1: {
             categoryName: String,
-            categoryImage: String
+            categoryImage: String,
+            categorySlug: String,
+            bgColor: String,
+            ctaLabel: String
         },
         category2: {
             categoryName: String,
-            categoryImage: String
+            categoryImage: String,
+            categorySlug: String,
+            bgColor: String,
+            ctaLabel: String
         },
         category3: {
             categoryName: String,
-            categoryImage: String
+            categoryImage: String,
+            categorySlug: String,
+            bgColor: String,
+            ctaLabel: String
         },
         category4: {
             categoryName: String,
-            categoryImage: String
+            categoryImage: String,
+            categorySlug: String,
+            bgColor: String,
+            ctaLabel: String
         },
         category5: {
             categoryName: String,
-            categoryImage: String
+            categoryImage: String,
+            categorySlug: String,
+            bgColor: String,
+            ctaLabel: String
         }
     },
     testimonials: {
