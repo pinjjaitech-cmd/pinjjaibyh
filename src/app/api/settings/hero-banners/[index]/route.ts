@@ -9,15 +9,11 @@ const linkSchema = z.string().trim().refine(
   (value) => !value || value.startsWith('/') || /^https?:\/\//.test(value),
   { message: 'Link must be an absolute URL or start with /' }
 ).optional()
-const imageUrlSchema = z.string().trim().refine(
-  (value) => !value || (/^https?:\/\//.test(value) && !value.startsWith('data:')),
-  { message: 'Images must be uploaded URLs (use Cloudinary), not base64 data.' }
-).optional()
 
 // Hero banner schema
 const heroBannerSchema = z.object({
-  desktopImg: imageUrlSchema,
-  mobileImg: imageUrlSchema,
+  desktopImg: z.string().url().optional(),
+  mobileImg: z.string().url().optional(),
   title: z.string().optional(),
   subtitle: z.string().optional(),
   cta: z.string().optional(),

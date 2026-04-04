@@ -11,11 +11,29 @@ interface BrowseCategory {
 }
 
 const FeaturedCategory = ({ categories: configuredCategories }: { categories?: BrowseCategory[] }) => {
-  const categories: BrowseCategory[] = configuredCategories || []
-
-  if (!categories.length) {
-    return null
-  }
+  const categories: BrowseCategory[] = configuredCategories && configuredCategories.length > 0 ? configuredCategories : [
+    {
+      title: "Best collection",
+      image: "https://sanova-demo.myshopify.com/cdn/shop/files/banner-1.png?v=1734242399&width=550",
+      bgColor: "#eef1d7",
+      slug: "best-collection",
+      ctaLabel: "Shop Now",
+    },
+    {
+      title: "What's new?",
+      image: "https://sanova-demo.myshopify.com/cdn/shop/files/banner-2.png?v=1734242399&width=550",
+      bgColor: "#e3e7e3",
+      slug: "whats-new",
+      ctaLabel: "Shop Now",
+    },
+    {
+      title: "Tips & trends",
+      image: "https://sanova-demo.myshopify.com/cdn/shop/files/banner-3.png?v=1734242399&width=550",
+      bgColor: "#f2e2da",
+      slug: "tips-trends",
+      ctaLabel: "Shop Now",
+    },
+  ]
 
   return (
     <div className='w-full py-16 px-4 md:px-8 lg:px-16 bg-brand-white'>

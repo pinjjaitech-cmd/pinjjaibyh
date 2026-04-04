@@ -18,10 +18,6 @@ const storeSettingsSchema = new mongoose.Schema({
         }],
         default: []
     },
-    featuredProducts: {
-        type: [String],
-        default: []
-    },
     productGroup1: productGroupSchema,
     productGroup2: productGroupSchema,
     browseByCategory: {

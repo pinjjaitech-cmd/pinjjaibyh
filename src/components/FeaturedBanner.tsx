@@ -18,11 +18,32 @@ const FeaturedBanner = ({ slides: configuredSlides }: { slides?: HeroSlide[] }) 
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
 
-  const slides: HeroSlide[] = configuredSlides || []
-
-  if (!slides.length) {
-    return null
-  }
+  const slides: HeroSlide[] = configuredSlides && configuredSlides.length > 0 ? configuredSlides : [
+    {
+      id: 1,
+      desktopImage: '/banner1.png',
+      mobileImage: '/banner1-mobile.png',
+      title: 'Premium Collection',
+      subtitle: 'Discover our curated selection of luxury fashion',
+      cta: 'Shop Now'
+    },
+    {
+      id: 2,
+      desktopImage: '/banner2.png',
+      mobileImage: '/banner2-mobile.png',
+      title: 'Timeless Elegance',
+      subtitle: 'Where sophistication meets contemporary design',
+      cta: 'Explore'
+    },
+    {
+      id: 3,
+      desktopImage: '/banner3.png',
+      mobileImage: '/banner3-mobile.png',
+      title: 'Exclusive Designs',
+      subtitle: 'Limited edition pieces for the discerning customer',
+      cta: 'Learn More'
+    }
+  ]
 
   useEffect(() => {
     if (!isAutoPlaying) return

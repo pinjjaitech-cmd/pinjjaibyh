@@ -12,7 +12,7 @@ const imageUrlSchema = z.string().trim().refine(
 // Category schema
 const categorySchema = z.object({
   categoryName: z.string().min(1, 'Category name is required'),
-  categoryImage: imageUrlSchema,
+  categoryImage: z.string().url().optional(),
   categorySlug: z.string().optional(),
   bgColor: z.string().optional(),
   ctaLabel: z.string().optional()

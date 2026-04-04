@@ -1,8 +1,17 @@
 import StoreProductCard from './store/StoreProductCard'
 import Link from 'next/link'
 
-const FeaturedProducts = ({ products }: { products?: any[] }) => {
+const FeaturedProducts = async ({ products }: { products?: any[] }) => {
   let featuredProducts = products || []
+
+  if (!featuredProducts.length) {
+    await connectDB()
+    featuredProducts = await Product.find({ status: 'published' })
+      .populate('category', 'name slug')
+      .sort({ createdAt: -1 })
+      .limit(6)
+      .lean()
+  }
 
   if (!featuredProducts.length) {
     return null
