@@ -19,6 +19,7 @@ const storeSettingsSchema = z.object({
     cta: z.string().optional(),
     link: linkSchema
   })).optional(),
+  featuredProducts: z.array(z.string()).optional(),
   productGroup1: z.object({
     name: z.string().min(1, 'Product group name is required'),
     description: z.string().optional(),
@@ -71,7 +72,7 @@ const storeSettingsSchema = z.object({
     testimonialSectionDescription: z.string().optional(),
     reviews: z.array(z.object({
       customerName: z.string().min(1, 'Customer name is required'),
-      customerProfile: z.string().url().optional(),
+      customerProfile: imageUrlSchema,
       customerMessage: z.string().min(1, 'Customer message is required'),
       customerRating: z.number().min(1).max(5)
     })).optional()

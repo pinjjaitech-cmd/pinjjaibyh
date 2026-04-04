@@ -192,9 +192,10 @@ const HeroBannersManager = ({ settings, onUpdate }: HeroBannersManagerProps) => 
       const data = await response.json();
 
       if (data.success) {
+        const savedBanner = data.data || editingBanner
         const newBanners = editIndex !== null 
-          ? banners.map((banner, index) => index === editIndex ? editingBanner : banner)
-          : [...banners, editingBanner];
+          ? banners.map((banner, index) => index === editIndex ? savedBanner : banner)
+          : [...banners, savedBanner];
         
         setBanners(newBanners);
         onUpdate({ heroBanners: newBanners });

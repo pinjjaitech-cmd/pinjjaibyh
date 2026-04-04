@@ -6,9 +6,14 @@ import { uploadImage } from '@/lib/cloudinary'
 import { z } from 'zod'
 
 // Review schema
+const imageUrlSchema = z.string().trim().refine(
+  (value) => !value || (/^https?:\/\//.test(value) && !value.startsWith('data:')),
+  { message: 'Images must be uploaded URLs (use Cloudinary), not base64 data.' }
+).optional()
+
 const reviewSchema = z.object({
   customerName: z.string().min(1, 'Customer name is required'),
-  customerProfile: z.string().url().optional(),
+  customerProfile: imageUrlSchema,
   customerMessage: z.string().min(1, 'Customer message is required'),
   customerRating: z.number().min(1).max(5)
 })

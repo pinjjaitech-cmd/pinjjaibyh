@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import HeroBannersManager from "@/components/settings/HeroBannersManager";
-import ProductGroupsManager from "@/components/settings/ProductGroupsManager";
+import FeaturedProductsManager from "@/components/settings/FeaturedProductsManager";
 import TestimonialsManager from "@/components/settings/TestimonialsManager";
 import BrowseByCategoryManager from "@/components/settings/BrowseByCategoryManager";
 
@@ -30,16 +30,7 @@ interface StoreSettings {
     cta?: string;
     link?: string;
   }>;
-  productGroup1?: {
-    name: string;
-    description?: string;
-    products: string[];
-  };
-  productGroup2?: {
-    name: string;
-    description?: string;
-    products: string[];
-  };
+  featuredProducts?: string[];
   browseByCategory?: {
     category1?: { categoryName: string; categoryImage?: string; categorySlug?: string; bgColor?: string; ctaLabel?: string };
     category2?: { categoryName: string; categoryImage?: string; categorySlug?: string; bgColor?: string; ctaLabel?: string };
@@ -122,7 +113,7 @@ const SettingsPage = () => {
   const getTabIcon = (tabValue: string) => {
     const icons = {
       "hero-banners": ImageIcon,
-      "product-groups": Package,
+      "featured-products": Package,
       "browse-category": Grid3X3,
       "testimonials": MessageSquare,
     };
@@ -131,7 +122,7 @@ const SettingsPage = () => {
 
   const tabs = [
     { value: "hero-banners", label: "Hero Banners", description: "Manage homepage banners" },
-    { value: "product-groups", label: "Product Groups", description: "Configure product showcases" },
+    { value: "featured-products", label: "Featured Products", description: "Choose products shown on homepage" },
     { value: "browse-category", label: "Browse by Category", description: "Setup category display" },
     { value: "testimonials", label: "Testimonials", description: "Manage customer reviews" },
   ];
@@ -185,9 +176,9 @@ const SettingsPage = () => {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {[settings.productGroup1, settings.productGroup2].filter(Boolean).length}
+                {settings.featuredProducts?.length || 0}
               </div>
-              <p className="text-xs text-muted-foreground">Configured groups</p>
+              <p className="text-xs text-muted-foreground">Selected products</p>
             </CardContent>
           </Card>
           <Card>
@@ -255,15 +246,15 @@ const SettingsPage = () => {
                 </div>
               </TabsContent>
 
-              <TabsContent value="product-groups" className="mt-6">
+              <TabsContent value="featured-products" className="mt-6">
                 <div className="space-y-4">
                   <div>
-                    <h3 className="text-lg font-medium">Product Groups</h3>
+                    <h3 className="text-lg font-medium">Featured Products</h3>
                     <p className="text-sm text-muted-foreground">
-                      Configure featured product groups for special displays
+                      Select the products to show in the homepage featured products section
                     </p>
                   </div>
-                  <ProductGroupsManager 
+                  <FeaturedProductsManager
                     settings={settings} 
                     onUpdate={handleSettingsUpdate}
                   />

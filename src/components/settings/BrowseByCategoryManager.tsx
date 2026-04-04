@@ -134,11 +134,12 @@ const BrowseByCategoryManager = ({ settings, onUpdate }: BrowseByCategoryManager
       const data = await response.json();
 
       if (data.success) {
+        const savedCategory = data.data || editingCategory
         const updatedSettings = {
           ...settings,
           browseByCategory: {
             ...settings?.browseByCategory,
-            [`category${editingCategoryNumber}`]: editingCategory
+            [`category${editingCategoryNumber}`]: savedCategory
           }
         };
         onUpdate(updatedSettings);

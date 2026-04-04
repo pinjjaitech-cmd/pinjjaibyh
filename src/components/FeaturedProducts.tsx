@@ -1,5 +1,3 @@
-import connectDB from '@/lib/db'
-import Product from '@/models/Product'
 import StoreProductCard from './store/StoreProductCard'
 import Link from 'next/link'
 

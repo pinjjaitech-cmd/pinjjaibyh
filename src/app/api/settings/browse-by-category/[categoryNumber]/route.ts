@@ -5,6 +5,11 @@ import { requireAdmin } from '@/lib/admin-auth'
 import { uploadImage } from '@/lib/cloudinary'
 import { z } from 'zod'
 
+const imageUrlSchema = z.string().trim().refine(
+  (value) => !value || (/^https?:\/\//.test(value) && !value.startsWith('data:')),
+  { message: 'Images must be uploaded URLs (use Cloudinary), not base64 data.' }
+).optional()
+
 // Category schema
 const categorySchema = z.object({
   categoryName: z.string().min(1, 'Category name is required'),
