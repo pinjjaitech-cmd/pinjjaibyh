@@ -2,7 +2,8 @@
 import { motion, useInView } from "framer-motion";
 import Link from "next/link";
 import { useRef } from "react";
-import { Facebook, Instagram, Youtube, Mail, MapPin } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
+import SocialMediaLinks from "@/components/SocialMediaLinks";
 
 const floatingIcons = [
   { icon: "✦", x: "5%", y: "15%", size: "text-lg", delay: 0 },
@@ -118,29 +119,12 @@ const Footer = () => {
           
           {/* Social Media Icons */}
           <motion.div 
-            className="flex items-center justify-center gap-4 mb-8"
+            className="flex items-center justify-center mb-8"
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.4 }}
           >
-            {[
-              { icon: Facebook, href: "#", label: "Facebook" },
-              { icon: Instagram, href: "#", label: "Instagram" },
-              { icon: Youtube, href: "#", label: "Youtube" },
-            ].map((social, index) => (
-              <motion.a
-                key={social.label}
-                href={social.href}
-                className="w-10 h-10 bg-(--brand-white)/10 rounded-full flex items-center justify-center hover:bg-(--brand-white)/20 transition-all duration-300 group"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
-                whileHover={{ scale: 1.1, backgroundColor: "hsl(var(--brand-white) / 0.3)" }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <social.icon className="w-5 h-5 text-(--brand-white) group-hover:text-(--brand-primary) transition-colors duration-300" />
-              </motion.a>
-            ))}
+            <SocialMediaLinks />
           </motion.div>
           
           <p className="heading-editorial text-(--brand-white)/60 text-lg lg:text-xl max-w-lg mx-auto">
@@ -192,9 +176,9 @@ const Footer = () => {
             <h4 className="text-sm tracking-[0.25em] uppercase mb-6 text-(--brand-primary) font-semibold">Collections</h4>
             <div className="flex flex-col gap-3">
               {[
-                { label: "Ziyabana", path: "/collections/ziyabana" },
-                { label: "Roots", path: "/collections/roots" },
-                { label: "Sahara", path: "/collections/sahara" },
+                { label: "Ziyabana Collection", path: "/collection/ziyabana-collection" },
+                { label: "Raffia Collection", path: "/collection/raffia-collection" },
+                { label: "Chromatic Minis Collection", path: "/collection/chromatic-minis-collection" },
               ].map((link, index) => (
                 <motion.div
                   key={link.path}
@@ -230,10 +214,10 @@ const Footer = () => {
               >
                 <Mail className="w-4 h-4 text-(--brand-white)/50 group-hover:text-(--brand-primary) transition-colors duration-300" />
                 <a 
-                  href="mailto:hello@pinjjai.com" 
+                  href="mailto:Pinjjaibyh@gmail.com" 
                   className="text-sm text-(--brand-white)/70 hover:text-(--brand-primary) transition-colors duration-300"
                 >
-                  hello@pinjjai.com
+                  Pinjjaibyh@gmail.com
                 </a>
               </motion.div>
               
@@ -250,7 +234,7 @@ const Footer = () => {
                   rel="noopener noreferrer"
                   className="text-sm text-(--brand-white)/70 hover:text-(--brand-primary) transition-colors duration-300"
                 >
-                  Punjab, India
+                  Delhi, India
                 </a>
               </motion.div>
             </div>

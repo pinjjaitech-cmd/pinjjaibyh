@@ -1,19 +1,21 @@
 'use client'
 
 import { motion } from "framer-motion";
+import SocialMediaLinks from "@/components/SocialMediaLinks";
 
 const StoryPage = () => {
   return (
     <div className="min-h-screen bg-(--brand-white)">
       {/* Hero */}
-      <section className="relative h-[70vh] overflow-hidden flex items-end">
+      <section className="relative w-full h-[60vh] bg-black overflow-hidden flex items-end">
+        <img src="/our-story-banner.png" alt="Our Story" className="absolute inset-0 w-full h-full opacity-45 object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-(--brand-primary)/10 to-(--brand-primary)/40" />
-        <div className="relative z-10 max-w-4xl px-6 lg:px-12 pb-16">
+        <div className="relative w-full z-10 px-6 lg:px-12 pb-16">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.3 }}
-            className="font-serif text-5xl md:text-7xl text-(--brand-dark) tracking-[0.05em] mb-4"
+            className="font-serif text-5xl md:text-7xl text-white text-center tracking-[0.05em] mb-4"
           >
             Our Story
           </motion.h1>
@@ -21,9 +23,9 @@ const StoryPage = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.8 }}
-            className="text-lg md:text-xl text-(--brand-dark)/70 max-w-lg"
+            className="text-lg md:text-xl text-white/70 text-center "
           >
-            A documentary of heritage, hands, and hope woven into every stitch
+            A documentary of heritage, hands, and hope knit into every stitch
           </motion.p>
         </div>
       </section>
@@ -48,13 +50,11 @@ const StoryPage = () => {
           viewport={{ once: true }}
         >
           <p className="text-lg text-(--brand-dark)/70 mb-6 leading-relaxed">
-            In the heartland of Punjab, where mustard fields stretch to the horizon and the air smells of earth
-            after rain, an ancient art was slowly fading. <em className="font-serif italic text-(--brand-dark)">Pinjana</em>—the 
-            art of carding cotton—had been the rhythm of village life for centuries.
+            In the heartland of Punjab, where mustard fields stretch endlessly and the air carries the scent of rain-soaked earth, an ancient art was quietly fading. Hand crochet—the delicate craft of creating fabric using a single hook and thread, loop by loop—was once the rhythm of village life, each stitch formed slowly with patience and care.
+
           </p>
           <p className="text-lg text-(--brand-dark)/70 leading-relaxed">
-            Women would sit together under the shade of neem trees, their hands moving in practiced choreography,
-            turning raw cotton into thread. It was more than craft—it was conversation, community, continuity.
+            Under the shade of neem trees, women would gather, their hands moving in effortless harmony—each thread knitted with memory and meaning. It was never just a craft; it was shared stories, silent strength, and a bond passed down through generations. A living legacy of conversation, community, and continuity.
           </p>
         </motion.div>
       </section>
@@ -92,11 +92,10 @@ const StoryPage = () => {
               A Thread of Hope
             </h2>
             <p className="text-(--brand-dark)/70 mb-6 leading-relaxed">
-              Harman Seera returned to her grandmother's village with a question: What if these forgotten skills
-              could become a force for change? What if the women who once carded cotton could crochet a new future?
+              Harman Seera returned to her roots with a question—what if these forgotten hand crochet skills could become a force for change? What if the women who once knit threads of tradition could now crochet a new future?
             </p>
             <p className="text-(--brand-dark)/70 leading-relaxed">
-              She began with five women and a simple crochet hook. Within months, word spread. Women walked from
+              She began with two women and a simple crochet hook. Within months, word spread. Women walked from
               neighboring villages to learn, to earn, to belong to something bigger than themselves.
             </p>
           </motion.div>
@@ -109,12 +108,7 @@ const StoryPage = () => {
           >
             <div className="relative aspect-[3/4] bg-(--brand-primary)/10">
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-24 h-24 bg-(--brand-primary) rounded-full flex items-center justify-center mb-4 mx-auto">
-                    <span className="text-(--brand-white) text-3xl">🧵</span>
-                  </div>
-                  <p className="text-(--brand-dark)/60">Crocheting with care</p>
-                </div>
+                <img src="/crochet-with-care.jpg" alt="Crochet with Care" className="w-full h-full object-cover" />
               </div>
             </div>
           </motion.div>
@@ -135,8 +129,7 @@ const StoryPage = () => {
               The Craft Continues
             </h2>
             <p className="text-lg text-(--brand-dark)/70 max-w-2xl mx-auto mb-12 leading-relaxed">
-              Today, Pinjjai is more than a brand. It's a living archive of Punjabi craft, a platform for women's
-              voices, and proof that beauty and purpose can exist in the same stitch.
+              Today, Pinjjai is more than a brand; it is a living archive of hand crochet—preserving craft, carrying stories, and honouring heritage. It is a platform for women’s voices, and a reminder that beauty and purpose can exist in the same stitch.
             </p>
           </motion.div>
 
@@ -149,12 +142,7 @@ const StoryPage = () => {
           >
             <div className="relative aspect-[16/9] bg-(--brand-primary)/10">
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-24 h-24 bg-(--brand-primary) rounded-full flex items-center justify-center mb-4 mx-auto">
-                    <span className="text-(--brand-white) text-3xl">🎨</span>
-                  </div>
-                  <p className="text-(--brand-dark)/60">Crochet texture detail</p>
-                </div>
+                <img src="/crochet-with-details.jpg" alt="Crochet with Details" className="w-full h-full object-cover" />
               </div>
             </div>
           </motion.div>
@@ -198,6 +186,42 @@ const StoryPage = () => {
               </blockquote>
             </motion.div>
           ))}
+        </div>
+      </section>
+
+      {/* Join Our Journey */}
+      <section className="py-20 bg-(--brand-primary)">
+        <div className="max-w-4xl mx-auto px-6 lg:px-12">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <h2 className="font-serif text-4xl md:text-5xl text-(--brand-white) mb-6">
+              Join Our Journey
+            </h2>
+            <p className="text-lg text-(--brand-white)/80 max-w-2xl mx-auto mb-12">
+              Follow us to witness the continuation of this story, see new collections emerge, and connect with the artisans who make every piece special.
+            </p>
+            
+            <SocialMediaLinks 
+              size="lg"
+              variant="outlined"
+              className="mb-8"
+            />
+            
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              viewport={{ once: true }}
+              className="text-(--brand-white)/60 text-sm"
+            >
+              #PinjjaiByH #HandcraftedWithPurpose #ArtisanStories
+            </motion.div>
+          </motion.div>
         </div>
       </section>
     </div>

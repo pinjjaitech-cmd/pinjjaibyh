@@ -24,7 +24,7 @@ const variantUpdateSchema = z.object({
 // PUT /api/products/[id]/variants/[variantId] - Update a specific variant (Admin only)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string, variantId: string } }
+  { params }: { params: Promise<{ id: string, variantId: string }> }
 ) {
   try {
     // Check admin authentication
@@ -33,7 +33,7 @@ export async function PUT(
 
     await connectDB()
 
-    const { id, variantId } = params
+    const { id, variantId } = await params
     const body = await request.json()
     const validatedData = variantUpdateSchema.parse(body)
 
@@ -120,7 +120,7 @@ export async function PUT(
 // DELETE /api/products/[id]/variants/[variantId] - Delete a specific variant (Admin only)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string, variantId: string } }
+  { params }: { params: Promise<{ id: string, variantId: string }> }
 ) {
   try {
     // Check admin authentication
@@ -129,7 +129,7 @@ export async function DELETE(
 
     await connectDB()
 
-    const { id, variantId } = params
+    const { id, variantId } = await params
 
     // Find the product
     let product

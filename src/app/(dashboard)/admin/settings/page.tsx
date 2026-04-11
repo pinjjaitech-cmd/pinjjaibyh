@@ -1,301 +1,1589 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Settings, 
-  Image as ImageIcon, 
-  Package, 
-  Grid3X3, 
-  MessageSquare,
-  Save,
-  RefreshCw
-} from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import HeroBannersManager from "@/components/settings/HeroBannersManager";
-import FeaturedProductsManager from "@/components/settings/FeaturedProductsManager";
-import TestimonialsManager from "@/components/settings/TestimonialsManager";
-import BrowseByCategoryManager from "@/components/settings/BrowseByCategoryManager";
+import { 
+  Upload, 
+  Image as ImageIcon, 
+  Plus, 
+  Trash2, 
+  Save, 
+  RefreshCw,
+  Monitor,
+  Smartphone,
+  Link,
+  Type,
+  MessageSquare,
+  X,
+  Search
+} from "lucide-react";
 
-interface StoreSettings {
+interface HeroBanner {
   _id?: string;
-  heroBanners: Array<{
-    desktopImg?: string;
-    mobileImg?: string;
-    title?: string;
-    subtitle?: string;
-    cta?: string;
-    link?: string;
-  }>;
-  featuredProducts?: string[];
-  browseByCategory?: {
-    category1?: { categoryName: string; categoryImage?: string; categorySlug?: string; bgColor?: string; ctaLabel?: string };
-    category2?: { categoryName: string; categoryImage?: string; categorySlug?: string; bgColor?: string; ctaLabel?: string };
-    category3?: { categoryName: string; categoryImage?: string; categorySlug?: string; bgColor?: string; ctaLabel?: string };
-    category4?: { categoryName: string; categoryImage?: string; categorySlug?: string; bgColor?: string; ctaLabel?: string };
-    category5?: { categoryName: string; categoryImage?: string; categorySlug?: string; bgColor?: string; ctaLabel?: string };
-  };
-  testimonials?: {
-    testimonialSectionHeading?: string;
-    testimonialSectionDescription?: string;
-    reviews?: Array<{
-      customerName: string;
-      customerProfile?: string;
-      customerMessage: string;
-      customerRating: number;
-    }>;
-  };
+  desktopImg?: string;
+  mobileImg?: string;
+  title?: string;
+  subtitle?: string;
+  cta?: string;
+  link?: string;
 }
 
-const SettingsPage = () => {
-  const [settings, setSettings] = useState<StoreSettings | null>(null);
+interface StoreSettingsData {
+  marqueeTexts: string[];
+  heroBanners: HeroBanner[];
+  featuredProducts: any[];
+  browseByCategory: any[];
+  testimonials: any;
+}
+
+export default function SettingsPage() {
+  const [settings, setSettings] = useState<StoreSettingsData>({
+    marqueeTexts: [],
+    heroBanners: [],
+    featuredProducts: [],
+    browseByCategory: [],
+    testimonials: null
+  });
+  
+  const [allCategories, setAllCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("hero-banners");
   const [saving, setSaving] = useState(false);
+  const [activeTab, setActiveTab] = useState("hero-banners");
+
+  // Fetch settings on component mount
+  useEffect(() => {
+    fetchSettings();
+    fetchMarqueeTexts();
+    fetchBrowseByCategory();
+    fetchAllCategories();
+    fetchFeaturedProducts();
+  }, []);
+
+  const fetchFeaturedProducts = async () => {
+    try {
+      const response = await fetch("/api/settings/featured-products");
+      const result = await response.json();
+      
+      if (result.success) {
+        setSettings(prev => ({
+          ...prev,
+          featuredProducts: result.data || []
+        }));
+      }
+    } catch (error) {
+      toast.error("Failed to fetch featured products");
+    }
+  };
+
+  const fetchBrowseByCategory = async () => {
+    try {
+      const response = await fetch("/api/settings/browse-by-category");
+      const result = await response.json();
+      
+      if (response.ok) {
+        setSettings(prev => ({
+          ...prev,
+          browseByCategory: result || []
+        }));
+      }
+    } catch (error) {
+      toast.error("Failed to fetch browse by category");
+    }
+  };
+
+  const fetchAllCategories = async () => {
+    try {
+      const response = await fetch("/api/collections?isActive=true&limit=100");
+      const result = await response.json();
+      
+      if (result.success) {
+        // Store categories in state for the category section
+        setAllCategories(result.data || []);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch categories");
+    }
+  };
+
+  const fetchMarqueeTexts = async () => {
+    try {
+      const response = await fetch("/api/settings/marquee");
+      const result = await response.json();
+      
+      if (result.success) {
+        setSettings(prev => ({
+          ...prev,
+          marqueeTexts: result.data || []
+        }));
+      }
+    } catch (error) {
+      toast.error("Failed to fetch marquee texts");
+    }
+  };
 
   const fetchSettings = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/settings");
-      const data = await response.json();
-
-      if (data.success) {
-        setSettings(data.data);
-      } else {
-        toast.error(data.error || "Failed to fetch settings");
+      const response = await fetch("/api/settings/hero-banners");
+      const result = await response.json();
+      
+      if (result.success) {
+        setSettings(prev => ({
+          ...prev,
+          heroBanners: result.data || []
+        }));
       }
     } catch (error) {
-      toast.error("Error fetching settings");
+      toast.error("Failed to fetch settings");
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchSettings();
-  }, []);
-
-  const handleSettingsUpdate = (updatedSettings: Partial<StoreSettings>) => {
-    setSettings(prev => prev ? { ...prev, ...updatedSettings } : null);
-  };
-
-  const saveAllSettings = async () => {
-    if (!settings) return;
-
+  const handleAddHeroBanner = async (bannerData: Partial<HeroBanner>, desktopFile?: File, mobileFile?: File) => {
     try {
       setSaving(true);
-      const response = await fetch("/api/settings", {
+      
+      const formData = new FormData();
+      formData.append('banner', JSON.stringify(bannerData));
+      
+      if (desktopFile) {
+        formData.append('desktopImg', desktopFile);
+      }
+      
+      if (mobileFile) {
+        formData.append('mobileImg', mobileFile);
+      }
+
+      const response = await fetch("/api/settings/hero-banners", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(settings),
+        body: formData
       });
 
-      const data = await response.json();
-
-      if (data.success) {
-        toast.success("All settings saved successfully");
+      const result = await response.json();
+      
+      if (result.success) {
+        toast.success("Hero banner added successfully");
         fetchSettings();
+        return true;
       } else {
-        toast.error(data.error || "Failed to save settings");
+        toast.error(result.error || "Failed to add hero banner");
+        return false;
       }
     } catch (error) {
-      toast.error("Error saving settings");
+      toast.error("Failed to add hero banner");
+      return false;
     } finally {
       setSaving(false);
     }
   };
 
-  const getTabIcon = (tabValue: string) => {
-    const icons = {
-      "hero-banners": ImageIcon,
-      "featured-products": Package,
-      "browse-category": Grid3X3,
-      "testimonials": MessageSquare,
-    };
-    return icons[tabValue as keyof typeof icons] || Settings;
+  const handleUpdateHeroBanners = async (banners: HeroBanner[]) => {
+    try {
+      setSaving(true);
+      
+      const response = await fetch("/api/settings/hero-banners", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(banners)
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        toast.success("Hero banners updated successfully");
+        setSettings(prev => ({ ...prev, heroBanners: banners }));
+        return true;
+      } else {
+        toast.error(result.error || "Failed to update hero banners");
+        return false;
+      }
+    } catch (error) {
+      toast.error("Failed to update hero banners");
+      return false;
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const tabs = [
-    { value: "hero-banners", label: "Hero Banners", description: "Manage homepage banners" },
-    { value: "featured-products", label: "Featured Products", description: "Choose products shown on homepage" },
-    { value: "browse-category", label: "Browse by Category", description: "Setup category display" },
-    { value: "testimonials", label: "Testimonials", description: "Manage customer reviews" },
-  ];
+  const handleUpdateFeaturedProducts = async (productIds: string[]) => {
+    try {
+      setSaving(true);
+      
+      const response = await fetch("/api/settings/featured-products", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ productIds })
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        toast.success("Featured products updated successfully");
+        fetchFeaturedProducts();
+        return true;
+      } else {
+        toast.error(result.error || "Failed to update featured products");
+        return false;
+      }
+    } catch (error) {
+      toast.error("Failed to update featured products");
+      return false;
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleUpdateBrowseByCategory = async (categoryIds: string[]) => {
+    try {
+      setSaving(true);
+      
+      const response = await fetch("/api/settings/browse-by-category", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ categoryIds })
+      });
+
+      const result = await response.json();
+      
+      if (response.ok) {
+        toast.success("Browse by category updated successfully");
+        fetchBrowseByCategory();
+        return true;
+      } else {
+        toast.error(result.error || "Failed to update browse by category");
+        return false;
+      }
+    } catch (error) {
+      toast.error("Failed to update browse by category");
+      return false;
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleUpdateMarqueeTexts = async (marqueeTexts: string[]) => {
+    try {
+      setSaving(true);
+      
+      const response = await fetch("/api/settings/marquee", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ marqueeTexts })
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        toast.success("Marquee texts updated successfully");
+        setSettings(prev => ({ ...prev, marqueeTexts }));
+        return true;
+      } else {
+        toast.error(result.message || "Failed to update marquee texts");
+        return false;
+      }
+    } catch (error) {
+      toast.error("Failed to update marquee texts");
+      return false;
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleAddMarqueeText = async (text: string) => {
+    try {
+      setSaving(true);
+      
+      const response = await fetch("/api/settings/marquee", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ marqueeTexts: [text] })
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        toast.success("Marquee text added successfully");
+        fetchMarqueeTexts();
+        return true;
+      } else {
+        toast.error(result.message || "Failed to add marquee text");
+        return false;
+      }
+    } catch (error) {
+      toast.error("Failed to add marquee text");
+      return false;
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDeleteHeroBanner = async (index: number) => {
+    try {
+      setSaving(true);
+      
+      const newBanners = settings.heroBanners.filter((_, i) => i !== index);
+      const success = await handleUpdateHeroBanners(newBanners);
+      
+      if (success) {
+        toast.success("Hero banner deleted successfully");
+      }
+    } catch (error) {
+      toast.error("Failed to delete hero banner");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleClearAllHeroBanners = async () => {
+    try {
+      setSaving(true);
+      
+      const response = await fetch("/api/settings/hero-banners", {
+        method: "DELETE"
+      });
+
+      const result = await response.json();
+      
+      if (result.success) {
+        toast.success("All hero banners cleared successfully");
+        setSettings(prev => ({ ...prev, heroBanners: [] }));
+      } else {
+        toast.error(result.error || "Failed to clear hero banners");
+      }
+    } catch (error) {
+      toast.error("Failed to clear hero banners");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <RefreshCw className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Store Settings</h1>
-          <p className="text-muted-foreground">
-            Manage your store's appearance and content settings
-          </p>
+          <h1 className="text-3xl font-bold">Store Settings</h1>
+          <p className="text-muted-foreground">Manage your store configuration and content</p>
         </div>
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            onClick={fetchSettings}
-            disabled={loading}
-          >
-            <RefreshCw className={`mr-2 h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
-          <Button
-            onClick={saveAllSettings}
-            disabled={saving || !settings}
-          >
-            <Save className="mr-2 h-4 w-4" />
-            {saving ? "Saving..." : "Save All"}
-          </Button>
-        </div>
+        <Button onClick={fetchSettings} variant="outline" size="sm">
+          <RefreshCw className="h-4 w-4 mr-2" />
+          Refresh
+        </Button>
       </div>
 
-      {/* Settings Overview Cards */}
-      {settings && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Hero Banners</CardTitle>
-              <ImageIcon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{settings.heroBanners?.length || 0}</div>
-              <p className="text-xs text-muted-foreground">Active banners</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Product Groups</CardTitle>
-              <Package className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {settings.featuredProducts?.length || 0}
-              </div>
-              <p className="text-xs text-muted-foreground">Selected products</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Categories</CardTitle>
-              <Grid3X3 className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {Object.values(settings.browseByCategory || {}).filter(Boolean).length}
-              </div>
-              <p className="text-xs text-muted-foreground">Active categories</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Testimonials</CardTitle>
-              <MessageSquare className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{settings.testimonials?.reviews?.length || 0}</div>
-              <p className="text-xs text-muted-foreground">Customer reviews</p>
-            </CardContent>
-          </Card>
-        </div>
-      )}
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col space-y-6">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="hero-banners">Hero Banners</TabsTrigger>
+          <TabsTrigger value="marquee">Marquee Text</TabsTrigger>
+          <TabsTrigger value="categories">Categories</TabsTrigger>
+          <TabsTrigger value="featured-products">Featured Products</TabsTrigger>
+        </TabsList>
 
-      {/* Main Settings Tabs */}
+        <TabsContent value="hero-banners" className="flex flex-col space-y-6">
+          <HeroBannersSection 
+            heroBanners={settings.heroBanners}
+            onAddBanner={handleAddHeroBanner}
+            onUpdateBanners={handleUpdateHeroBanners}
+            onDeleteBanner={handleDeleteHeroBanner}
+            onClearAll={handleClearAllHeroBanners}
+            saving={saving}
+          />
+        </TabsContent>
+
+        <TabsContent value="marquee" className="space-y-6">
+          <MarqueeTextSection 
+            marqueeTexts={settings.marqueeTexts}
+            onUpdateTexts={handleUpdateMarqueeTexts}
+            onAddText={handleAddMarqueeText}
+            saving={saving}
+          />
+        </TabsContent>
+
+        <TabsContent value="categories" className="space-y-6">
+          <CategorySection 
+            allCategories={allCategories}
+            selectedCategories={settings.browseByCategory}
+            onUpdateCategories={handleUpdateBrowseByCategory}
+            saving={saving}
+          />
+        </TabsContent>
+
+        <TabsContent value="featured-products" className="space-y-6">
+          <FeaturedProductsSection 
+            featuredProducts={settings.featuredProducts}
+            onUpdateFeaturedProducts={handleUpdateFeaturedProducts}
+            saving={saving}
+          />
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}
+
+interface MarqueeTextSectionProps {
+  marqueeTexts: string[];
+  onUpdateTexts: (texts: string[]) => Promise<boolean>;
+  onAddText: (text: string) => Promise<boolean>;
+  saving: boolean;
+}
+
+function MarqueeTextSection({ 
+  marqueeTexts, 
+  onUpdateTexts, 
+  onAddText, 
+  saving 
+}: MarqueeTextSectionProps) {
+  const [newText, setNewText] = useState("");
+  const [editingTexts, setEditingTexts] = useState<string[]>(marqueeTexts);
+
+  useEffect(() => {
+    setEditingTexts(marqueeTexts);
+  }, [marqueeTexts]);
+
+  const handleAddText = async () => {
+    if (!newText.trim()) {
+      toast.error("Please enter a marquee text");
+      return;
+    }
+
+    const success = await onAddText(newText.trim());
+    if (success) {
+      setNewText("");
+    }
+  };
+
+  const handleUpdateTexts = async () => {
+    const success = await onUpdateTexts(editingTexts);
+    if (success) {
+      toast.success("Marquee texts updated successfully");
+    }
+  };
+
+  const handleRemoveText = (index: number) => {
+    const newTexts = editingTexts.filter((_, i) => i !== index);
+    setEditingTexts(newTexts);
+  };
+
+  const handleMoveText = (index: number, direction: 'up' | 'down') => {
+    const newTexts = [...editingTexts];
+    const newIndex = direction === 'up' ? index - 1 : index + 1;
+    
+    if (newIndex >= 0 && newIndex < newTexts.length) {
+      [newTexts[index], newTexts[newIndex]] = [newTexts[newIndex], newTexts[index]];
+      setEditingTexts(newTexts);
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Add New Text */}
       <Card>
         <CardHeader>
-          <CardTitle>Configuration</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <Plus className="h-5 w-5" />
+            Add Marquee Text
+          </CardTitle>
+          <CardDescription>Add new announcement text for the scrolling marquee</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex gap-2">
+            <Input
+              value={newText}
+              onChange={(e) => setNewText(e.target.value)}
+              placeholder="Enter announcement text..."
+              onKeyDown={(e) => e.key === 'Enter' && handleAddText()}
+              className="flex-1"
+            />
+            <Button onClick={handleAddText} disabled={saving || !newText.trim()}>
+              <Plus className="h-4 w-4 mr-2" />
+              Add
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Manage Existing Texts */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Marquee Texts</CardTitle>
+              <CardDescription>Manage and reorder announcement texts</CardDescription>
+            </div>
+            <Button 
+              onClick={handleUpdateTexts}
+              disabled={saving || JSON.stringify(editingTexts) === JSON.stringify(marqueeTexts)}
+            >
+              <Save className="h-4 w-4 mr-2" />
+              {saving ? "Saving..." : "Save Changes"}
+            </Button>
+          </div>
         </CardHeader>
         <CardContent>
-          {loading ? (
-            <div className="flex items-center justify-center py-8">
-              <RefreshCw className="h-8 w-8 animate-spin text-muted-foreground" />
-              <span className="ml-2 text-muted-foreground">Loading settings...</span>
+          {editingTexts.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <MessageSquare className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p>No marquee texts yet. Add your first announcement text above.</p>
             </div>
           ) : (
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full flex flex-col">
-              <TabsList className="grid w-full grid-cols-4">
-                {tabs.map((tab) => {
-                  const Icon = getTabIcon(tab.value);
-                  return (
-                    <TabsTrigger key={tab.value} value={tab.value} className="flex items-center gap-2">
-                      <Icon className="h-4 w-4" />
-                      <span className="hidden sm:inline">{tab.label}</span>
-                    </TabsTrigger>
-                  );
-                })}
-              </TabsList>
-
-              <TabsContent value="hero-banners" className="mt-6">
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-lg font-medium">Hero Banners</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Manage the promotional banners displayed on your homepage
-                    </p>
+            <div className="space-y-3">
+              {editingTexts.map((text, index) => (
+                <div key={index} className="flex items-center gap-2 p-3 border rounded-lg">
+                  <div className="flex-1">
+                    <Input
+                      value={text}
+                      onChange={(e) => {
+                        const newTexts = [...editingTexts];
+                        newTexts[index] = e.target.value;
+                        setEditingTexts(newTexts);
+                      }}
+                      className="w-full"
+                    />
                   </div>
-                  <HeroBannersManager 
-                    settings={settings} 
-                    onUpdate={handleSettingsUpdate}
-                  />
-                </div>
-              </TabsContent>
-
-              <TabsContent value="featured-products" className="mt-6">
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-lg font-medium">Featured Products</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Select the products to show in the homepage featured products section
-                    </p>
+                  
+                  <div className="flex items-center gap-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleMoveText(index, 'up')}
+                      disabled={index === 0}
+                    >
+                      ↑
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleMoveText(index, 'down')}
+                      disabled={index === editingTexts.length - 1}
+                    >
+                      ↓
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => handleRemoveText(index)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
-                  <FeaturedProductsManager
-                    settings={settings} 
-                    onUpdate={handleSettingsUpdate}
-                  />
                 </div>
-              </TabsContent>
-
-              <TabsContent value="browse-category" className="mt-6">
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-lg font-medium">Browse by Category</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Setup category browsing options for your customers
-                    </p>
-                  </div>
-                  <BrowseByCategoryManager 
-                    settings={settings} 
-                    onUpdate={handleSettingsUpdate}
-                  />
-                </div>
-              </TabsContent>
-
-              <TabsContent value="testimonials" className="mt-6">
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-lg font-medium">Testimonials</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Manage customer reviews and testimonials
-                    </p>
-                  </div>
-                  <TestimonialsManager 
-                    settings={settings} 
-                    onUpdate={handleSettingsUpdate}
-                  />
-                </div>
-              </TabsContent>
-            </Tabs>
+              ))}
+            </div>
           )}
         </CardContent>
       </Card>
     </div>
   );
-};
+}
 
-export default SettingsPage;
+interface MarqueeTextSectionProps {
+  marqueeTexts: string[];
+  onUpdateTexts: (texts: string[]) => Promise<boolean>;
+  onAddText: (text: string) => Promise<boolean>;
+  saving: boolean;
+}
+
+// function MarqueeTextSection({ 
+//   marqueeTexts, 
+//   onUpdateTexts, 
+//   onAddText, 
+//   saving 
+// }: MarqueeTextSectionProps) {
+//   const [newText, setNewText] = useState("");
+//   const [editingTexts, setEditingTexts] = useState<string[]>(marqueeTexts);
+
+//   useEffect(() => {
+//     setEditingTexts(marqueeTexts);
+//   }, [marqueeTexts]);
+
+//   const handleAddText = async () => {
+//     if (!newText.trim()) {
+//       toast.error("Please enter a marquee text");
+//       return;
+//     }
+
+//     const success = await onAddText(newText.trim());
+//     if (success) {
+//       setNewText("");
+//     }
+//   };
+
+//   const handleUpdateTexts = async () => {
+//     const success = await onUpdateTexts(editingTexts);
+//     if (success) {
+//       toast.success("Marquee texts updated successfully");
+//     }
+//   };
+
+//   const handleRemoveText = (index: number) => {
+//     const newTexts = editingTexts.filter((_, i) => i !== index);
+//     setEditingTexts(newTexts);
+//   };
+
+//   const handleMoveText = (index: number, direction: 'up' | 'down') => {
+//     const newTexts = [...editingTexts];
+//     const newIndex = direction === 'up' ? index - 1 : index + 1;
+    
+//     if (newIndex >= 0 && newIndex < newTexts.length) {
+//       [newTexts[index], newTexts[newIndex]] = [newTexts[newIndex], newTexts[index]];
+//       setEditingTexts(newTexts);
+//     }
+//   };
+
+//   return (
+//     <div className="space-y-6">
+//       {/* Add New Text */}
+//       <Card>
+//         <CardHeader>
+//           <CardTitle className="flex items-center gap-2">
+//             <Plus className="h-5 w-5" />
+//             Add Marquee Text
+//           </CardTitle>
+//           <CardDescription>Add new announcement text for the scrolling marquee</CardDescription>
+//         </CardHeader>
+//         <CardContent className="space-y-4">
+//           <div className="flex gap-2">
+//             <Input
+//               value={newText}
+//               onChange={(e) => setNewText(e.target.value)}
+//               placeholder="Enter announcement text..."
+//               onKeyDown={(e) => e.key === 'Enter' && handleAddText()}
+//               className="flex-1"
+//             />
+//             <Button onClick={handleAddText} disabled={saving || !newText.trim()}>
+//               <Plus className="h-4 w-4 mr-2" />
+//               Add
+//             </Button>
+//           </div>
+//         </CardContent>
+//       </Card>
+
+//       {/* Manage Existing Texts */}
+//       <Card>
+//         <CardHeader>
+//           <div className="flex items-center justify-between">
+//             <div>
+//               <CardTitle>Marquee Texts</CardTitle>
+//               <CardDescription>Manage and reorder announcement texts</CardDescription>
+//             </div>
+//             <Button 
+//               onClick={handleUpdateTexts}
+//               disabled={saving || JSON.stringify(editingTexts) === JSON.stringify(marqueeTexts)}
+//             >
+//               <Save className="h-4 w-4 mr-2" />
+//               {saving ? "Saving..." : "Save Changes"}
+//             </Button>
+//           </div>
+//         </CardHeader>
+//         <CardContent>
+//           {editingTexts.length === 0 ? (
+//             <div className="text-center py-8 text-muted-foreground">
+//               <MessageSquare className="h-12 w-12 mx-auto mb-4 opacity-50" />
+//               <p>No marquee texts yet. Add your first announcement text above.</p>
+//             </div>
+//           ) : (
+//             <div className="space-y-3">
+//               {editingTexts.map((text, index) => (
+//                 <div key={index} className="flex items-center gap-2 p-3 border rounded-lg">
+//                   <div className="flex-1">
+//                     <Input
+//                       value={text}
+//                       onChange={(e) => {
+//                         const newTexts = [...editingTexts];
+//                         newTexts[index] = e.target.value;
+//                         setEditingTexts(newTexts);
+//                       }}
+//                       className="w-full"
+//                     />
+//                   </div>
+                  
+//                   <div className="flex items-center gap-1">
+//                     <Button
+//                       variant="outline"
+//                       size="sm"
+//                       onClick={() => handleMoveText(index, 'up')}
+//                       disabled={index === 0}
+//                     >
+//                       ↑
+//                     </Button>
+//                     <Button
+//                       variant="outline"
+//                       size="sm"
+//                       onClick={() => handleMoveText(index, 'down')}
+//                       disabled={index === editingTexts.length - 1}
+//                     >
+//                       ↓
+//                     </Button>
+//                     <Button
+//                       variant="destructive"
+//                       size="sm"
+//                       onClick={() => handleRemoveText(index)}
+//                     >
+//                       <Trash2 className="h-4 w-4" />
+//                     </Button>
+//                   </div>
+//                 </div>
+//               ))}
+//             </div>
+//           )}
+//         </CardContent>
+//       </Card>
+//     </div>
+//   );
+// }
+
+interface CategorySectionProps {
+  allCategories: any[];
+  selectedCategories: any[];
+  onUpdateCategories: (categoryIds: string[]) => Promise<boolean>;
+  saving: boolean;
+}
+
+function CategorySection({ 
+  allCategories, 
+  selectedCategories, 
+  onUpdateCategories, 
+  saving 
+}: CategorySectionProps) {
+  const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Extract IDs from selected categories (which have categoryName, categoryImage, categorySlug)
+    const selectedIds = selectedCategories.map(cat => {
+      // Find the corresponding category from allCategories to get the _id
+      const matchingCategory = allCategories.find(
+        allCat => allCat.name === cat.categoryName && allCat.slug === cat.categorySlug
+      );
+      return matchingCategory?._id;
+    }).filter(Boolean); // Remove any undefined values
+    
+    setSelectedCategoryIds(selectedIds);
+  }, [selectedCategories, allCategories]);
+
+  const handleCategoryToggle = (categoryId: string) => {
+    setSelectedCategoryIds(prev => {
+      if (prev.includes(categoryId)) {
+        return prev.filter(id => id !== categoryId);
+      } else {
+        return [...prev, categoryId];
+      }
+    });
+  };
+
+  const handleSaveCategories = async () => {
+    const success = await onUpdateCategories(selectedCategoryIds);
+    if (success) {
+      toast.success("Categories updated successfully");
+    }
+  };
+
+  const handleSelectAll = () => {
+    const allIds = allCategories.map(cat => cat._id);
+    setSelectedCategoryIds(allIds);
+  };
+
+  const handleClearAll = () => {
+    setSelectedCategoryIds([]);
+  };
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Plus className="h-5 w-5" />
+                Browse by Category
+              </CardTitle>
+              <CardDescription>
+                Select categories to feature on the homepage browse by category section
+              </CardDescription>
+            </div>
+            <div className="flex gap-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={handleSelectAll}
+                disabled={saving}
+              >
+                Select All
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={handleClearAll}
+                disabled={saving}
+              >
+                Clear All
+              </Button>
+              <Button 
+                onClick={handleSaveCategories}
+                disabled={saving}
+              >
+                <Save className="h-4 w-4 mr-2" />
+                {saving ? "Saving..." : "Save Changes"}
+              </Button>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {allCategories.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <div className="h-12 w-12 mx-auto mb-4 opacity-50 flex items-center justify-center">
+                <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+              </div>
+              <p>No categories found. Please create categories first.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {allCategories.map((category) => {
+                const isSelected = selectedCategoryIds.includes(category._id);
+                
+                return (
+                  <div 
+                    key={category._id}
+                    className={`border rounded-lg p-4 cursor-pointer transition-all hover:shadow-md ${
+                      isSelected 
+                        ? 'border-primary bg-primary/5' 
+                        : 'border-border hover:border-primary/50'
+                    }`}
+                    onClick={() => handleCategoryToggle(category._id)}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 mt-1">
+                        <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                          isSelected 
+                            ? 'border-primary bg-primary' 
+                            : 'border-muted-foreground'
+                        }`}>
+                          {isSelected && (
+                            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-2">
+                          <h3 className="font-medium truncate">{category.name}</h3>
+                          {category.parentCategory && (
+                            <Badge variant="secondary" className="text-xs">
+                              {category.parentCategory.name}
+                            </Badge>
+                          )}
+                        </div>
+                        
+                        {category.image && (
+                          <div className="mb-2">
+                            <img 
+                              src={category.image} 
+                              alt={category.name}
+                              className="w-full h-20 object-cover rounded"
+                            />
+                          </div>
+                        )}
+                        
+                        <div className="text-sm text-muted-foreground">
+                          <p>Slug: {category.slug}</p>
+                          <p>Status: {category.isActive ? 'Active' : 'Inactive'}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          
+          {allCategories.length > 0 && (
+            <div className="mt-6 pt-4 border-t">
+              <div className="flex items-center justify-between text-sm text-muted-foreground">
+                <span>{selectedCategoryIds.length} of {allCategories.length} categories selected</span>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setSelectedCategoryIds(
+                    selectedCategories.map(cat => {
+                      const matchingCategory = allCategories.find(
+                        allCat => allCat.name === cat.categoryName && allCat.slug === cat.categorySlug
+                      );
+                      return matchingCategory?._id;
+                    }).filter(Boolean)
+                  )}
+                >
+                  Reset to Current
+                </Button>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+interface FeaturedProductsSectionProps {
+  featuredProducts: any[];
+  onUpdateFeaturedProducts: (productIds: string[]) => Promise<boolean>;
+  saving: boolean;
+}
+
+function FeaturedProductsSection({ 
+  featuredProducts, 
+  onUpdateFeaturedProducts, 
+  saving 
+}: FeaturedProductsSectionProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    // Extract product IDs from featured products
+    const productIds = featuredProducts.map(product => 
+      product.productId || product._id
+    ).filter(Boolean);
+    setSelectedProductIds(productIds);
+  }, [featuredProducts]);
+
+  const handleSearch = async (query: string, page: number = 1) => {
+    if (!query.trim()) {
+      setSearchResults([]);
+      return;
+    }
+
+    try {
+      setSearchLoading(true);
+      const response = await fetch(
+        `/api/products/search?q=${encodeURIComponent(query)}&page=${page}&limit=10&status=published`
+      );
+      const result = await response.json();
+      
+      if (result.success) {
+        setSearchResults(result.data || []);
+        setCurrentPage(page);
+      } else {
+        toast.error("Failed to search products");
+      }
+    } catch (error) {
+      toast.error("Failed to search products");
+    } finally {
+      setSearchLoading(false);
+    }
+  };
+
+  const handleProductSelect = (productId: string) => {
+    setSelectedProductIds(prev => {
+      if (prev.includes(productId)) {
+        return prev.filter(id => id !== productId);
+      } else {
+        return [...prev, productId];
+      }
+    });
+  };
+
+  const handleSaveFeaturedProducts = async () => {
+    const success = await onUpdateFeaturedProducts(selectedProductIds);
+    if (success) {
+      toast.success("Featured products updated successfully");
+      setIsModalOpen(false);
+    }
+  };
+
+  const handleRemoveProduct = (productId: string) => {
+    setSelectedProductIds(prev => prev.filter(id => id !== productId));
+  };
+
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+    setSearchQuery("");
+    setSearchResults([]);
+    setCurrentPage(1);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setSearchQuery("");
+    setSearchResults([]);
+  };
+
+  const loadMoreResults = () => {
+    handleSearch(searchQuery, currentPage + 1);
+  };
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="flex items-center gap-2">
+                <Plus className="h-5 w-5" />
+                Featured Products
+              </CardTitle>
+              <CardDescription>
+                Select products to feature on the homepage
+              </CardDescription>
+            </div>
+            <div className="flex gap-2">
+              <Button 
+                onClick={handleModalOpen}
+                disabled={saving}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Products
+              </Button>
+              <Button 
+                onClick={handleSaveFeaturedProducts}
+                disabled={saving || selectedProductIds.length === 0}
+              >
+                <Save className="h-4 w-4 mr-2" />
+                {saving ? "Saving..." : "Save Changes"}
+              </Button>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {featuredProducts.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <div className="h-12 w-12 mx-auto mb-4 opacity-50 flex items-center justify-center">
+                <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8-2m8-4l-8 4m0 10l-8-2m0-10l-8 4m8 4v10m0-10l-8 4" />
+                </svg>
+              </div>
+              <p>No featured products yet. Click "Add Products" to select products.</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {featuredProducts.map((product, index) => (
+                <div key={product.productId || product._id} className="flex items-center gap-4 p-4 border rounded-lg">
+                  <div className="flex-shrink-0">
+                    {product.variants?.[0]?.images?.[0] && (
+                      <img 
+                        src={product.variants[0].images[0]} 
+                        alt={product.title}
+                        className="w-16 h-16 object-cover rounded"
+                      />
+                    )}
+                  </div>
+                  
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-medium truncate">{product.title}</h3>
+                    <p className="text-sm text-muted-foreground">Slug: {product.slug}</p>
+                    {product.category?.name && (
+                      <Badge variant="secondary" className="mt-1">
+                        {product.category.name}
+                      </Badge>
+                    )}
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline">
+                      {index + 1}
+                    </Badge>
+                    <Button 
+                      variant="destructive" 
+                      size="sm"
+                      onClick={() => handleRemoveProduct(product.productId || product._id)}
+                      disabled={saving}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+              
+              <div className="mt-4 pt-4 border-t">
+                <div className="flex items-center justify-between text-sm text-muted-foreground">
+                  <span>{selectedProductIds.length} products selected</span>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => setSelectedProductIds(
+                      featuredProducts.map(product => product.productId || product._id)
+                    )}
+                  >
+                    Reset to Current
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Product Search Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-background rounded-lg w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="flex items-center justify-between p-6 border-b">
+              <h2 className="text-xl font-semibold">Search and Select Products</h2>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={handleModalClose}
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+            
+            <div className="p-6 border-b">
+              <div className="flex gap-4">
+                <Input
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search products by title, SKU, or description..."
+                  className="flex-1"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleSearch(searchQuery);
+                    }
+                  }}
+                />
+                <Button 
+                  onClick={() => handleSearch(searchQuery)}
+                  disabled={searchLoading || !searchQuery.trim()}
+                >
+                  {searchLoading ? (
+                    <RefreshCw className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Search className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
+            </div>
+            
+            <div className="flex-1 overflow-auto p-6">
+              {searchResults.length === 0 && !searchLoading && searchQuery ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  <p>No products found matching "{searchQuery}"</p>
+                </div>
+              ) : searchResults.length === 0 && !searchLoading ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  <p>Enter a search query to find products</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {searchResults.map((product) => {
+                    const isSelected = selectedProductIds.includes(product._id);
+                    const hasImages = product.variants?.[0]?.images?.length > 0;
+                    
+                    return (
+                      <div 
+                        key={product._id}
+                        className={`flex items-center gap-4 p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md ${
+                          isSelected 
+                            ? 'border-primary bg-primary/5' 
+                            : 'border-border hover:border-primary/50'
+                        }`}
+                        onClick={() => handleProductSelect(product._id)}
+                      >
+                        <div className="flex-shrink-0">
+                          {hasImages ? (
+                            <img 
+                              src={product.variants[0].images[0]} 
+                              alt={product.title}
+                              className="w-16 h-16 object-cover rounded"
+                            />
+                          ) : (
+                            <div className="w-16 h-16 bg-muted rounded flex items-center justify-center">
+                              <ImageIcon className="h-8 w-8 text-muted-foreground" />
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="font-medium truncate">{product.title}</h3>
+                            <Badge variant="secondary" className="text-xs">
+                              {product.status}
+                            </Badge>
+                          </div>
+                          
+                          <p className="text-sm text-muted-foreground truncate mb-2">
+                            {product.description}
+                          </p>
+                          
+                          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                            <span>SKU: {product.variants?.[0]?.skuCode || 'N/A'}</span>
+                            <span>Slug: {product.slug}</span>
+                            {product.variants?.[0]?.price && (
+                              <span>Price: ₹{product.variants[0].price}</span>
+                            )}
+                          </div>
+                        </div>
+                        
+                        <div className="flex-shrink-0">
+                          <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
+                            isSelected 
+                              ? 'border-primary bg-primary' 
+                              : 'border-muted-foreground'
+                          }`}>
+                            {isSelected && (
+                              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+            
+            <div className="p-6 border-t flex items-center justify-between">
+              <div className="text-sm text-muted-foreground">
+                {selectedProductIds.length} products selected
+              </div>
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline" 
+                  onClick={handleModalClose}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  onClick={handleSaveFeaturedProducts}
+                  disabled={saving || selectedProductIds.length === 0}
+                >
+                  {saving ? (
+                    <>
+                      <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="h-4 w-4 mr-2" />
+                      Save Selected ({selectedProductIds.length})
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+interface HeroBannersSectionProps {
+  heroBanners: HeroBanner[];
+  onAddBanner: (banner: Partial<HeroBanner>, desktopFile?: File, mobileFile?: File) => Promise<boolean>;
+  onUpdateBanners: (banners: HeroBanner[]) => Promise<boolean>;
+  onDeleteBanner: (index: number) => void;
+  onClearAll: () => void;
+  saving: boolean;
+}
+
+function HeroBannersSection({ 
+  heroBanners, 
+  onAddBanner, 
+  onUpdateBanners, 
+  onDeleteBanner, 
+  onClearAll, 
+  saving 
+}: HeroBannersSectionProps) {
+  const [newBanner, setNewBanner] = useState<Partial<HeroBanner>>({
+    title: "",
+    subtitle: "",
+    cta: "",
+    link: ""
+  });
+  const [desktopFile, setDesktopFile] = useState<File | null>(null);
+  const [mobileFile, setMobileFile] = useState<File | null>(null);
+  const [desktopPreview, setDesktopPreview] = useState<string>("");
+  const [mobilePreview, setMobilePreview] = useState<string>("");
+
+  const handleDesktopFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setDesktopFile(file);
+      const reader = new FileReader();
+      reader.onload = (e) => setDesktopPreview(e.target?.result as string);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleMobileFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setMobileFile(file);
+      const reader = new FileReader();
+      reader.onload = (e) => setMobilePreview(e.target?.result as string);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleAddBanner = async () => {
+    if (!desktopFile && !newBanner.title) {
+      toast.error("Please add at least a desktop image or title");
+      return;
+    }
+
+    const success = await onAddBanner(newBanner, desktopFile || undefined, mobileFile || undefined);
+    
+    if (success) {
+      setNewBanner({ title: "", subtitle: "", cta: "", link: "" });
+      setDesktopFile(null);
+      setMobileFile(null);
+      setDesktopPreview("");
+      setMobilePreview("");
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Add New Banner */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Plus className="h-5 w-5" />
+            Add New Hero Banner
+          </CardTitle>
+          <CardDescription>Create a new hero banner with images and content</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* Images Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Desktop Image */}
+            <div className="space-y-3">
+              <Label className="flex items-center gap-2">
+                <Monitor className="h-4 w-4" />
+                Desktop Image (1920x600)
+              </Label>
+              <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4">
+                {desktopPreview ? (
+                  <div className="space-y-3">
+                    <img 
+                      src={desktopPreview} 
+                      alt="Desktop preview" 
+                      className="w-full h-32 object-cover rounded"
+                    />
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => {
+                        setDesktopFile(null);
+                        setDesktopPreview("");
+                      }}
+                      className="w-full"
+                    >
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Remove
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="text-center">
+                    <ImageIcon className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Upload desktop banner image
+                    </p>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleDesktopFileChange}
+                      className="hidden"
+                      id="desktop-image"
+                    />
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => document.getElementById('desktop-image')?.click()}
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      Choose File
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Mobile Image */}
+            <div className="space-y-3">
+              <Label className="flex items-center gap-2">
+                <Smartphone className="h-4 w-4" />
+                Mobile Image (768x400)
+              </Label>
+              <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4">
+                {mobilePreview ? (
+                  <div className="space-y-3">
+                    <img 
+                      src={mobilePreview} 
+                      alt="Mobile preview" 
+                      className="w-full h-32 object-cover rounded"
+                    />
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => {
+                        setMobileFile(null);
+                        setMobilePreview("");
+                      }}
+                      className="w-full"
+                    >
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Remove
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="text-center">
+                    <ImageIcon className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Upload mobile banner image
+                    </p>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleMobileFileChange}
+                      className="hidden"
+                      id="mobile-image"
+                    />
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => document.getElementById('mobile-image')?.click()}
+                    >
+                      <Upload className="h-4 w-4 mr-2" />
+                      Choose File
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end">
+            <Button onClick={handleAddBanner} disabled={saving}>
+              <Save className="h-4 w-4 mr-2" />
+              {saving ? "Adding..." : "Add Banner"}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Existing Banners */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Existing Hero Banners</CardTitle>
+              <CardDescription>Manage your current hero banners</CardDescription>
+            </div>
+            {heroBanners.length > 0 && (
+              <Button 
+                variant="destructive" 
+                size="sm" 
+                onClick={onClearAll}
+                disabled={saving}
+              >
+                <Trash2 className="h-4 w-4 mr-2" />
+                Clear All
+              </Button>
+            )}
+          </div>
+        </CardHeader>
+        <CardContent>
+          {heroBanners.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">
+              <ImageIcon className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p>No hero banners yet. Add your first banner above.</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {heroBanners.map((banner, index) => (
+                <div key={index} className="border rounded-lg p-4 space-y-4">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Badge variant="secondary">Banner {index + 1}</Badge>
+                        {banner.title && <span className="font-medium">{banner.title}</span>}
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        {banner.desktopImg && (
+                          <div>
+                            <p className="text-sm text-muted-foreground mb-1">Desktop Image:</p>
+                            <img 
+                              src={banner.desktopImg} 
+                              alt="Desktop" 
+                              className="w-full h-24 object-cover rounded"
+                            />
+                          </div>
+                        )}
+                        {banner.mobileImg && (
+                          <div>
+                            <p className="text-sm text-muted-foreground mb-1">Mobile Image:</p>
+                            <img 
+                              src={banner.mobileImg} 
+                              alt="Mobile" 
+                              className="w-full h-24 object-cover rounded"
+                            />
+                          </div>
+                        )}
+                      </div>
+
+                      {banner.subtitle && (
+                        <p className="text-sm text-muted-foreground mb-2">{banner.subtitle}</p>
+                      )}
+                      
+                      {banner.cta && banner.link && (
+                        <div className="flex items-center gap-2 text-sm">
+                          <Badge variant="outline">{banner.cta}</Badge>
+                          <span className="text-muted-foreground">→</span>
+                          <span className="text-muted-foreground">{banner.link}</span>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <Button 
+                      variant="destructive" 
+                      size="sm"
+                      onClick={() => onDeleteBanner(index)}
+                      disabled={saving}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

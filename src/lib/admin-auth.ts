@@ -1,5 +1,6 @@
 import { auth } from '@/lib/auth'
 import { NextResponse } from 'next/server'
+import { canAccessAdminRoute } from './role-utils'
 
 export async function requireAdmin() {
   const session = await auth()
@@ -11,7 +12,7 @@ export async function requireAdmin() {
     )
   }
 
-  if (session.user.role !== 'admin') {
+  if (!canAccessAdminRoute(session.user.role)) {
     return NextResponse.json(
       { error: 'Forbidden - Admin access required' },
       { status: 403 }

@@ -41,7 +41,7 @@ const FeaturedCategory = ({ categories: configuredCategories }: { categories?: B
         <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
           {categories.map((category, index) => (
             <Link
-              href={`/category/${category.slug}`}
+              href={`/collection/${category.slug}`}
               key={category.title}
               className="relative h-[400px] rounded-lg overflow-hidden group transition-all duration-300 hover:shadow-xl "
               style={{ backgroundColor: category.bgColor || "#f5f5f5" }}

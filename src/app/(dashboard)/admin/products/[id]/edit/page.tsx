@@ -159,7 +159,7 @@ const EditProductPage = () => {
   const fetchCategories = async () => {
     try {
       setCategoriesLoading(true);
-      const response = await fetch("/api/categories?limit=100&isActive=true");
+      const response = await fetch("/api/collections?limit=100&isActive=true");
       const data = await response.json();
 
       if (data.success) {
@@ -335,12 +335,21 @@ const EditProductPage = () => {
     setLoading(true);
 
     try {
+      // Separate existing variants from new ones
       const payload = {
         ...formData,
-        variants: formData.variants.map(({ _id, id, ...variant }) => ({
-          ...variant,
-          _id: _id || id, // Use existing _id or fallback to id
-        })),
+        variants: formData.variants.map(variant => {
+          // Only include _id for existing variants (those that came from the database)
+          if (variant._id && variant._id.length === 24) {
+            // This is an existing variant with a proper ObjectId
+            const { id, ...variantData } = variant;
+            return variantData;
+          } else {
+            // This is a new variant, don't include _id
+            const { _id, id, ...variantData } = variant;
+            return variantData;
+          }
+        }),
       };
 
       const response = await fetch(`/api/products/${productId}`, {
@@ -436,7 +445,7 @@ const EditProductPage = () => {
       </div>
 
       <form onSubmit={handleSubmit}>
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6 flex flex-col">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="basic">Basic Info</TabsTrigger>
             <TabsTrigger value="variants">Variants</TabsTrigger>

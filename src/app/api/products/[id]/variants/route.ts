@@ -23,12 +23,12 @@ const variantCreateSchema = z.object({
 // GET /api/products/[id]/variants - Get all variants of a product
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB()
 
-    const { id } = params
+    const { id } = await params
 
     // Find the product
     let product
@@ -61,7 +61,7 @@ export async function GET(
 // POST /api/products/[id]/variants - Add a new variant to a product (Admin only)
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Check admin authentication
@@ -70,7 +70,7 @@ export async function POST(
 
     await connectDB()
 
-    const { id } = params
+    const { id } = await params
     const contentType = request.headers.get('content-type')
     let validatedData: any
     

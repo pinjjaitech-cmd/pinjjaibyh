@@ -1,5 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server'
 import { auth } from '@/lib/auth'
+import { canAccessAdminRoute } from '@/lib/role-utils'
 
 // This middleware protects routes based on user authentication and role
 export async function proxy(request: NextRequest) {
@@ -23,7 +24,7 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(url)
     }
     
-    if (session.user?.role !== 'admin') {
+    if (!canAccessAdminRoute(session.user?.role)) {
       // Authenticated but not admin - redirect to unauthorized page or home
       return NextResponse.redirect(new URL('/unauthorized', request.url))
     }

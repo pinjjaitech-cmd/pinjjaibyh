@@ -1,74 +1,74 @@
 import mongoose from 'mongoose'
 
-const productGroupSchema = new mongoose.Schema({
-    name: String,
-    description: String,
-    products: [String]
-})
+
 
 const storeSettingsSchema = new mongoose.Schema({
+
+    marqueeTexts: [String],
+
     heroBanners: {
+
         type: [{
+
             desktopImg: String,
+
             mobileImg: String,
-            title: String,
-            subtitle: String,
-            cta: String,
-            link: String
+
         }],
+
         default: []
+
     },
-    productGroup1: productGroupSchema,
-    productGroup2: productGroupSchema,
+
+    featuredProducts: {
+
+        type: [Object],
+
+        default: []
+
+    },
+
     browseByCategory: {
-        category1: {
+
+        type: [{
+
             categoryName: String,
+
             categoryImage: String,
-            categorySlug: String,
-            bgColor: String,
-            ctaLabel: String
-        },
-        category2: {
-            categoryName: String,
-            categoryImage: String,
-            categorySlug: String,
-            bgColor: String,
-            ctaLabel: String
-        },
-        category3: {
-            categoryName: String,
-            categoryImage: String,
-            categorySlug: String,
-            bgColor: String,
-            ctaLabel: String
-        },
-        category4: {
-            categoryName: String,
-            categoryImage: String,
-            categorySlug: String,
-            bgColor: String,
-            ctaLabel: String
-        },
-        category5: {
-            categoryName: String,
-            categoryImage: String,
-            categorySlug: String,
-            bgColor: String,
-            ctaLabel: String
-        }
+
+            categorySlug: String
+
+        }]
+
     },
+
     testimonials: {
+
         type: {
+
             testimonialSectionHeading: String,
+
             testimonialSectionDescription: String,
+
             reviews: [{
+
                 customerName: String,
+
                 customerProfile: String,
+
                 customerMessage: String,
+
                 customerRating: Number
+
             }]
+
         }
+
     }
+
 })
 
+
+
 export const StoreSettings = mongoose.models.StoreSettings || mongoose.model('StoreSettings', storeSettingsSchema)
+

@@ -4,7 +4,7 @@ export interface User {
   email: string,
   phone: string,
   avatar: string,
-  role: 'admin' | 'user',
+  role: 'admin' | 'user' | 'super_admin',
   password?: string,
   isVerified: boolean,
   verificationToken?: string,

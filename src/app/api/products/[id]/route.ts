@@ -72,7 +72,7 @@ export async function GET(
 // PUT /api/products/[id] - Update a product (Admin only)
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Check admin authentication
@@ -81,7 +81,7 @@ export async function PUT(
 
     await connectDB()
 
-    const { id } = params
+    const { id } = await params
     const contentType = request.headers.get('content-type')
     let validatedData: any
     
@@ -223,7 +223,7 @@ export async function PUT(
 // DELETE /api/products/[id] - Delete a product (Admin only)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Check admin authentication
@@ -232,7 +232,7 @@ export async function DELETE(
 
     await connectDB()
 
-    const { id } = params
+    const { id } = await params
 
     // Find and delete the product
     let product

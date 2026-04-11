@@ -2,26 +2,28 @@
 
 import { motion } from "framer-motion";
 import Image from 'next/image';
+import SocialMediaLinks from "@/components/SocialMediaLinks";
 
 const timelineEvents = [
-  { year: "Roots", title: "The Art of Pinjana", desc: "For centuries, women in Punjab practiced 'Pinjana'—the art of carding cotton. With simple tools and infinite patience, they turned raw fibers into thread, weaving the fabric of their communities." },
-  { year: "Spark", title: "A Vision Takes Shape", desc: "Harman Seera, inspired by her grandmother's stories of cotton fields and crochet hooks, envisioned a brand that could honor these traditions while creating modern luxury." },
-  { year: "Birth", title: "Pinjjai is Born", desc: "Named after the Punjabi word for the crochet stitch, Pinjjai was founded to bridge heritage craft with contemporary fashion—empowering the women who keep these traditions alive." },
-  { year: "Today", title: "A Growing Movement", desc: "From a handful of artisans to a community of skilled women across rural Punjab, Pinjjai continues to grow—each bag a testament to resilience, beauty, and purpose." },
+  { year: "Roots", title: "The Art of Pinjana", desc: "Pinjjai by H is deeply rooted in the rural landscapes of Punjab, where tradition and craftsmanship are a way of life. Inspired by age-old techniques, the name Pinjjai comes from “Pinjana” (पिंजना), the traditional process of cleaning cotton—symbolizing patience, purity, and heritage. Our foundation lies in preserving these timeless skills while celebrating the women who carry them forward." },
+  { year: "Spark", title: "A Vision Takes Shape", desc: "Our vision has always been to create more than just products. We aim to build a platform that empowers women—providing fair wages, nurturing skills, and fostering independence. Every design reflects a belief in effortless style, meaningful craftsmanship, and the strength of women who express themselves through what they create and wear." },
+  { year: "Birth", title: "Pinjjai is Born", desc: "Pinjjai by H came to life in July 2019, founded by Harman Seera, a textile graduate from Pearl Academy of Fashion. What began as a creative passion soon turned into a purpose-driven journey. Inspired by her mothers hand crochet skills, Harman grew up watching simple threads transform into something beautiful. Those memories now live on in every piece—each one telling a story of love, tradition, and deep-rooted connection." },
+  { year: "Today", title: "A Growing Movement", desc: "Today, Pinjjai by H carries forward stories knitted with care and tradition. Each bag, handcrafted by women artisans of Punjab, holds their skill, dedication, and quiet strength. With every piece, we continue to uplift lives and create consciously—inviting you to be part of a journey rooted in heritage, empowerment, and purpose." },
 ];
 
 const AboutPage = () => {
   return (
     <div className="min-h-screen bg-(--brand-white)">
       {/* Hero */}
-      <section className="relative h-[60vh] overflow-hidden flex items-center justify-center">
-        <div className="absolute inset-0 bg-gradient-to-b from-(--brand-primary)/20 to-(--brand-primary)/40" />
+      <section className="relative bg-[url('/hands-crochet.jpg')] bg-cover bg-center h-[60vh] overflow-hidden flex items-center justify-center">
+
+        <div className="absolute inset-0 bg-gradient-to-b from-(--brand-primary)/70 to-(--brand-primary)" />
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.3 }}
-            className="font-serif text-5xl md:text-7xl text-(--brand-dark) mb-6"
+            className="font-serif text-5xl md:text-7xl text-white mb-6"
           >
             About Us
           </motion.h1>
@@ -29,7 +31,7 @@ const AboutPage = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.8 }}
-            className="text-lg md:text-xl text-(--brand-dark)/70 max-w-2xl mx-auto"
+            className="text-lg md:text-xl text-white/70 max-w-2xl mx-auto"
           >
             From raw thread to radiant purpose - the journey of Pinjjai
           </motion.p>
@@ -144,13 +146,12 @@ const AboutPage = () => {
             </h2>
             <div className="w-16 h-0.5 bg-(--brand-primary) mb-6" />
             <p className="text-(--brand-dark)/70 leading-relaxed mb-6">
-              Over 50 women artisans across 12 villages in Punjab form the beating heart of Pinjjai.
-              They are mothers, daughters, dreamers—each one transforming thread into independence.
+              Over 20 women artisans, along with their families in Punjab, form the beating heart of Pinjjai. They are mothers, daughters, dreamers—each one transforming thread into independence.
             </p>
             <div className="grid grid-cols-3 gap-8">
               {[
-                { num: "50+", label: "Artisans" },
-                { num: "12", label: "Villages" },
+                { num: "20+", label: "Artisans" },
+                { num: "2+", label: "Villages" },
                 { num: "100%", label: "Fair Wage" },
               ].map((stat) => (
                 <div key={stat.label}>
@@ -177,6 +178,42 @@ const AboutPage = () => {
                 </div>
               </div>
             </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Connect With Us */}
+      <section className="py-20 bg-(--brand-primary)">
+        <div className="max-w-7xl mx-auto px-6 lg:px-12">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <h2 className="font-serif text-4xl md:text-5xl text-(--brand-white) mb-6">
+              Connect With Us
+            </h2>
+            <p className="text-lg text-(--brand-white)/80 max-w-2xl mx-auto mb-12">
+              Follow our journey on social media to see behind-the-scenes content, new collections, and stories from our artisan community.
+            </p>
+            
+            <SocialMediaLinks 
+              size="lg"
+              variant="outlined"
+              className="mb-8"
+            />
+            
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              viewport={{ once: true }}
+              className="text-(--brand-white)/60 text-sm"
+            >
+              Join our community of conscious consumers and craft enthusiasts
+            </motion.div>
           </motion.div>
         </div>
       </section>

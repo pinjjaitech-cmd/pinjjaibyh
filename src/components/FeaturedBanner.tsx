@@ -71,7 +71,7 @@ const FeaturedBanner = ({ slides: configuredSlides }: { slides?: HeroSlide[] }) 
   }
 
   return (
-    <div className="relative w-full mx-auto max-w-7xl xl:rounded-2xl h-[600px] xl:h-[650px] overflow-hidden bg-brand-primary">
+    <div className="relative w-full mx-auto max-w-[400px] md:max-w-[1200px] xl:rounded-2xl h-[600px] md:h-[650px] overflow-hidden bg-brand-primary">
       {/* Slides Container */}
       <div className="relative h-full">
         {slides.map((slide, index) => (

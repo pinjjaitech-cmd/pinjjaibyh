@@ -36,7 +36,7 @@ const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address!" }),
   phone: z.string().min(10).max(15),
   location: z.string().min(2),
-  role: z.enum(["admin", "user"]),
+  role: z.enum(["admin", "user", "super_admin"]),
 });
 
 const EditUser = () => {
@@ -135,6 +135,7 @@ const EditUser = () => {
                         <SelectContent>
                           <SelectItem value="admin">Admin</SelectItem>
                           <SelectItem value="user">User</SelectItem>
+                          <SelectItem value="super_admin">Super Admin</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>

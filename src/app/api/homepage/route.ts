@@ -1,14 +1,21 @@
 import { NextResponse } from 'next/server'
-import { getHomepageData } from '@/lib/homepage'
+import connectDB from '@/lib/db'
+import { StoreSettings } from '@/models/StoreSettings'
 
-// GET /api/homepage - Fetch all homepage data
 export async function GET() {
   try {
-    const homepageData = await getHomepageData()
+
+    await connectDB()
+
+    // fetch the store settings first document to and sent the homepage data
+    const storeSettings = await StoreSettings.findOne().sort({ createdAt: -1 })
+
+    console.log("storeSettings",storeSettings)
+
 
     return NextResponse.json({
       success: true,
-      data: homepageData
+      data: storeSettings
     })
   } catch (error: any) {
     console.error('Error fetching homepage data:', error)
@@ -18,3 +25,4 @@ export async function GET() {
     )
   }
 }
+

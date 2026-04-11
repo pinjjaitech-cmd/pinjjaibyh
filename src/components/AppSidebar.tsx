@@ -47,6 +47,8 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./ui/collapsible";
+import { signOut, useSession } from "next-auth/react";
+import { url } from "inspector";
 
 const mainNavItems = [
   {
@@ -91,52 +93,25 @@ const managementItems = [
   },
   {
     title: "Categories",
-    url: "/admin/categories",
+    url: "/admin/collections",
     icon: FolderOpen,
     subItems: [
       {
         title: "View Categories",
-        url: "/admin/categories",
+        url: "/admin/collections",
         icon: FolderOpen,
       },
       {
         title: "Add Category",
-        url: "/admin/categories/create",
+        url: "/admin/collections/create",
         icon: Plus,
       },
     ],
-  },
-  {
-    title: "Orders",
-    url: "/admin/orders",
-    icon: Receipt,
   },
   {
     title: "Users",
     url: "/admin/users",
     icon: Users,
-  },
-  {
-    title: "Coupons",
-    url: "/admin/coupons",
-    icon: Tag,
-    subItems: [
-      {
-        title: "View Coupons",
-        url: "/admin/coupons",
-        icon: Tag,
-      },
-      {
-        title: "Create Coupon",
-        url: "/admin/coupons/create",
-        icon: Plus,
-      },
-      {
-        title: "Coupon Analytics",
-        url: "/admin/coupons/analytics",
-        icon: BarChart3,
-      },
-    ],
   },
 ];
 
@@ -168,14 +143,11 @@ const contentItems = [
     url: "/admin/wishlist",
     icon: Heart,
   },
-  {
-    title: "Cart Management",
-    url: "/admin/cart",
-    icon: ShoppingCart,
-  },
 ];
 
 const AppSidebar = () => {
+  const session = useSession()
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="py-4">
@@ -320,13 +292,11 @@ const AppSidebar = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <User2 /> John Doe <ChevronUp className="ml-auto" />
+                  <User2 /> {session.data?.user.name} <ChevronUp className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem>Account</DropdownMenuItem>
-                <DropdownMenuItem>Setting</DropdownMenuItem>
-                <DropdownMenuItem>Sign out</DropdownMenuItem>
+                <DropdownMenuItem onClick={()=> signOut()} >Sign out</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>

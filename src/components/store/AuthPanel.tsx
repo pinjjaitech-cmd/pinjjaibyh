@@ -23,8 +23,9 @@ export default function AuthPanel() {
       redirect: false,
     })
     setLoading(false)
+    console.warn(result)
 
-    if (result?.error) {
+    if (result?.status !== 200) {
       setError('Invalid credentials or unverified email.')
       return
     }

@@ -41,11 +41,6 @@ const CategorySchema = new mongoose.Schema<Category>({
     timestamps: true,
 })
 
-// Create indexes for better performance
-CategorySchema.index({ name: 1 })
-CategorySchema.index({ slug: 1 })
-CategorySchema.index({ isActive: 1 })
-CategorySchema.index({ parentCategory: 1 })
 
 const CategoryModel = mongoose.models.Category || mongoose.model<Category>('Category', CategorySchema)
 

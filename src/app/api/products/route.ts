@@ -5,12 +5,14 @@ import Category from '@/models/Category'
 import { requireAdmin } from '@/lib/admin-auth'
 import { uploadImage } from '@/lib/cloudinary'
 import { z } from 'zod'
+import CategoryModel from '@/models/Category'
 
 // Query parameters schema for validation
 const querySchema = z.object({
   page: z.string().optional().transform(val => val ? parseInt(val) : 1),
   limit: z.string().optional().transform(val => val ? parseInt(val) : 10),
   search: z.string().optional(),
+  slug: z.string().optional(),
   status: z.enum(['draft', 'published', 'archived']).optional(),
   sortBy: z.enum(['title', 'createdAt', 'updatedAt', 'price']).optional().default('createdAt'),
   sortOrder: z.enum(['asc', 'desc']).optional().default('desc'),
@@ -48,7 +50,7 @@ const productCreateSchema = z.object({
 export async function GET(request: NextRequest) {
   try {
     await connectDB()
-    Category.modelName
+    console.log(CategoryModel.modelName)
 
     const { searchParams } = new URL(request.url)
     const validatedQuery = querySchema.parse(Object.fromEntries(searchParams))
@@ -57,6 +59,7 @@ export async function GET(request: NextRequest) {
       page,
       limit,
       search,
+      slug,
       status,
       sortBy,
       sortOrder,
@@ -68,6 +71,11 @@ export async function GET(request: NextRequest) {
 
     // Build query
     const query: any = {}
+
+    // Slug filter (for single product lookup)
+    if (slug) {
+      query.slug = slug
+    }
 
     // Search functionality
     if (search) {
@@ -107,6 +115,25 @@ export async function GET(request: NextRequest) {
     // Sorting
     const sort: any = {}
     sort[sortBy] = sortOrder === 'asc' ? 1 : -1
+
+    // Handle single product lookup by slug
+    if (slug) {
+      const product = await Product.findOne({ slug, status: 'published' })
+        .populate('category', 'name slug')
+        .lean()
+
+      if (!product) {
+        return NextResponse.json(
+          { success: false, error: 'Product not found' },
+          { status: 404 }
+        )
+      }
+
+      return NextResponse.json({
+        success: true,
+        data: product,
+      })
+    }
 
     // Execute query with pagination
     const skip = (page - 1) * limit

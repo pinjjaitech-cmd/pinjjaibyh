@@ -14,12 +14,12 @@ const customerReviewUpdateSchema = z.object({
 // GET /api/customer-reviews/[id] - Fetch a specific customer review by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB()
 
-    const { id } = params
+    const { id } = await params
 
     if (!id) {
       return NextResponse.json(
@@ -56,12 +56,12 @@ export async function GET(
 // PUT /api/customer-reviews/[id] - Update a specific customer review
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB()
 
-    const { id } = params
+    const { id } = await params
 
     if (!id) {
       return NextResponse.json(
@@ -117,12 +117,12 @@ export async function PUT(
 // DELETE /api/customer-reviews/[id] - Delete a specific customer review
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB()
 
-    const { id } = params
+    const { id } = await params
 
     if (!id) {
       return NextResponse.json(
