@@ -2,6 +2,26 @@ import Link from 'next/link'
 import connectDB from '@/lib/db'
 import Category from '@/models/Category'
 import Image from 'next/image'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Collections - Shop Handcrafted Crochet Bags by Category',
+  description: 'Explore our curated collections of handcrafted crochet bags. Each collection features unique designs created by women artisans in Punjab, blending traditional techniques with contemporary style.',
+  keywords: ['crochet bag collections', 'handcrafted bags', 'artisan categories', 'women crafts', 'punjab handicrafts', 'sustainable fashion collections'],
+  openGraph: {
+    title: 'Collections - Handcrafted Crochet Bags by Pinjjai',
+    description: 'Browse our curated collections of handcrafted crochet bags, each telling a unique story of traditional craftsmanship and modern design.',
+    url: '/collections',
+    images: [
+      {
+        url: '/og-collections.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Handcrafted crochet bag collections by Pinjjai',
+      },
+    ],
+  },
+}
 
 export default async function CategoriesPage() {
   await connectDB()

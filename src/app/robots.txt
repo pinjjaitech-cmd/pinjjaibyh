@@ -1,0 +1,60 @@
+import { MetadataRoute } from 'next'
+
+export default function robots(): MetadataRoute.Robots {
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://pinjjai.com'
+
+  return {
+    rules: [
+      {
+        userAgent: '*',
+        allow: [
+          '/',
+          '/about',
+          '/story',
+          '/collections',
+          '/products',
+          '/collection/*',
+          '/products/*',
+          '/search',
+          '/wishlist',
+          '/auth',
+        ],
+        disallow: [
+          '/admin',
+          '/api',
+          '/dashboard',
+          '/_next',
+          '/static',
+          '/*.json$',
+          '/login',
+          '/register',
+        ],
+      },
+      {
+        userAgent: 'Googlebot',
+        allow: [
+          '/',
+          '/about',
+          '/story',
+          '/collections',
+          '/products',
+          '/collection/*',
+          '/products/*',
+          '/search',
+        ],
+        disallow: [
+          '/admin',
+          '/api',
+          '/dashboard',
+          '/wishlist',
+          '/auth',
+          '/login',
+          '/register',
+        ],
+        crawlDelay: 1,
+      },
+    ],
+    sitemap: `${baseUrl}/sitemap.xml`,
+    host: baseUrl,
+  }
+}

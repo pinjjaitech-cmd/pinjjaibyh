@@ -3,6 +3,26 @@ import FeaturedCategory from '@/components/FeaturedCategory'
 import FeaturedProducts from '@/components/FeaturedProducts'
 import { getHomepageData } from '@/lib/homepage'
 import Link from 'next/link'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Home - Handcrafted Crochet Bags & Artisan Crafts',
+  description: 'Welcome to Pinjjai by H. Discover our collection of handcrafted crochet bags made by women artisans in Punjab. Shop sustainable fashion that empowers communities and preserves traditional craftsmanship.',
+  keywords: ['handcrafted bags', 'crochet bags', 'artisan crafts', 'sustainable fashion', 'women empowerment', 'traditional crafts', 'Punjab artisans'],
+  openGraph: {
+    title: 'Pinjjai by H - Handcrafted Crochet Bags | Empowering Women Artisans',
+    description: 'Discover handcrafted crochet bags made by women artisans in Punjab. Each bag tells a story of tradition, empowerment, and sustainable craftsmanship.',
+    url: '/',
+    images: [
+      {
+        url: '/og-homepage.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Pinjjai by H - Handcrafted Crochet Bags Collection',
+      },
+    ],
+  },
+}
 
 const Homepage = async () => {
   const homepageData = await getHomepageData()
