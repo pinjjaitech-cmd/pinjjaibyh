@@ -34,7 +34,7 @@ export interface Product {
   services?: ("free-delivery" | "cash-on-delivery" | "replacement")[],
   slug: string,
   defaultVariantId?: string,
-  category?: string,
+  categories?: string[],
   variants: {
       _id: string,
       skuCode: string,

@@ -5,7 +5,7 @@ import { z } from 'zod'
 
 // Advanced search schema
 const searchSchema = z.object({
-  q: z.string().min(1, 'Search query is required'),
+  q: z.string().optional(),
   page: z.string().optional().transform(val => val ? parseInt(val) : 1),
   limit: z.string().optional().transform(val => val ? parseInt(val) : 10),
   status: z.enum(['draft', 'published', 'archived']).optional(),
@@ -14,6 +14,7 @@ const searchSchema = z.object({
   minPrice: z.string().optional().transform(val => val ? parseFloat(val) : undefined),
   maxPrice: z.string().optional().transform(val => val ? parseFloat(val) : undefined),
   services: z.string().optional().transform(val => val ? val.split(',') : undefined),
+  categories: z.string().optional().transform(val => val ? val.split(',') : undefined),
   inStock: z.string().optional().transform(val => val === 'true'),
   hasImages: z.string().optional().transform(val => val === 'true'),
 })
@@ -36,13 +37,17 @@ export async function GET(request: NextRequest) {
       minPrice,
       maxPrice,
       services,
+      categories,
       inStock,
       hasImages,
     } = validatedQuery
 
     // Build advanced search query
-    const query: any = {
-      $or: [
+    const query: any = {}
+    
+    // Only add text search if query is provided
+    if (q && q.trim()) {
+      query.$or = [
         { title: { $regex: q, $options: 'i' } },
         { description: { $regex: q, $options: 'i' } },
         { 'variants.skuCode': { $regex: q, $options: 'i' } },
@@ -70,6 +75,11 @@ export async function GET(request: NextRequest) {
     // Services filter
     if (services && services.length > 0) {
       query.services = { $in: services }
+    }
+
+    // Categories filter
+    if (categories && categories.length > 0) {
+      query.categories = { $in: categories }
     }
 
     // Stock filter
@@ -115,30 +125,33 @@ export async function GET(request: NextRequest) {
     const productsWithScores = products.map(product => {
       let score = 0
       
-      // Title matches get highest score
-      if (product.title.toLowerCase().includes(q.toLowerCase())) {
-        score += 10
-      }
-      
-      // SKU matches get high score
-      const hasSkuMatch = product.variants.some((variant: any) => 
-        variant.skuCode.toLowerCase().includes(q.toLowerCase())
-      )
-      if (hasSkuMatch) score += 8
-      
-      // Description matches get medium score
-      if (product.description.toLowerCase().includes(q.toLowerCase())) {
-        score += 5
-      }
-      
-      // Attribute matches get lower score
-      const hasAttributeMatch = product.variants.some((variant: any) =>
-        variant.attributes.some((attr: any) =>
-          attr.name.toLowerCase().includes(q.toLowerCase()) ||
-          attr.value.toLowerCase().includes(q.toLowerCase())
+      // Only calculate relevance scores if query is provided
+      if (q && q.trim()) {
+        // Title matches get highest score
+        if (product.title.toLowerCase().includes(q.toLowerCase())) {
+          score += 10
+        }
+        
+        // SKU matches get high score
+        const hasSkuMatch = product.variants.some((variant: any) => 
+          variant.skuCode.toLowerCase().includes(q.toLowerCase())
         )
-      )
-      if (hasAttributeMatch) score += 3
+        if (hasSkuMatch) score += 8
+        
+        // Description matches get medium score
+        if (product.description.toLowerCase().includes(q.toLowerCase())) {
+          score += 5
+        }
+        
+        // Attribute matches get lower score
+        const hasAttributeMatch = product.variants.some((variant: any) =>
+          variant.attributes.some((attr: any) =>
+            attr.name.toLowerCase().includes(q.toLowerCase()) ||
+            attr.value.toLowerCase().includes(q.toLowerCase())
+          )
+        )
+        if (hasAttributeMatch) score += 3
+      }
       
       return { ...product, _searchScore: score }
     })

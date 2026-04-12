@@ -1,7 +1,7 @@
 import connectDB from '@/lib/db'
 import Category from '@/models/Category'
 import Product from '@/models/Product'
-import StoreProductCard from '@/components/store/StoreProductCard'
+import CollectionProductsClient from '@/components/store/CollectionProductsClient'
 import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import { generateCategoryMetadata, generateBreadcrumbJsonLd } from '@/lib/seo'
@@ -18,8 +18,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     }
   }
 
-  const products = await Product.find({ category: category._id, status: 'published' })
-    .populate('category', 'name slug')
+  const products = await Product.find({ categories: { $in: [category._id] }, status: 'published' })
+    .populate('categories', 'name slug')
+    .limit(12) // Load first 12 products for initial display
+    .sort({ createdAt: -1 })
     .lean()
 
   return generateCategoryMetadata(category as any, products as any[])
@@ -32,8 +34,10 @@ export default async function CategoryDetailsPage({ params }: { params: Promise<
   const category = await Category.findOne({ slug, isActive: true }).lean() as any
   if (!category) return notFound()
 
-  const products = await Product.find({ category: category._id, status: 'published' })
-    .populate('category', 'name slug')
+  // Load initial products (first 12)
+  const initialProducts = await Product.find({ categories: { $in: [category._id] }, status: 'published' })
+    .populate('categories', 'name slug')
+    .limit(12) // Load first 12 products for initial display
     .sort({ createdAt: -1 })
     .lean()
 
@@ -52,9 +56,11 @@ export default async function CategoryDetailsPage({ params }: { params: Promise<
       <section className='w-full max-w-7xl mx-auto px-4 py-14'>
         <h1 className='font-serif text-5xl text-(--brand-dark) mb-3'>{category.name}</h1>
         <p className='text-(--brand-dark)/70 mb-8'>{category.description || 'Explore products in this category.'}</p>
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-          {(products as any[]).map((product: any) => <StoreProductCard key={product._id.toString()} product={{ ...product, _id: product._id.toString() }} />)}
-        </div>
+        <CollectionProductsClient 
+          initialProducts={initialProducts as any[]}
+          categoryId={category._id.toString()}
+          categoryName={category.name}
+        />
       </section>
     </>
   )

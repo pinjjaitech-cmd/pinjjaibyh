@@ -66,7 +66,7 @@ interface ProductFormData {
   status: 'draft' | 'published' | 'archived';
   services: string[];
   slug: string;
-  category?: string;
+  categories: string[];
   defaultVariantId: string;
   variants: Variant[];
 }
@@ -81,7 +81,7 @@ const CreateProductPage = () => {
     status: "draft",
     services: [],
     slug: "",
-    category: "",
+    categories: [],
     defaultVariantId: "",
     variants: [
       {
@@ -477,24 +477,58 @@ const CreateProductPage = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="category">Category</Label>
-                  <Select
-                    value={formData.category || "none"}
-                    onValueChange={(value) => setFormData(prev => ({ ...prev, category: value === "none" ? undefined : value }))}
-                    disabled={categoriesLoading}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a category (optional)" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">No Category</SelectItem>
-                      {categories.map((category) => (
-                        <SelectItem key={category._id} value={category._id}>
-                          {category.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <Label>Categories</Label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-40 overflow-y-auto p-2 border rounded-md">
+                    {categoriesLoading ? (
+                      <div className="col-span-full flex items-center justify-center py-4">
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      </div>
+                    ) : categories.length === 0 ? (
+                      <p className="col-span-full text-sm text-muted-foreground">No categories available</p>
+                    ) : (
+                      categories.map((category) => (
+                        <div key={category._id} className="flex items-center space-x-2">
+                          <Checkbox
+                            id={`category-${category._id}`}
+                            checked={formData.categories.includes(category._id)}
+                            onCheckedChange={(checked) => {
+                              setFormData(prev => ({
+                                ...prev,
+                                categories: checked
+                                  ? [...prev.categories, category._id]
+                                  : prev.categories.filter(c => c !== category._id),
+                              }));
+                            }}
+                          />
+                          <Label htmlFor={`category-${category._id}`} className="text-sm">
+                            {category.name}
+                          </Label>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                  {formData.categories.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {formData.categories.map((categoryId) => {
+                        const category = categories.find(c => c._id === categoryId);
+                        return category ? (
+                          <Badge key={categoryId} variant="secondary" className="text-xs">
+                            {category.name}
+                            <button
+                              type="button"
+                              onClick={() => setFormData(prev => ({
+                                ...prev,
+                                categories: prev.categories.filter(c => c !== categoryId)
+                              }))}
+                              className="ml-1 hover:text-red-500"
+                            >
+                              ×
+                            </button>
+                          </Badge>
+                        ) : null;
+                      })}
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-2">

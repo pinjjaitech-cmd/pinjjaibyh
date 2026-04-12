@@ -12,7 +12,7 @@ const productUpdateSchema = z.object({
   status: z.enum(['draft', 'published', 'archived']).optional(),
   services: z.array(z.enum(['free-delivery', 'cash-on-delivery', 'replacement'])).optional(),
   slug: z.string().min(1).optional(),
-  category: z.string().optional(),
+  categories: z.array(z.string()).optional(),
   defaultVariantId: z.string().optional(),
   variants: z.array(z.object({
     _id: z.string().optional(),
@@ -44,9 +44,9 @@ export async function GET(
     // Try to find by ID first, then by slug
     let product;
     if (id.match(/^[0-9a-fA-F]{24}$/)) {
-      product = await Product.findById(id).populate('category', 'name slug');
+      product = await Product.findById(id).populate('categories', 'name slug');
     } else {
-      product = await Product.findOne({ slug: id }).populate('category', 'name slug');
+      product = await Product.findOne({ slug: id }).populate('categories', 'name slug');
     }
 
     if (!product) {
@@ -186,9 +186,9 @@ export async function PUT(
     Object.assign(product, validatedData)
     await product.save()
 
-    // Populate the product with category details
+    // Populate the product with categories details
     const populatedProduct = await Product.findById(product._id)
-      .populate('category', 'name slug')
+      .populate('categories', 'name slug')
       .lean()
 
     return NextResponse.json({

@@ -28,12 +28,11 @@ const ProductSchema = new mongoose.Schema<Product>(
             unique: true,
             index: true,
         },
-        category: {
+        categories: [{
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Category',
             required: false,
-            index: true,
-        },
+        }],
         defaultVariantId: {
             type: String,
         },

@@ -29,13 +29,13 @@ import {
 } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  Plus, 
-  Search, 
-  Filter, 
-  MoreHorizontal, 
-  Edit, 
-  Trash2, 
+import {
+  Plus,
+  Search,
+  Filter,
+  MoreHorizontal,
+  Edit,
+  Trash2,
   Eye,
   Package,
   Image as ImageIcon,
@@ -50,11 +50,11 @@ interface Product {
   slug: string;
   status: 'draft' | 'published' | 'archived';
   services: string[];
-  category?: {
+  categories?: [{
     _id: string;
     name: string;
     slug: string;
-  };
+  }];
   variants: {
     _id: string;
     skuCode: string;
@@ -106,6 +106,8 @@ const ProductsPage = () => {
 
       const response = await fetch(`/api/products?${params}`);
       const data = await response.json();
+
+      console.log(data)
 
       if (data.success) {
         setProducts(data.data);
@@ -203,7 +205,7 @@ const ProductsPage = () => {
       published: { variant: "default", label: "Published" },
       archived: { variant: "destructive", label: "Archived" },
     };
-    
+
     const config = variants[status as keyof typeof variants];
     return <Badge variant={config?.variant as any || "default"}>{config?.label || "Unknown"}</Badge>;
   };
@@ -217,14 +219,14 @@ const ProductsPage = () => {
     if (!variants || !Array.isArray(variants) || variants.length === 0) {
       return { status: "No Variants", color: "text-gray-500" };
     }
-    
+
     const activeVariants = variants.filter(v => v.isActive);
     if (activeVariants.length === 0) return { status: "No Variants", color: "text-gray-500" };
-    
+
     const inStock = activeVariants.some(v => !v.trackQuantity || v.stockQuantity! > 0);
-    return { 
-      status: inStock ? "In Stock" : "Out of Stock", 
-      color: inStock ? "text-green-600" : "text-red-600" 
+    return {
+      status: inStock ? "In Stock" : "Out of Stock",
+      color: inStock ? "text-green-600" : "text-red-600"
     };
   };
 
@@ -413,7 +415,7 @@ const ProductsPage = () => {
                   const stockStatus = getStockStatus(variants);
                   const minPrice = getMinPrice(variants);
                   const maxPrice = variants.length > 0 ? Math.max(...variants.map(v => v.price)) : 0;
-                  
+
                   return (
                     <TableRow key={product._id}>
                       <TableCell>
@@ -451,9 +453,9 @@ const ProductsPage = () => {
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          {product.category ? (
+                          {product.categories ? (
                             <Badge variant="outline">
-                              {product.category.name}
+                              {product.categories.map((cat) => (cat.name))}
                             </Badge>
                           ) : (
                             <Badge variant="secondary">No Category</Badge>

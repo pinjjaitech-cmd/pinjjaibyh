@@ -19,7 +19,7 @@ const querySchema = z.object({
   minPrice: z.string().optional().transform(val => val ? parseFloat(val) : undefined),
   maxPrice: z.string().optional().transform(val => val ? parseFloat(val) : undefined),
   services: z.string().optional().transform(val => val ? val.split(',') : undefined),
-  category: z.string().optional(),
+  categories: z.string().optional().transform(val => val ? val.split(',') : undefined),
 })
 
 // Product creation schema
@@ -29,7 +29,7 @@ const productCreateSchema = z.object({
   status: z.enum(['draft', 'published', 'archived']).default('draft'),
   services: z.array(z.enum(['free-delivery', 'cash-on-delivery', 'replacement'])).default([]),
   slug: z.string().min(1, 'Slug is required'),
-  category: z.string().optional(),
+  categories: z.array(z.string()).optional(),
   defaultVariantId: z.string().optional(),
   variants: z.array(z.object({
     skuCode: z.string().min(1, 'SKU code is required'),
@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
       minPrice,
       maxPrice,
       services,
-      category,
+      categories,
     } = validatedQuery
 
     // Build query
@@ -107,9 +107,9 @@ export async function GET(request: NextRequest) {
       query.services = { $in: services }
     }
 
-    // Category filter
-    if (category) {
-      query.category = category
+    // Categories filter
+    if (categories && categories.length > 0) {
+      query.categories = { $in: categories }
     }
 
     // Sorting
@@ -119,7 +119,7 @@ export async function GET(request: NextRequest) {
     // Handle single product lookup by slug
     if (slug) {
       const product = await Product.findOne({ slug, status: 'published' })
-        .populate('category', 'name slug')
+        .populate('categories', 'name slug')
         .lean()
 
       if (!product) {
@@ -140,7 +140,7 @@ export async function GET(request: NextRequest) {
 
     const [products, totalCount] = await Promise.all([
       Product.find(query)
-        .populate('category', 'name slug')
+        .populate('categories', 'name slug')
         .sort(sort)
         .skip(skip)
         .limit(limit)
@@ -269,9 +269,9 @@ export async function POST(request: NextRequest) {
     const product = new Product(validatedData)
     await product.save()
 
-    // Populate the product with category details
+    // Populate the product with categories details
     const populatedProduct = await Product.findById(product._id)
-      .populate('category', 'name slug')
+      .populate('categories', 'name slug')
       .lean()
 
     return NextResponse.json({
