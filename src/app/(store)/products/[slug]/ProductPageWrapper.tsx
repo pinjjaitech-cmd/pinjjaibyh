@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const product = await Product.findOne({ 
       slug, 
       status: 'published' 
-    }).populate('category').lean()
+    }).populate('categories').lean()
     
     if (!product) {
       return {
@@ -45,7 +45,7 @@ export default async function ProductPageWrapper({ params }: PageProps) {
     const product = await Product.findOne({ 
       slug, 
       status: 'published' 
-    }).populate('category').lean()
+    }).populate('categories').lean()
     
     if (!product) {
       return (

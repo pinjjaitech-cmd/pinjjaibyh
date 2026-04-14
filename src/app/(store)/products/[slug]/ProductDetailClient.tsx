@@ -172,7 +172,7 @@ export default function ProductDetailClient({ productSlug }: ProductDetailClient
   const handleWhatsAppBooking = () => {
     if (!product || !selectedVariant) return;
     
-    const message = `Hi Pinjjai team! I'm interested in booking this product:\n\nð Product: ${product.title}\nð Variant: ${selectedVariant.skuCode}\nâ°ï¸ Price: ${formatPrice(selectedVariant.price)}\n\n${selectedVariant.attributes.map(attr => `${attr.name}: ${attr.value}`).join('\n')}`;
+    const message = `Hi Pinjjai team! I'm interested in booking this product:\n\n★ Product: ${product.title}\n★ Variant: ${selectedVariant.skuCode}\n★ Price: ${formatPrice(selectedVariant.price)}\n\n${selectedVariant.attributes.map(attr => `${attr.name}: ${attr.value}`).join('\n')}`;
     const whatsappUrl = `https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '919999999999'}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
@@ -612,7 +612,7 @@ export default function ProductDetailClient({ productSlug }: ProductDetailClient
                         const percentage = reviews.length > 0 ? (count / reviews.length) * 100 : 0;
                         return (
                           <div key={rating} className="flex items-center gap-2">
-                            <span className="text-sm w-12">{rating} â</span>
+                            <span className="text-sm w-12">{rating} ★</span>
                             <div className="flex-1 bg-muted rounded-full h-2">
                               <div 
                                 className="bg-yellow-400 h-2 rounded-full" 
@@ -771,10 +771,10 @@ export default function ProductDetailClient({ productSlug }: ProductDetailClient
                 <div>
                   <h4 className="font-medium mb-2">Shipping Information</h4>
                   <ul className="space-y-2 text-muted-foreground">
-                    <li>â¢ Free shipping on orders above 2500</li>
-                    <li>â¢ Standard delivery: 7-10 business days</li>
-                    <li>â¢ Express delivery: 2-3 business days with Shipping Charges</li>
-                    <li>â¢ All orders are shipped with tracking</li>
+                    <li>• Free shipping on orders above 2500</li>
+                    <li>• Standard delivery: 7-10 business days</li>
+                    <li>• Express delivery: 2-3 business days with Shipping Charges</li>
+                    <li>• All orders are shipped with tracking</li>
                   </ul>
                 </div>
                 
@@ -783,9 +783,9 @@ export default function ProductDetailClient({ productSlug }: ProductDetailClient
                 <div>
                   <h4 className="font-medium mb-2">Return Policy</h4>
                   <ul className="space-y-2 text-muted-foreground">
-                    <li>â¢ 15-day return policy from date of delivery</li>
-                    <li>â¢ Items must be unused and in original packaging</li>
-                    <li>â¢ Refunds processed within 5-7 business days</li>
+                    <li>• 15-day return policy from date of delivery</li>
+                    <li>• Items must be unused and in original packaging</li>
+                    <li>• Refunds processed within 5-7 business days</li>
                   </ul>
                 </div>
               </CardContent>

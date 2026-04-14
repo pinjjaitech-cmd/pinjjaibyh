@@ -36,7 +36,7 @@ export default async function CategoriesPage() {
       <div className='grid sm:grid-cols-2 lg:grid-cols-3 gap-4'>
         {categories.map((category) => (
           <Link key={category._id.toString()} href={`/collection/${category.slug}`} className='rounded-xl border border-(--brand-dark)/10 p-6 bg-white/70 hover:bg-white'>
-            <img src={category.image} alt={category.name} width={400} height={500} className='w-full max-h-96 object-top-left mb-2 object-cover rounded-lg' />
+            <img src={category.image} alt={category.name} width={400} height={500} className='w-full max-h-96 object-top-center mb-2 object-cover rounded-lg' />
             <h2 className='font-serif text-3xl text-(--brand-dark)'>{category.name}</h2>
             <p className='text-sm text-(--brand-dark)/65 mt-1'>{category.description || 'Browse products in this category'}</p>
           </Link>

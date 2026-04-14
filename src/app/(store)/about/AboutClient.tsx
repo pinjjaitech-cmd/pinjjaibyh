@@ -5,10 +5,10 @@ import Image from 'next/image';
 import SocialMediaLinks from "@/components/SocialMediaLinks";
 
 const timelineEvents = [
-  { year: "Roots", title: "The Art of Pinjana", desc: "Pinjjai by H is deeply rooted in the rural landscapes of Punjab, where tradition and craftsmanship are a way of life. Inspired by age-old techniques, the name Pinjjai comes from \"Pinjana\" (à¤ªà¤¿à¤à¥à¤¨à¤¾), the traditional process of cleaning cottonâsymbolizing patience, purity, and heritage. Our foundation lies in preserving these timeless skills while celebrating the women who carry them forward." },
-  { year: "Spark", title: "A Vision Takes Shape", desc: "Our vision has always been to create more than just products. We aim to build a platform that empowers womenâproviding fair wages, nurturing skills, and fostering independence. Every design reflects a belief in effortless style, meaningful craftsmanship, and the strength of women who express themselves through what they create and wear." },
-  { year: "Birth", title: "Pinjjai is Born", desc: "Pinjjai by H came to life in July 2019, founded by Harman Seera, a textile graduate from Pearl Academy of Fashion. What began as a creative passion soon turned into a purpose-driven journey. Inspired by her mothers hand crochet skills, Harman grew up watching simple threads transform into something beautiful. Those memories now live on in every pieceâeach one telling a story of love, tradition, and deep-rooted connection." },
-  { year: "Today", title: "A Growing Movement", desc: "Today, Pinjjai by H carries forward stories knitted with care and tradition. Each bag, handcrafted by women artisans of Punjab, holds their skill, dedication, and quiet strength. With every piece, we continue to uplift lives and create consciouslyâinviting you to be part of a journey rooted in heritage, empowerment, and purpose." },
+  { year: "Roots", title: "The Art of Pinjana", desc: "Pinjjai by H is deeply rooted in the rural landscapes of Punjab, where tradition and craftsmanship are a way of life. Inspired by age-old techniques, the name Pinjjai comes from \"Pinjana\" (à¤ªà¤¿à¤à¥à¤¨à¤¾), the traditional process of cleaning cotton—symbolizing patience, purity, and heritage. Our foundation lies in preserving these timeless skills while celebrating the women who carry them forward." },
+  { year: "Spark", title: "A Vision Takes Shape", desc: "Our vision has always been to create more than just products. We aim to build a platform that empowers women—providing fair wages, nurturing skills, and fostering independence. Every design reflects a belief in effortless style, meaningful craftsmanship, and the strength of women who express themselves through what they create and wear." },
+  { year: "Birth", title: "Pinjjai is Born", desc: "Pinjjai by H came to life in July 2019, founded by Harman Seera, a textile graduate from Pearl Academy of Fashion. What began as a creative passion soon turned into a purpose-driven journey. Inspired by her mothers hand crochet skills, Harman grew up watching simple threads transform into something beautiful. Those memories now live on in every piece—each one telling a story of love, tradition, and deep-rooted connection." },
+  { year: "Today", title: "A Growing Movement", desc: "Today, Pinjjai by H carries forward stories knitted with care and tradition. Each bag, handcrafted by women artisans of Punjab, holds their skill, dedication, and quiet strength. With every piece, we continue to uplift lives and create consciously—inviting you to be part of a journey rooted in heritage, empowerment, and purpose." },
 ];
 
 const AboutClient = () => {
@@ -39,7 +39,7 @@ const AboutClient = () => {
       </section>
 
       {/* Founder */}
-      <section className="py-20 lg:py-32 max-w-7xl mx-auto px-6 lg:px-12">
+      <section className="py-20 max-w-7xl mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -48,18 +48,13 @@ const AboutClient = () => {
             viewport={{ once: true }}
             className="relative overflow-hidden rounded-lg"
           >
-            <div className="relative aspect-4/3 bg-(--brand-primary)/10">
+            <div className="relative aspect-4/3 min-h-[60vh] bg-(--brand-primary)/10">
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-24 h-24 bg-(--brand-primary) rounded-full flex items-center justify-center mb-4 mx-auto">
-                    <span className="text-(--brand-white) text-3xl font-serif">HS</span>
-                  </div>
-                  <p className="text-(--brand-dark)/60">Founder's Image</p>
-                </div>
+                <Image src="/harman-seera.jpeg" alt="Harman Seera" fill className="object-top-left object-cover" />
               </div>
             </div>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -79,7 +74,7 @@ const AboutClient = () => {
               every thread carries a story.
             </p>
             <p className="text-(--brand-dark)/70 leading-relaxed">
-              Pinjjai was born from the desire to give these stories a platformâto transform the invisible labor of
+              Pinjjai was born from the desire to give these stories a platform—to transform the invisible labor of
               women artisans into visible, celebrated art. Each bag is an act of preservation, empowerment, and love.
             </p>
           </motion.div>
@@ -87,7 +82,7 @@ const AboutClient = () => {
       </section>
 
       {/* Timeline */}
-      <section className="py-20 lg:py-32 bg-(--brand-primary)/5">
+      <section className="py-20 bg-(--brand-primary)/5">
         <div className="max-w-4xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -111,9 +106,8 @@ const AboutClient = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: i * 0.15 }}
                 viewport={{ once: true }}
-                className={`relative flex items-start gap-8 mb-16 last:mb-0 ${
-                  i % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
-                }`}
+                className={`relative flex items-start gap-8 mb-16 last:mb-0 ${i % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
+                  }`}
               >
                 {/* Dot */}
                 <div className="absolute left-6 lg:left-1/2 w-4 h-4 rounded-full bg-(--brand-primary) -translate-x-1/2 mt-2 z-10 border-4 border-(--brand-white)" />
@@ -130,7 +124,7 @@ const AboutClient = () => {
       </section>
 
       {/* Community */}
-      <section className="py-20 lg:py-32 max-w-7xl mx-auto px-6 lg:px-12">
+      <section className="py-20 max-w-7xl mx-auto px-6 lg:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -146,7 +140,7 @@ const AboutClient = () => {
             </h2>
             <div className="w-16 h-0.5 bg-(--brand-primary) mb-6" />
             <p className="text-(--brand-dark)/70 leading-relaxed mb-6">
-              Over 20 women artisans, along with their families in Punjab, form the beating heart of Pinjjai. They are mothers, daughters, dreamersâeach one transforming thread into independence.
+              Over 20 women artisans, along with their families in Punjab, form the beating heart of Pinjjai. They are mothers, daughters, dreamers—each one transforming thread into independence.
             </p>
             <div className="grid grid-cols-3 gap-8">
               {[
@@ -161,7 +155,7 @@ const AboutClient = () => {
               ))}
             </div>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0, transition: { duration: 0.8, delay: 0.2 } }}
@@ -170,53 +164,13 @@ const AboutClient = () => {
           >
             <div className="relative aspect-4/5 bg-(--brand-primary)/10">
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-24 h-24 bg-(--brand-primary) rounded-full flex items-center justify-center mb-4 mx-auto">
-                    <span className="text-(--brand-white) text-3xl">ð</span>
-                  </div>
-                  <p className="text-(--brand-dark)/60">Artisans Community</p>
-                </div>
+                <Image src="/artisans-community.jpeg" alt="Community" fill className="object-cover" />
               </div>
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Connect With Us */}
-      <section className="py-20 bg-(--brand-primary)">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center"
-          >
-            <h2 className="font-serif text-4xl md:text-5xl text-(--brand-white) mb-6">
-              Connect With Us
-            </h2>
-            <p className="text-lg text-(--brand-white)/80 max-w-2xl mx-auto mb-12">
-              Follow our journey on social media to see behind-the-scenes content, new collections, and stories from our artisan community.
-            </p>
-            
-            <SocialMediaLinks 
-              size="lg"
-              variant="outlined"
-              className="mb-8"
-            />
-            
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              viewport={{ once: true }}
-              className="text-(--brand-white)/60 text-sm"
-            >
-              Join our community of conscious consumers and craft enthusiasts
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
     </div>
   );
 };

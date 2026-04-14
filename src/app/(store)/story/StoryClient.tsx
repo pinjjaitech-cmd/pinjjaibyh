@@ -50,11 +50,11 @@ const StoryClient = () => {
           viewport={{ once: true }}
         >
           <p className="text-lg text-(--brand-dark)/70 mb-6 leading-relaxed">
-            In the heartland of Punjab, where mustard fields stretch endlessly and the air carries the scent of rain-soaked earth, an ancient art was quietly fading. Hand crochetâthe delicate craft of creating fabric using a single hook and thread, loop by loopâwas once the rhythm of village life, each stitch formed slowly with patience and care.
+            In the heartland of Punjab, where mustard fields stretch endlessly and the air carries the scent of rain-soaked earth, an ancient art was quietly fading. Hand crochet—the delicate craft of creating fabric using a single hook and thread, loop by loop—was once the rhythm of village life, each stitch formed slowly with patience and care.
 
           </p>
           <p className="text-lg text-(--brand-dark)/70 leading-relaxed">
-            Under the shade of neem trees, women would gather, their hands moving in effortless harmonyâeach thread knitted with memory and meaning. It was never just a craft; it was shared stories, silent strength, and a bond passed down through generations. A living legacy of conversation, community, and continuity.
+            Under the shade of neem trees, women would gather, their hands moving in effortless harmony—each thread knitted with memory and meaning. It was never just a craft; it was shared stories, silent strength, and a bond passed down through generations. A living legacy of conversation, community, and continuity.
           </p>
         </motion.div>
       </section>
@@ -92,7 +92,7 @@ const StoryClient = () => {
               A Thread of Hope
             </h2>
             <p className="text-(--brand-dark)/70 mb-6 leading-relaxed">
-              Harman Seera returned to her roots with a questionâwhat if these forgotten hand crochet skills could become a force for change? What if the women who once knit threads of tradition could now crochet a new future?
+              Harman Seera returned to her roots with a question—what if these forgotten hand crochet skills could become a force for change? What if the women who once knit threads of tradition could now crochet a new future?
             </p>
             <p className="text-(--brand-dark)/70 leading-relaxed">
               She began with two women and a simple crochet hook. Within months, word spread. Women walked from
@@ -129,7 +129,7 @@ const StoryClient = () => {
               The Craft Continues
             </h2>
             <p className="text-lg text-(--brand-dark)/70 max-w-2xl mx-auto mb-12 leading-relaxed">
-              Today, Pinjjai is more than a brand; it is a living archive of hand crochetâpreserving craft, carrying stories, and honouring heritage. It is a platform for womenâs voices, and a reminder that beauty and purpose can exist in the same stitch.
+              Today, Pinjjai is more than a brand; it is a living archive of hand crochet—preserving craft, carrying stories, and honouring heritage. It is a platform for women's voices, and a reminder that beauty and purpose can exist in the same stitch.
             </p>
           </motion.div>
 
@@ -164,9 +164,11 @@ const StoryClient = () => {
 
         <div className="space-y-12">
           {[
-            { quote: "Before Pinjjai, my hands knew how to work but not how to dream. Now they do both.", name: "Simran Kaur", role: "Artisan, Moga District" },
-            { quote: "My mother carded cotton. I crochet bags that travel the world. We are the same thread.", name: "Amrit Kaur", role: "Senior Artisan" },
-            { quote: "Every bag I finish is a promise keptâto my children, to my village, to myself.", name: "Jaspreet Kaur", role: "Artisan, Ludhiana" },
+            { quote: "I earn with dignity while doing what I love.", name: "Abhilasha", role: "Artisan" },
+            { quote: "This work gives me confidence, income, and pride.", name: "Rinkal", role: "Artisan" },
+            { quote: "I support my family with every thread I crochet.", name: "Tannu", role: "Artisan" },
+            { quote: "Pinjjai turned my skill into a source of empowerment.", name: "Manpreet", role: "Artisan" },
+            { quote: "With Pinjjai, my hands create not just products, but possibilities.", name: "Sonia", role: "Artisan" },
           ].map((item, i) => (
             <motion.div
               key={i}
@@ -181,7 +183,7 @@ const StoryClient = () => {
                 </p>
                 <cite className="not-italic">
                   <span className="text-sm font-serif text-(--brand-dark)">{item.name}</span>
-                  <span className="text-xs text-(--brand-dark)/60 ml-2">â {item.role}</span>
+                  <span className="text-xs text-(--brand-dark)/60 ml-2">— {item.role}</span>
                 </cite>
               </blockquote>
             </motion.div>
