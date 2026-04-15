@@ -75,7 +75,7 @@ const NewsletterManagementPage = () => {
       setLoading(true);
       const params = new URLSearchParams({
         page: pagination.currentPage as any,
-        limit: pagination.limit,
+        limit: pagination.limit as any,
         ...(searchQuery && { search: searchQuery }),
       });
 
