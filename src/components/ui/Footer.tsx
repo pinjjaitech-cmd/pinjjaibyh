@@ -1,8 +1,8 @@
 "use client"
 import { motion, useInView } from "framer-motion";
 import Link from "next/link";
-import { useRef } from "react";
-import { Mail, MapPin } from "lucide-react";
+import { useRef, useState } from "react";
+import { Mail, MapPin, Send } from "lucide-react";
 import SocialMediaLinks from "@/components/SocialMediaLinks";
 
 const floatingIcons = [
@@ -32,6 +32,57 @@ const crochetPatterns = [
 const Footer = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  const handleNewsletterSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email.trim()) {
+      setMessage({ type: 'error', text: 'Please enter your email address' });
+      return;
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setMessage({ type: 'error', text: 'Please enter a valid email address' });
+      return;
+    }
+
+    setIsSubmitting(true);
+    setMessage(null);
+
+    try {
+      const response = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: email.trim() }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setMessage({ type: 'success', text: 'Successfully subscribed! Thank you for joining our community.' });
+        setEmail(''); // Clear the input
+      } else {
+        setMessage({ 
+          type: 'error', 
+          text: result.error === 'Email already subscribed' 
+            ? 'This email is already subscribed to our newsletter.' 
+            : 'Failed to subscribe. Please try again.' 
+        });
+      }
+    } catch (error) {
+      console.error('Newsletter subscription error:', error);
+      setMessage({ type: 'error', text: 'Something went wrong. Please try again later.' });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <footer ref={ref} className="relative bg-(--brand-primary) text-(--brand-white) w-full py-20 lg:py-28 overflow-hidden">
@@ -240,8 +291,8 @@ const Footer = () => {
             </div>
           </motion.div>
 
-          {/* Additional Info or Newsletter */}
-          {/* <motion.div
+          {/* Newsletter Subscription */}
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.85 }}
@@ -250,17 +301,67 @@ const Footer = () => {
             <p className="text-sm text-(--brand-white)/60 leading-relaxed mb-4">
               Join our community to discover the art of traditional craftsmanship and be the first to know about new collections.
             </p>
-            <motion.button
-              className="px-6 py-2 bg-(--brand-white) text-(--brand-primary) rounded-full text-sm font-medium hover:bg-(--brand-white)/90 transition-all duration-300 w-fit"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={isInView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ duration: 0.5, delay: 0.9 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Subscribe
-            </motion.button>
-          </motion.div> */}
+            
+            {/* Newsletter Form */}
+            <form onSubmit={handleNewsletterSubscribe} className="space-y-3">
+              <div className="relative">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  className="w-full px-4 py-2 bg-(--brand-white)/10 border border-(--brand-white)/20 rounded-full text-sm text-(--brand-white) placeholder:text-(--brand-white)/40 focus:outline-none focus:border-(--brand-white)/40 focus:bg-(--brand-white)/15 transition-all duration-300"
+                  disabled={isSubmitting}
+                />
+                {email && (
+                  <button
+                    type="button"
+                    onClick={() => setEmail("")}
+                    className="absolute right-12 top-1/2 -translate-y-1/2 text-(--brand-white)/40 hover:text-(--brand-white)/60 transition-colors"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+              
+              {message && (
+                <motion.p
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`text-xs ${message.type === 'success' ? 'text-green-400' : 'text-red-400'}`}
+                >
+                  {message.text}
+                </motion.p>
+              )}
+              
+              <motion.button
+                type="submit"
+                disabled={isSubmitting || !email}
+                className="px-6 py-2 bg-(--brand-white) text-(--brand-primary) rounded-full text-sm font-medium hover:bg-(--brand-white)/90 transition-all duration-300 w-fit disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.5, delay: 0.9 }}
+                whileHover={{ scale: isSubmitting ? 1 : 1.05 }}
+                whileTap={{ scale: isSubmitting ? 1 : 0.95 }}
+              >
+                {isSubmitting ? (
+                  <>
+                    <motion.div
+                      className="w-4 h-4 border-2 border-(--brand-primary)/30 border-t-(--brand-primary) rounded-full"
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                    />
+                    Subscribing...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    Subscribe
+                  </>
+                )}
+              </motion.button>
+            </form>
+          </motion.div>
         </div>
 
         {/* Bottom bar */}

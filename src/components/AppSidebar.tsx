@@ -15,6 +15,7 @@ import {
   BarChart3,
   SearchCode,
   FolderOpen,
+  Mail,
 } from "lucide-react";
 import {
   Sidebar,
@@ -137,6 +138,11 @@ const contentItems = [
         icon: BarChart3,
       },
     ],
+  },
+  {
+    title: "Newsletter",
+    url: "/admin/newsletter",
+    icon: Mail,
   },
   {
     title: "Wishlist",
