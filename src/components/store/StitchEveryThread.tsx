@@ -4,11 +4,11 @@ import React, { useEffect, useState } from 'react'
 
 const StitchEveryThread = () => {
     const [artisansData, setArtisansData] = useState([
-        { quote: "I earn with dignity while doing what I love.", name: "Abhilasha", role: "Artisan", image: "/artisans-image/abhilasha.jpg" },
-        { quote: "This work gives me confidence, income, and pride.", name: "Rinkal", role: "Artisan", image: "/artisans-image/rinkal.jpg" },
-        { quote: "I support my family with every thread I crochet.", name: "Tannu", role: "Artisan", image: "/artisans-image/tannu.jpg" },
-        { quote: "Pinjjai turned my skill into a source of empowerment.", name: "Manpreet", role: "Artisan", image: "/artisans-image/manpreet.jpg" },
-        { quote: "With Pinjjai, my hands create not just products, but possibilities.", name: "Sonia", role: "Artisan", image: "/artisans-image/sonia.jpg" },
+        { quote: "I earn with dignity while doing what I love.", name: "Abhilasha", role: "Artisan", image: "/artisans-image/Abhilasha.jpg" },
+        { quote: "This work gives me confidence, income, and pride.", name: "Rinkal", role: "Artisan", image: "/artisans-image/Rinkal.jpg" },
+        { quote: "I support my family with every thread I crochet.", name: "Tannu", role: "Artisan", image: "/artisans-image/Tannu.jpg" },
+        { quote: "Pinjjai turned my skill into a source of empowerment.", name: "Manpreet", role: "Artisan", image: "/artisans-image/Manpreet.jpg" },
+        { quote: "With Pinjjai, my hands create not just products, but possibilities.", name: "Sonia", role: "Artisan", image: "/artisans-image/Sonia.jpg" },
     ])
 
     const [currentIndex, setCurrentIndex] = useState(0)
