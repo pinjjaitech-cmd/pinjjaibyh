@@ -241,7 +241,7 @@ const Footer = () => {
           </motion.div>
 
           {/* Additional Info or Newsletter */}
-          <motion.div
+          {/* <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.85 }}
@@ -260,7 +260,7 @@ const Footer = () => {
             >
               Subscribe
             </motion.button>
-          </motion.div>
+          </motion.div> */}
         </div>
 
         {/* Bottom bar */}
