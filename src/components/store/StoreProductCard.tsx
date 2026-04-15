@@ -3,7 +3,28 @@ import Image from 'next/image'
 import { Product } from '@/types'
 
 export default function StoreProductCard({ product }: { product: Product & { categories?: { _id: string; name: string; slug: string }[] } }) {
-  const defaultVariant = product.variants?.find((v) => v._id === product.defaultVariantId) || product.variants?.[0]
+  console.log("product coming",product)
+  // Handle defaultVariantId - it could be an index (number as string) or skuCode
+  let defaultVariant = null
+  
+  if ((product as any).defaultVariantId) {
+    // Try to find variant by skuCode first
+    defaultVariant = product.variants.find(v => v._id === (product as any).defaultVariantId)
+
+    // If not found, try to use it as an index
+    if (!defaultVariant && !isNaN(Number((product as any).defaultVariantId))) {
+      const index = Number((product as any).defaultVariantId)
+      if (index >= 0 && index < product.variants.length) {
+        defaultVariant = product.variants[index]
+      }
+    }
+  }
+  
+  // Fallback to first variant if no default is found
+  if (!defaultVariant && product.variants.length > 0) {
+    defaultVariant = product.variants[0]
+  }
+  
   const image = defaultVariant?.images?.[0] || '/products/5.png'
 
   return (
@@ -13,7 +34,7 @@ export default function StoreProductCard({ product }: { product: Product & { cat
       </div>
       <div className="p-4">
         <p className="text-xs uppercase tracking-[0.2em] text-(--brand-dark)/60">
-          {product.categories && product.categories.length > 0 
+          {product.categories && product.categories.length > 0
             ? product.categories.map((cat:any) => cat.name).join(', ')
             : 'Artisan Collection'
           }

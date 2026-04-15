@@ -221,7 +221,7 @@ export const metadata: Metadata = {
 ```env
 NEXT_PUBLIC_SITE_URL=https://pinjjai.com
 GOOGLE_SITE_VERIFICATION=your_verification_code
-NEXT_PUBLIC_WHATSAPP_NUMBER=919999999999
+NEXT_PUBLIC_WHATSAPP_NUMBER=919899187882
 ```
 
 ## Testing and Validation

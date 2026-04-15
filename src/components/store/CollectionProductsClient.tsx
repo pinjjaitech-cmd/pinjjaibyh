@@ -53,6 +53,15 @@ export default function CollectionProductsClient({ initialProducts, categoryId, 
     }
   }
 
+  if(!initialProducts || initialProducts.length === 0 ){
+    return (
+      <div className='text-center py-12'>
+        <h2 className='text-2xl font-semibold text-(--brand-dark) mb-4'>Coming Soon</h2>
+        <p className='text-(--brand-dark)/70'>We&apos;re working on bringing you the best products from {categoryName}. Stay tuned!</p>
+      </div>
+    )
+  }
+
   return (
     <>
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8'>

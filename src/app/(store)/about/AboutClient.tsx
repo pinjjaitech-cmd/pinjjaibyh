@@ -5,7 +5,7 @@ import Image from 'next/image';
 import SocialMediaLinks from "@/components/SocialMediaLinks";
 
 const timelineEvents = [
-  { year: "Roots", title: "The Art of Pinjana", desc: "Pinjjai by H is deeply rooted in the rural landscapes of Punjab, where tradition and craftsmanship are a way of life. Inspired by age-old techniques, the name Pinjjai comes from \"Pinjana\" (à¤ªà¤¿à¤à¥à¤¨à¤¾), the traditional process of cleaning cotton—symbolizing patience, purity, and heritage. Our foundation lies in preserving these timeless skills while celebrating the women who carry them forward." },
+  { year: "Roots", title: "The Art of Pinjana", desc: "Pinjjai by H is deeply rooted in the rural landscapes of Punjab, where tradition and craftsmanship are a way of life. Inspired by age-old techniques, the name Pinjjai comes from \"Pinjana\", the traditional process of cleaning cotton—symbolizing patience, purity, and heritage. Our foundation lies in preserving these timeless skills while celebrating the women who carry them forward." },
   { year: "Spark", title: "A Vision Takes Shape", desc: "Our vision has always been to create more than just products. We aim to build a platform that empowers women—providing fair wages, nurturing skills, and fostering independence. Every design reflects a belief in effortless style, meaningful craftsmanship, and the strength of women who express themselves through what they create and wear." },
   { year: "Birth", title: "Pinjjai is Born", desc: "Pinjjai by H came to life in July 2019, founded by Harman Seera, a textile graduate from Pearl Academy of Fashion. What began as a creative passion soon turned into a purpose-driven journey. Inspired by her mothers hand crochet skills, Harman grew up watching simple threads transform into something beautiful. Those memories now live on in every piece—each one telling a story of love, tradition, and deep-rooted connection." },
   { year: "Today", title: "A Growing Movement", desc: "Today, Pinjjai by H carries forward stories knitted with care and tradition. Each bag, handcrafted by women artisans of Punjab, holds their skill, dedication, and quiet strength. With every piece, we continue to uplift lives and create consciously—inviting you to be part of a journey rooted in heritage, empowerment, and purpose." },
@@ -40,18 +40,23 @@ const AboutClient = () => {
 
       {/* Founder */}
       <section className="py-20 max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div className="flex flex-col md:flex-row justify-center items-center gap-16">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="relative overflow-hidden rounded-lg"
+            className="relative overflow-hidden rounded-lg w-full md:w-1/2"
           >
-            <div className="relative aspect-4/3 min-h-[60vh] bg-(--brand-primary)/10">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Image src="/harman-seera.jpeg" alt="Harman Seera" fill className="object-top-left object-cover" />
-              </div>
+            <div className="relative w-full h-[60vh] md:h-[70vh]">
+              <Image 
+                src="/harman-seera.jpeg" 
+                alt="Harman Seera" 
+                fill 
+                className="object-contain object-center"
+                sizes="(max-width: 768px) 100vw, 70vw"
+                priority
+              />
             </div>
           </motion.div>
 
@@ -70,7 +75,7 @@ const AboutClient = () => {
             <div className="w-16 h-0.5 bg-(--brand-primary) mb-6" />
             <p className="text-(--brand-dark)/70 leading-relaxed mb-4">
               Growing up between the bustling streets of modern India and the quiet rhythms of her ancestral village,
-              Harman always felt the pull of two worlds. Her grandmother's hands, weathered and wise, taught her that
+              Harman always felt the pull of two worlds. Her mother's hands, weathered and wise, taught her that
               every thread carries a story.
             </p>
             <p className="text-(--brand-dark)/70 leading-relaxed">

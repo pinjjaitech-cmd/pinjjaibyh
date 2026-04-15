@@ -38,8 +38,8 @@ export async function PUT(request: Request) {
       _id: { $in: productIds },
       status: 'published' 
     })
-    .select('title slug description category defaultVariantId variants')
-    .populate('category', 'name slug')
+    .select('title slug description categories defaultVariantId variants')
+    .populate('categories', 'name slug')
     .lean()
 
     // Transform products to required format
@@ -48,7 +48,7 @@ export async function PUT(request: Request) {
       title: product.title,
       slug: product.slug,
       description: product.description,
-      category: product.category,
+      categories: product.categories,
       defaultVariantId: product.defaultVariantId,
       variants: product.variants,
       status: product.status

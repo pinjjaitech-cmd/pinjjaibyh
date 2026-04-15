@@ -173,7 +173,7 @@ export default function ProductDetailClient({ productSlug }: ProductDetailClient
     if (!product || !selectedVariant) return;
     
     const message = `Hi Pinjjai team! I'm interested in booking this product:\n\n★ Product: ${product.title}\n★ Variant: ${selectedVariant.skuCode}\n★ Price: ${formatPrice(selectedVariant.price)}\n\n${selectedVariant.attributes.map(attr => `${attr.name}: ${attr.value}`).join('\n')}`;
-    const whatsappUrl = `https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '919999999999'}?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '919899187882'}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 

@@ -13,7 +13,7 @@ interface WishlistItem {
   productIds: any[]
 }
 
-const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '919999999999'
+const whatsappNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '919899187882'
 
 export default function WishlistManager() {
   const { data: session, status } = useSession()

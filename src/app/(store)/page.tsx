@@ -27,7 +27,6 @@ export const metadata: Metadata = {
 
 const Homepage = async () => {
   const homepageData = await getHomepageData()
-  console.log("homepageData", homepageData)
 
   return (
     <div className='w-full font-sans h-full bg-(--brand-white) text-black'>
