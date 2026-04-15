@@ -5,22 +5,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { 
-  Upload, 
-  Image as ImageIcon, 
-  Plus, 
-  Trash2, 
-  Save, 
+import {
+  Upload,
+  Image as ImageIcon,
+  Plus,
+  Trash2,
+  Save,
   RefreshCw,
   Monitor,
   Smartphone,
-  Link,
-  Type,
   MessageSquare,
   X,
   Search
@@ -52,13 +48,12 @@ export default function SettingsPage() {
     browseByCategory: [],
     testimonials: null
   });
-  
+
   const [allCategories, setAllCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState("hero-banners");
 
-  // Fetch settings on component mount
   useEffect(() => {
     fetchSettings();
     fetchMarqueeTexts();
@@ -71,14 +66,10 @@ export default function SettingsPage() {
     try {
       const response = await fetch("/api/settings/featured-products");
       const result = await response.json();
-      
       if (result.success) {
-        setSettings(prev => ({
-          ...prev,
-          featuredProducts: result.data || []
-        }));
+        setSettings(prev => ({ ...prev, featuredProducts: result.data || [] }));
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to fetch featured products");
     }
   };
@@ -87,14 +78,10 @@ export default function SettingsPage() {
     try {
       const response = await fetch("/api/settings/browse-by-category");
       const result = await response.json();
-      
       if (response.ok) {
-        setSettings(prev => ({
-          ...prev,
-          browseByCategory: result || []
-        }));
+        setSettings(prev => ({ ...prev, browseByCategory: result || [] }));
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to fetch browse by category");
     }
   };
@@ -103,12 +90,10 @@ export default function SettingsPage() {
     try {
       const response = await fetch("/api/collections?isActive=true&limit=100");
       const result = await response.json();
-      
       if (result.success) {
-        // Store categories in state for the category section
         setAllCategories(result.data || []);
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to fetch categories");
     }
   };
@@ -117,14 +102,10 @@ export default function SettingsPage() {
     try {
       const response = await fetch("/api/settings/marquee");
       const result = await response.json();
-      
       if (result.success) {
-        setSettings(prev => ({
-          ...prev,
-          marqueeTexts: result.data || []
-        }));
+        setSettings(prev => ({ ...prev, marqueeTexts: result.data || [] }));
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to fetch marquee texts");
     }
   };
@@ -134,14 +115,10 @@ export default function SettingsPage() {
       setLoading(true);
       const response = await fetch("/api/settings/hero-banners");
       const result = await response.json();
-      
       if (result.success) {
-        setSettings(prev => ({
-          ...prev,
-          heroBanners: result.data || []
-        }));
+        setSettings(prev => ({ ...prev, heroBanners: result.data || [] }));
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to fetch settings");
     } finally {
       setLoading(false);
@@ -151,25 +128,18 @@ export default function SettingsPage() {
   const handleAddHeroBanner = async (bannerData: Partial<HeroBanner>, desktopFile?: File, mobileFile?: File) => {
     try {
       setSaving(true);
-      
       const formData = new FormData();
+      console.log("bannerData", bannerData)
       formData.append('banner', JSON.stringify(bannerData));
-      
-      if (desktopFile) {
-        formData.append('desktopImg', desktopFile);
-      }
-      
-      if (mobileFile) {
-        formData.append('mobileImg', mobileFile);
-      }
+      if (desktopFile) formData.append('desktopImg', desktopFile);
+      if (mobileFile) formData.append('mobileImg', mobileFile);
 
       const response = await fetch("/api/settings/hero-banners", {
         method: "POST",
         body: formData
       });
-
       const result = await response.json();
-      
+
       if (result.success) {
         toast.success("Hero banner added successfully");
         fetchSettings();
@@ -178,7 +148,7 @@ export default function SettingsPage() {
         toast.error(result.error || "Failed to add hero banner");
         return false;
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to add hero banner");
       return false;
     } finally {
@@ -189,17 +159,13 @@ export default function SettingsPage() {
   const handleUpdateHeroBanners = async (banners: HeroBanner[]) => {
     try {
       setSaving(true);
-      
       const response = await fetch("/api/settings/hero-banners", {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(banners)
       });
-
       const result = await response.json();
-      
+
       if (result.success) {
         toast.success("Hero banners updated successfully");
         setSettings(prev => ({ ...prev, heroBanners: banners }));
@@ -208,7 +174,7 @@ export default function SettingsPage() {
         toast.error(result.error || "Failed to update hero banners");
         return false;
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to update hero banners");
       return false;
     } finally {
@@ -219,17 +185,13 @@ export default function SettingsPage() {
   const handleUpdateFeaturedProducts = async (productIds: string[]) => {
     try {
       setSaving(true);
-      
       const response = await fetch("/api/settings/featured-products", {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ productIds })
       });
-
       const result = await response.json();
-      
+
       if (result.success) {
         toast.success("Featured products updated successfully");
         fetchFeaturedProducts();
@@ -238,7 +200,7 @@ export default function SettingsPage() {
         toast.error(result.error || "Failed to update featured products");
         return false;
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to update featured products");
       return false;
     } finally {
@@ -249,17 +211,13 @@ export default function SettingsPage() {
   const handleUpdateBrowseByCategory = async (categoryIds: string[]) => {
     try {
       setSaving(true);
-      
       const response = await fetch("/api/settings/browse-by-category", {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ categoryIds })
       });
-
       const result = await response.json();
-      
+
       if (response.ok) {
         toast.success("Browse by category updated successfully");
         fetchBrowseByCategory();
@@ -268,7 +226,7 @@ export default function SettingsPage() {
         toast.error(result.error || "Failed to update browse by category");
         return false;
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to update browse by category");
       return false;
     } finally {
@@ -279,17 +237,13 @@ export default function SettingsPage() {
   const handleUpdateMarqueeTexts = async (marqueeTexts: string[]) => {
     try {
       setSaving(true);
-      
       const response = await fetch("/api/settings/marquee", {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ marqueeTexts })
       });
-
       const result = await response.json();
-      
+
       if (result.success) {
         toast.success("Marquee texts updated successfully");
         setSettings(prev => ({ ...prev, marqueeTexts }));
@@ -298,7 +252,7 @@ export default function SettingsPage() {
         toast.error(result.message || "Failed to update marquee texts");
         return false;
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to update marquee texts");
       return false;
     } finally {
@@ -309,17 +263,13 @@ export default function SettingsPage() {
   const handleAddMarqueeText = async (text: string) => {
     try {
       setSaving(true);
-      
       const response = await fetch("/api/settings/marquee", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ marqueeTexts: [text] })
       });
-
       const result = await response.json();
-      
+
       if (result.success) {
         toast.success("Marquee text added successfully");
         fetchMarqueeTexts();
@@ -328,7 +278,7 @@ export default function SettingsPage() {
         toast.error(result.message || "Failed to add marquee text");
         return false;
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to add marquee text");
       return false;
     } finally {
@@ -339,14 +289,10 @@ export default function SettingsPage() {
   const handleDeleteHeroBanner = async (index: number) => {
     try {
       setSaving(true);
-      
       const newBanners = settings.heroBanners.filter((_, i) => i !== index);
       const success = await handleUpdateHeroBanners(newBanners);
-      
-      if (success) {
-        toast.success("Hero banner deleted successfully");
-      }
-    } catch (error) {
+      if (success) toast.success("Hero banner deleted successfully");
+    } catch {
       toast.error("Failed to delete hero banner");
     } finally {
       setSaving(false);
@@ -356,20 +302,16 @@ export default function SettingsPage() {
   const handleClearAllHeroBanners = async () => {
     try {
       setSaving(true);
-      
-      const response = await fetch("/api/settings/hero-banners", {
-        method: "DELETE"
-      });
-
+      const response = await fetch("/api/settings/hero-banners", { method: "DELETE" });
       const result = await response.json();
-      
+
       if (result.success) {
         toast.success("All hero banners cleared successfully");
         setSettings(prev => ({ ...prev, heroBanners: [] }));
       } else {
         toast.error(result.error || "Failed to clear hero banners");
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to clear hero banners");
     } finally {
       setSaving(false);
@@ -406,7 +348,7 @@ export default function SettingsPage() {
         </TabsList>
 
         <TabsContent value="hero-banners" className="flex flex-col space-y-6">
-          <HeroBannersSection 
+          <HeroBannersSection
             heroBanners={settings.heroBanners}
             onAddBanner={handleAddHeroBanner}
             onUpdateBanners={handleUpdateHeroBanners}
@@ -417,7 +359,7 @@ export default function SettingsPage() {
         </TabsContent>
 
         <TabsContent value="marquee" className="space-y-6">
-          <MarqueeTextSection 
+          <MarqueeTextSection
             marqueeTexts={settings.marqueeTexts}
             onUpdateTexts={handleUpdateMarqueeTexts}
             onAddText={handleAddMarqueeText}
@@ -426,7 +368,7 @@ export default function SettingsPage() {
         </TabsContent>
 
         <TabsContent value="categories" className="space-y-6">
-          <CategorySection 
+          <CategorySection
             allCategories={allCategories}
             selectedCategories={settings.browseByCategory}
             onUpdateCategories={handleUpdateBrowseByCategory}
@@ -435,7 +377,7 @@ export default function SettingsPage() {
         </TabsContent>
 
         <TabsContent value="featured-products" className="space-y-6">
-          <FeaturedProductsSection 
+          <FeaturedProductsSection
             featuredProducts={settings.featuredProducts}
             onUpdateFeaturedProducts={handleUpdateFeaturedProducts}
             saving={saving}
@@ -446,6 +388,8 @@ export default function SettingsPage() {
   );
 }
 
+// ─── Marquee Text Section ────────────────────────────────────────────────────
+
 interface MarqueeTextSectionProps {
   marqueeTexts: string[];
   onUpdateTexts: (texts: string[]) => Promise<boolean>;
@@ -453,12 +397,7 @@ interface MarqueeTextSectionProps {
   saving: boolean;
 }
 
-function MarqueeTextSection({ 
-  marqueeTexts, 
-  onUpdateTexts, 
-  onAddText, 
-  saving 
-}: MarqueeTextSectionProps) {
+function MarqueeTextSection({ marqueeTexts, onUpdateTexts, onAddText, saving }: MarqueeTextSectionProps) {
   const [newText, setNewText] = useState("");
   const [editingTexts, setEditingTexts] = useState<string[]>(marqueeTexts);
 
@@ -471,29 +410,21 @@ function MarqueeTextSection({
       toast.error("Please enter a marquee text");
       return;
     }
-
     const success = await onAddText(newText.trim());
-    if (success) {
-      setNewText("");
-    }
+    if (success) setNewText("");
   };
 
   const handleUpdateTexts = async () => {
-    const success = await onUpdateTexts(editingTexts);
-    if (success) {
-      toast.success("Marquee texts updated successfully");
-    }
+    await onUpdateTexts(editingTexts);
   };
 
   const handleRemoveText = (index: number) => {
-    const newTexts = editingTexts.filter((_, i) => i !== index);
-    setEditingTexts(newTexts);
+    setEditingTexts(editingTexts.filter((_, i) => i !== index));
   };
 
-  const handleMoveText = (index: number, direction: 'up' | 'down') => {
+  const handleMoveText = (index: number, direction: "up" | "down") => {
     const newTexts = [...editingTexts];
-    const newIndex = direction === 'up' ? index - 1 : index + 1;
-    
+    const newIndex = direction === "up" ? index - 1 : index + 1;
     if (newIndex >= 0 && newIndex < newTexts.length) {
       [newTexts[index], newTexts[newIndex]] = [newTexts[newIndex], newTexts[index]];
       setEditingTexts(newTexts);
@@ -502,7 +433,6 @@ function MarqueeTextSection({
 
   return (
     <div className="space-y-6">
-      {/* Add New Text */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -511,13 +441,13 @@ function MarqueeTextSection({
           </CardTitle>
           <CardDescription>Add new announcement text for the scrolling marquee</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent>
           <div className="flex gap-2">
             <Input
               value={newText}
               onChange={(e) => setNewText(e.target.value)}
               placeholder="Enter announcement text..."
-              onKeyDown={(e) => e.key === 'Enter' && handleAddText()}
+              onKeyDown={(e) => e.key === "Enter" && handleAddText()}
               className="flex-1"
             />
             <Button onClick={handleAddText} disabled={saving || !newText.trim()}>
@@ -528,7 +458,6 @@ function MarqueeTextSection({
         </CardContent>
       </Card>
 
-      {/* Manage Existing Texts */}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -536,7 +465,7 @@ function MarqueeTextSection({
               <CardTitle>Marquee Texts</CardTitle>
               <CardDescription>Manage and reorder announcement texts</CardDescription>
             </div>
-            <Button 
+            <Button
               onClick={handleUpdateTexts}
               disabled={saving || JSON.stringify(editingTexts) === JSON.stringify(marqueeTexts)}
             >
@@ -559,36 +488,16 @@ function MarqueeTextSection({
                     <Input
                       value={text}
                       onChange={(e) => {
-                        const newTexts = [...editingTexts];
-                        newTexts[index] = e.target.value;
-                        setEditingTexts(newTexts);
+                        const updated = [...editingTexts];
+                        updated[index] = e.target.value;
+                        setEditingTexts(updated);
                       }}
-                      className="w-full"
                     />
                   </div>
-                  
                   <div className="flex items-center gap-1">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleMoveText(index, 'up')}
-                      disabled={index === 0}
-                    >
-                      ↑
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleMoveText(index, 'down')}
-                      disabled={index === editingTexts.length - 1}
-                    >
-                      ↓
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => handleRemoveText(index)}
-                    >
+                    <Button variant="outline" size="sm" onClick={() => handleMoveText(index, "up")} disabled={index === 0}>↑</Button>
+                    <Button variant="outline" size="sm" onClick={() => handleMoveText(index, "down")} disabled={index === editingTexts.length - 1}>↓</Button>
+                    <Button variant="destructive" size="sm" onClick={() => handleRemoveText(index)}>
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -602,161 +511,7 @@ function MarqueeTextSection({
   );
 }
 
-interface MarqueeTextSectionProps {
-  marqueeTexts: string[];
-  onUpdateTexts: (texts: string[]) => Promise<boolean>;
-  onAddText: (text: string) => Promise<boolean>;
-  saving: boolean;
-}
-
-// function MarqueeTextSection({ 
-//   marqueeTexts, 
-//   onUpdateTexts, 
-//   onAddText, 
-//   saving 
-// }: MarqueeTextSectionProps) {
-//   const [newText, setNewText] = useState("");
-//   const [editingTexts, setEditingTexts] = useState<string[]>(marqueeTexts);
-
-//   useEffect(() => {
-//     setEditingTexts(marqueeTexts);
-//   }, [marqueeTexts]);
-
-//   const handleAddText = async () => {
-//     if (!newText.trim()) {
-//       toast.error("Please enter a marquee text");
-//       return;
-//     }
-
-//     const success = await onAddText(newText.trim());
-//     if (success) {
-//       setNewText("");
-//     }
-//   };
-
-//   const handleUpdateTexts = async () => {
-//     const success = await onUpdateTexts(editingTexts);
-//     if (success) {
-//       toast.success("Marquee texts updated successfully");
-//     }
-//   };
-
-//   const handleRemoveText = (index: number) => {
-//     const newTexts = editingTexts.filter((_, i) => i !== index);
-//     setEditingTexts(newTexts);
-//   };
-
-//   const handleMoveText = (index: number, direction: 'up' | 'down') => {
-//     const newTexts = [...editingTexts];
-//     const newIndex = direction === 'up' ? index - 1 : index + 1;
-    
-//     if (newIndex >= 0 && newIndex < newTexts.length) {
-//       [newTexts[index], newTexts[newIndex]] = [newTexts[newIndex], newTexts[index]];
-//       setEditingTexts(newTexts);
-//     }
-//   };
-
-//   return (
-//     <div className="space-y-6">
-//       {/* Add New Text */}
-//       <Card>
-//         <CardHeader>
-//           <CardTitle className="flex items-center gap-2">
-//             <Plus className="h-5 w-5" />
-//             Add Marquee Text
-//           </CardTitle>
-//           <CardDescription>Add new announcement text for the scrolling marquee</CardDescription>
-//         </CardHeader>
-//         <CardContent className="space-y-4">
-//           <div className="flex gap-2">
-//             <Input
-//               value={newText}
-//               onChange={(e) => setNewText(e.target.value)}
-//               placeholder="Enter announcement text..."
-//               onKeyDown={(e) => e.key === 'Enter' && handleAddText()}
-//               className="flex-1"
-//             />
-//             <Button onClick={handleAddText} disabled={saving || !newText.trim()}>
-//               <Plus className="h-4 w-4 mr-2" />
-//               Add
-//             </Button>
-//           </div>
-//         </CardContent>
-//       </Card>
-
-//       {/* Manage Existing Texts */}
-//       <Card>
-//         <CardHeader>
-//           <div className="flex items-center justify-between">
-//             <div>
-//               <CardTitle>Marquee Texts</CardTitle>
-//               <CardDescription>Manage and reorder announcement texts</CardDescription>
-//             </div>
-//             <Button 
-//               onClick={handleUpdateTexts}
-//               disabled={saving || JSON.stringify(editingTexts) === JSON.stringify(marqueeTexts)}
-//             >
-//               <Save className="h-4 w-4 mr-2" />
-//               {saving ? "Saving..." : "Save Changes"}
-//             </Button>
-//           </div>
-//         </CardHeader>
-//         <CardContent>
-//           {editingTexts.length === 0 ? (
-//             <div className="text-center py-8 text-muted-foreground">
-//               <MessageSquare className="h-12 w-12 mx-auto mb-4 opacity-50" />
-//               <p>No marquee texts yet. Add your first announcement text above.</p>
-//             </div>
-//           ) : (
-//             <div className="space-y-3">
-//               {editingTexts.map((text, index) => (
-//                 <div key={index} className="flex items-center gap-2 p-3 border rounded-lg">
-//                   <div className="flex-1">
-//                     <Input
-//                       value={text}
-//                       onChange={(e) => {
-//                         const newTexts = [...editingTexts];
-//                         newTexts[index] = e.target.value;
-//                         setEditingTexts(newTexts);
-//                       }}
-//                       className="w-full"
-//                     />
-//                   </div>
-                  
-//                   <div className="flex items-center gap-1">
-//                     <Button
-//                       variant="outline"
-//                       size="sm"
-//                       onClick={() => handleMoveText(index, 'up')}
-//                       disabled={index === 0}
-//                     >
-//                       ↑
-//                     </Button>
-//                     <Button
-//                       variant="outline"
-//                       size="sm"
-//                       onClick={() => handleMoveText(index, 'down')}
-//                       disabled={index === editingTexts.length - 1}
-//                     >
-//                       ↓
-//                     </Button>
-//                     <Button
-//                       variant="destructive"
-//                       size="sm"
-//                       onClick={() => handleRemoveText(index)}
-//                     >
-//                       <Trash2 className="h-4 w-4" />
-//                     </Button>
-//                   </div>
-//                 </div>
-//               ))}
-//             </div>
-//           )}
-//         </CardContent>
-//       </Card>
-//     </div>
-//   );
-// }
+// ─── Category Section ────────────────────────────────────────────────────────
 
 interface CategorySectionProps {
   allCategories: any[];
@@ -765,51 +520,29 @@ interface CategorySectionProps {
   saving: boolean;
 }
 
-function CategorySection({ 
-  allCategories, 
-  selectedCategories, 
-  onUpdateCategories, 
-  saving 
-}: CategorySectionProps) {
+function CategorySection({ allCategories, selectedCategories, onUpdateCategories, saving }: CategorySectionProps) {
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<string[]>([]);
 
   useEffect(() => {
-    // Extract IDs from selected categories (which have categoryName, categoryImage, categorySlug)
-    const selectedIds = selectedCategories.map(cat => {
-      // Find the corresponding category from allCategories to get the _id
-      const matchingCategory = allCategories.find(
-        allCat => allCat.name === cat.categoryName && allCat.slug === cat.categorySlug
-      );
-      return matchingCategory?._id;
-    }).filter(Boolean); // Remove any undefined values
-    
+    const selectedIds = selectedCategories
+      .map((cat) => {
+        const match = allCategories.find(
+          (a) => a.name === cat.categoryName && a.slug === cat.categorySlug
+        );
+        return match?._id;
+      })
+      .filter(Boolean);
     setSelectedCategoryIds(selectedIds);
   }, [selectedCategories, allCategories]);
 
-  const handleCategoryToggle = (categoryId: string) => {
-    setSelectedCategoryIds(prev => {
-      if (prev.includes(categoryId)) {
-        return prev.filter(id => id !== categoryId);
-      } else {
-        return [...prev, categoryId];
-      }
-    });
+  const handleCategoryToggle = (id: string) => {
+    setSelectedCategoryIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
   };
 
-  const handleSaveCategories = async () => {
-    const success = await onUpdateCategories(selectedCategoryIds);
-    if (success) {
-      toast.success("Categories updated successfully");
-    }
-  };
-
-  const handleSelectAll = () => {
-    const allIds = allCategories.map(cat => cat._id);
-    setSelectedCategoryIds(allIds);
-  };
-
-  const handleClearAll = () => {
-    setSelectedCategoryIds([]);
+  const handleSave = async () => {
+    await onUpdateCategories(selectedCategoryIds);
   };
 
   return (
@@ -822,31 +555,12 @@ function CategorySection({
                 <Plus className="h-5 w-5" />
                 Browse by Category
               </CardTitle>
-              <CardDescription>
-                Select categories to feature on the homepage browse by category section
-              </CardDescription>
+              <CardDescription>Select categories to feature on the homepage</CardDescription>
             </div>
             <div className="flex gap-2">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={handleSelectAll}
-                disabled={saving}
-              >
-                Select All
-              </Button>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={handleClearAll}
-                disabled={saving}
-              >
-                Clear All
-              </Button>
-              <Button 
-                onClick={handleSaveCategories}
-                disabled={saving}
-              >
+              <Button variant="outline" size="sm" onClick={() => setSelectedCategoryIds(allCategories.map((c) => c._id))} disabled={saving}>Select All</Button>
+              <Button variant="outline" size="sm" onClick={() => setSelectedCategoryIds([])} disabled={saving}>Clear All</Button>
+              <Button onClick={handleSave} disabled={saving}>
                 <Save className="h-4 w-4 mr-2" />
                 {saving ? "Saving..." : "Save Changes"}
               </Button>
@@ -856,95 +570,66 @@ function CategorySection({
         <CardContent>
           {allCategories.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
-              <div className="h-12 w-12 mx-auto mb-4 opacity-50 flex items-center justify-center">
-                <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                </svg>
-              </div>
               <p>No categories found. Please create categories first.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {allCategories.map((category) => {
-                const isSelected = selectedCategoryIds.includes(category._id);
-                
-                return (
-                  <div 
-                    key={category._id}
-                    className={`border rounded-lg p-4 cursor-pointer transition-all hover:shadow-md ${
-                      isSelected 
-                        ? 'border-primary bg-primary/5' 
-                        : 'border-border hover:border-primary/50'
-                    }`}
-                    onClick={() => handleCategoryToggle(category._id)}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 mt-1">
-                        <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
-                          isSelected 
-                            ? 'border-primary bg-primary' 
-                            : 'border-muted-foreground'
-                        }`}>
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {allCategories.map((category) => {
+                  const isSelected = selectedCategoryIds.includes(category._id);
+                  return (
+                    <div
+                      key={category._id}
+                      className={`border rounded-lg p-4 cursor-pointer transition-all hover:shadow-md ${isSelected ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
+                        }`}
+                      onClick={() => handleCategoryToggle(category._id)}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className={`mt-1 w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${isSelected ? "border-primary bg-primary" : "border-muted-foreground"
+                          }`}>
                           {isSelected && (
                             <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                             </svg>
                           )}
                         </div>
-                      </div>
-                      
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h3 className="font-medium truncate">{category.name}</h3>
-                          {category.parentCategory && (
-                            <Badge variant="secondary" className="text-xs">
-                              {category.parentCategory.name}
-                            </Badge>
-                          )}
-                        </div>
-                        
-                        {category.image && (
-                          <div className="mb-2">
-                            <img 
-                              src={category.image} 
-                              alt={category.name}
-                              className="w-full h-20 object-cover rounded"
-                            />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-2">
+                            <h3 className="font-medium truncate">{category.name}</h3>
+                            {category.parentCategory && (
+                              <Badge variant="secondary" className="text-xs">{category.parentCategory.name}</Badge>
+                            )}
                           </div>
-                        )}
-                        
-                        <div className="text-sm text-muted-foreground">
-                          <p>Slug: {category.slug}</p>
-                          <p>Status: {category.isActive ? 'Active' : 'Inactive'}</p>
+                          {category.image && (
+                            <img src={category.image} alt={category.name} className="w-full h-auto rounded object-contain object-contain object-contain object-contain object-contain rounded mb-2" />
+                          )}
+                          <div className="text-sm text-muted-foreground">
+                            <p>Slug: {category.slug}</p>
+                            <p>Status: {category.isActive ? "Active" : "Inactive"}</p>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-          
-          {allCategories.length > 0 && (
-            <div className="mt-6 pt-4 border-t">
-              <div className="flex items-center justify-between text-sm text-muted-foreground">
+                  );
+                })}
+              </div>
+              <div className="mt-6 pt-4 border-t flex items-center justify-between text-sm text-muted-foreground">
                 <span>{selectedCategoryIds.length} of {allCategories.length} categories selected</span>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   size="sm"
-                  onClick={() => setSelectedCategoryIds(
-                    selectedCategories.map(cat => {
-                      const matchingCategory = allCategories.find(
-                        allCat => allCat.name === cat.categoryName && allCat.slug === cat.categorySlug
-                      );
-                      return matchingCategory?._id;
-                    }).filter(Boolean)
-                  )}
+                  onClick={() =>
+                    setSelectedCategoryIds(
+                      selectedCategories
+                        .map((cat) => allCategories.find((a) => a.name === cat.categoryName && a.slug === cat.categorySlug)?._id)
+                        .filter(Boolean)
+                    )
+                  }
                 >
                   Reset to Current
                 </Button>
               </div>
-            </div>
+            </>
           )}
         </CardContent>
       </Card>
@@ -952,17 +637,15 @@ function CategorySection({
   );
 }
 
+// ─── Featured Products Section ───────────────────────────────────────────────
+
 interface FeaturedProductsSectionProps {
   featuredProducts: any[];
   onUpdateFeaturedProducts: (productIds: string[]) => Promise<boolean>;
   saving: boolean;
 }
 
-function FeaturedProductsSection({ 
-  featuredProducts, 
-  onUpdateFeaturedProducts, 
-  saving 
-}: FeaturedProductsSectionProps) {
+function FeaturedProductsSection({ featuredProducts, onUpdateFeaturedProducts, saving }: FeaturedProductsSectionProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -971,59 +654,41 @@ function FeaturedProductsSection({
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    // Extract product IDs from featured products
-    const productIds = featuredProducts.map(product => 
-      product.productId || product._id
-    ).filter(Boolean);
-    setSelectedProductIds(productIds);
+    setSelectedProductIds(featuredProducts.map((p) => p.productId || p._id).filter(Boolean));
   }, [featuredProducts]);
 
-  const handleSearch = async (query: string, page: number = 1) => {
-    if (!query.trim()) {
-      setSearchResults([]);
-      return;
-    }
-
+  const handleSearch = async (query: string, page = 1) => {
+    if (!query.trim()) { setSearchResults([]); return; }
     try {
       setSearchLoading(true);
-      const response = await fetch(
-        `/api/products/search?q=${encodeURIComponent(query)}&page=${page}&limit=10&status=published`
-      );
+      const response = await fetch(`/api/products/search?q=${encodeURIComponent(query)}&page=${page}&limit=10&status=published`);
       const result = await response.json();
-      
       if (result.success) {
         setSearchResults(result.data || []);
         setCurrentPage(page);
       } else {
         toast.error("Failed to search products");
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to search products");
     } finally {
       setSearchLoading(false);
     }
   };
 
-  const handleProductSelect = (productId: string) => {
-    setSelectedProductIds(prev => {
-      if (prev.includes(productId)) {
-        return prev.filter(id => id !== productId);
-      } else {
-        return [...prev, productId];
-      }
-    });
+  const handleProductSelect = (id: string) => {
+    setSelectedProductIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
   };
 
-  const handleSaveFeaturedProducts = async () => {
+  const handleSave = async () => {
     const success = await onUpdateFeaturedProducts(selectedProductIds);
-    if (success) {
-      toast.success("Featured products updated successfully");
-      setIsModalOpen(false);
-    }
+    if (success) handleModalClose();
   };
 
-  const handleRemoveProduct = (productId: string) => {
-    setSelectedProductIds(prev => prev.filter(id => id !== productId));
+  const handleRemoveProduct = (id: string) => {
+    setSelectedProductIds((prev) => prev.filter((x) => x !== id));
   };
 
   const handleModalOpen = () => {
@@ -1039,10 +704,6 @@ function FeaturedProductsSection({
     setSearchResults([]);
   };
 
-  const loadMoreResults = () => {
-    handleSearch(searchQuery, currentPage + 1);
-  };
-
   return (
     <div className="space-y-6">
       <Card>
@@ -1053,22 +714,14 @@ function FeaturedProductsSection({
                 <Plus className="h-5 w-5" />
                 Featured Products
               </CardTitle>
-              <CardDescription>
-                Select products to feature on the homepage
-              </CardDescription>
+              <CardDescription>Select products to feature on the homepage</CardDescription>
             </div>
             <div className="flex gap-2">
-              <Button 
-                onClick={handleModalOpen}
-                disabled={saving}
-              >
+              <Button onClick={handleModalOpen} disabled={saving}>
                 <Plus className="h-4 w-4 mr-2" />
                 Add Products
               </Button>
-              <Button 
-                onClick={handleSaveFeaturedProducts}
-                disabled={saving || selectedProductIds.length === 0}
-              >
+              <Button onClick={handleSave} disabled={saving || selectedProductIds.length === 0}>
                 <Save className="h-4 w-4 mr-2" />
                 {saving ? "Saving..." : "Save Changes"}
               </Button>
@@ -1078,66 +731,33 @@ function FeaturedProductsSection({
         <CardContent>
           {featuredProducts.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
-              <div className="h-12 w-12 mx-auto mb-4 opacity-50 flex items-center justify-center">
-                <svg className="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8-2m8-4l-8 4m0 10l-8-2m0-10l-8 4m8 4v10m0-10l-8 4" />
-                </svg>
-              </div>
               <p>No featured products yet. Click "Add Products" to select products.</p>
             </div>
           ) : (
             <div className="space-y-4">
               {featuredProducts.map((product, index) => (
                 <div key={product.productId || product._id} className="flex items-center gap-4 p-4 border rounded-lg">
-                  <div className="flex-shrink-0">
-                    {product.variants?.[0]?.images?.[0] && (
-                      <img 
-                        src={product.variants[0].images[0]} 
-                        alt={product.title}
-                        className="w-16 h-16 object-cover rounded"
-                      />
-                    )}
-                  </div>
-                  
+                  {product.variants?.[0]?.images?.[0] && (
+                    <img src={product.variants[0].images[0]} alt={product.title} className="w-full h-auto rounded object-contain object-contain object-contain object-contain object-contain rounded shrink-0" />
+                  )}
                   <div className="flex-1 min-w-0">
                     <h3 className="font-medium truncate">{product.title}</h3>
                     <p className="text-sm text-muted-foreground">Slug: {product.slug}</p>
-                    {product.category?.name && (
-                      <Badge variant="secondary" className="mt-1">
-                        {product.category.name}
-                      </Badge>
-                    )}
+                    {product.category?.name && <Badge variant="secondary" className="mt-1">{product.category.name}</Badge>}
                   </div>
-                  
                   <div className="flex items-center gap-2">
-                    <Badge variant="outline">
-                      {index + 1}
-                    </Badge>
-                    <Button 
-                      variant="destructive" 
-                      size="sm"
-                      onClick={() => handleRemoveProduct(product.productId || product._id)}
-                      disabled={saving}
-                    >
+                    <Badge variant="outline">{index + 1}</Badge>
+                    <Button variant="destructive" size="sm" onClick={() => handleRemoveProduct(product.productId || product._id)} disabled={saving}>
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
                 </div>
               ))}
-              
-              <div className="mt-4 pt-4 border-t">
-                <div className="flex items-center justify-between text-sm text-muted-foreground">
-                  <span>{selectedProductIds.length} products selected</span>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => setSelectedProductIds(
-                      featuredProducts.map(product => product.productId || product._id)
-                    )}
-                  >
-                    Reset to Current
-                  </Button>
-                </div>
+              <div className="mt-4 pt-4 border-t flex items-center justify-between text-sm text-muted-foreground">
+                <span>{selectedProductIds.length} products selected</span>
+                <Button variant="outline" size="sm" onClick={() => setSelectedProductIds(featuredProducts.map((p) => p.productId || p._id))}>
+                  Reset to Current
+                </Button>
               </div>
             </div>
           )}
@@ -1150,15 +770,11 @@ function FeaturedProductsSection({
           <div className="bg-background rounded-lg w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
             <div className="flex items-center justify-between p-6 border-b">
               <h2 className="text-xl font-semibold">Search and Select Products</h2>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={handleModalClose}
-              >
+              <Button variant="ghost" size="sm" onClick={handleModalClose}>
                 <X className="h-4 w-4" />
               </Button>
             </div>
-            
+
             <div className="p-6 border-b">
               <div className="flex gap-4">
                 <Input
@@ -1166,25 +782,14 @@ function FeaturedProductsSection({
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search products by title, SKU, or description..."
                   className="flex-1"
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      handleSearch(searchQuery);
-                    }
-                  }}
+                  onKeyDown={(e) => e.key === "Enter" && handleSearch(searchQuery)}
                 />
-                <Button 
-                  onClick={() => handleSearch(searchQuery)}
-                  disabled={searchLoading || !searchQuery.trim()}
-                >
-                  {searchLoading ? (
-                    <RefreshCw className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <Search className="h-4 w-4" />
-                  )}
+                <Button onClick={() => handleSearch(searchQuery)} disabled={searchLoading || !searchQuery.trim()}>
+                  {searchLoading ? <RefreshCw className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
                 </Button>
               </div>
             </div>
-            
+
             <div className="flex-1 overflow-auto p-6">
               {searchResults.length === 0 && !searchLoading && searchQuery ? (
                 <div className="text-center py-8 text-muted-foreground">
@@ -1199,64 +804,41 @@ function FeaturedProductsSection({
                   {searchResults.map((product) => {
                     const isSelected = selectedProductIds.includes(product._id);
                     const hasImages = product.variants?.[0]?.images?.length > 0;
-                    
                     return (
-                      <div 
+                      <div
                         key={product._id}
-                        className={`flex items-center gap-4 p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md ${
-                          isSelected 
-                            ? 'border-primary bg-primary/5' 
-                            : 'border-border hover:border-primary/50'
-                        }`}
+                        className={`flex items-center gap-4 p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md ${isSelected ? "border-primary bg-primary/5" : "border-border hover:border-primary/50"
+                          }`}
                         onClick={() => handleProductSelect(product._id)}
                       >
-                        <div className="flex-shrink-0">
+                        <div className="shrink-0">
                           {hasImages ? (
-                            <img 
-                              src={product.variants[0].images[0]} 
-                              alt={product.title}
-                              className="w-16 h-16 object-cover rounded"
-                            />
+                            <img src={product.variants[0].images[0]} alt={product.title} className="w-full h-auto rounded object-contain object-contain object-contain object-contain object-contain rounded" />
                           ) : (
                             <div className="w-16 h-16 bg-muted rounded flex items-center justify-center">
                               <ImageIcon className="h-8 w-8 text-muted-foreground" />
                             </div>
                           )}
                         </div>
-                        
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             <h3 className="font-medium truncate">{product.title}</h3>
-                            <Badge variant="secondary" className="text-xs">
-                              {product.status}
-                            </Badge>
+                            <Badge variant="secondary" className="text-xs">{product.status}</Badge>
                           </div>
-                          
-                          <p className="text-sm text-muted-foreground truncate mb-2">
-                            {product.description}
-                          </p>
-                          
+                          <p className="text-sm text-muted-foreground truncate mb-2">{product.description}</p>
                           <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                            <span>SKU: {product.variants?.[0]?.skuCode || 'N/A'}</span>
+                            <span>SKU: {product.variants?.[0]?.skuCode || "N/A"}</span>
                             <span>Slug: {product.slug}</span>
-                            {product.variants?.[0]?.price && (
-                              <span>Price: ₹{product.variants[0].price}</span>
-                            )}
+                            {product.variants?.[0]?.price && <span>Price: ₹{product.variants[0].price}</span>}
                           </div>
                         </div>
-                        
-                        <div className="flex-shrink-0">
-                          <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
-                            isSelected 
-                              ? 'border-primary bg-primary' 
-                              : 'border-muted-foreground'
+                        <div className={`w-5 h-5 rounded border-2 flex items-center justify-center shrink-0 ${isSelected ? "border-primary bg-primary" : "border-muted-foreground"
                           }`}>
-                            {isSelected && (
-                              <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                              </svg>
-                            )}
-                          </div>
+                          {isSelected && (
+                            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                              <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                            </svg>
+                          )}
                         </div>
                       </div>
                     );
@@ -1264,32 +846,16 @@ function FeaturedProductsSection({
                 </div>
               )}
             </div>
-            
+
             <div className="p-6 border-t flex items-center justify-between">
-              <div className="text-sm text-muted-foreground">
-                {selectedProductIds.length} products selected
-              </div>
+              <span className="text-sm text-muted-foreground">{selectedProductIds.length} products selected</span>
               <div className="flex gap-2">
-                <Button 
-                  variant="outline" 
-                  onClick={handleModalClose}
-                >
-                  Cancel
-                </Button>
-                <Button 
-                  onClick={handleSaveFeaturedProducts}
-                  disabled={saving || selectedProductIds.length === 0}
-                >
+                <Button variant="outline" onClick={handleModalClose}>Cancel</Button>
+                <Button onClick={handleSave} disabled={saving || selectedProductIds.length === 0}>
                   {saving ? (
-                    <>
-                      <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                      Saving...
-                    </>
+                    <><RefreshCw className="h-4 w-4 mr-2 animate-spin" />Saving...</>
                   ) : (
-                    <>
-                      <Save className="h-4 w-4 mr-2" />
-                      Save Selected ({selectedProductIds.length})
-                    </>
+                    <><Save className="h-4 w-4 mr-2" />Save Selected ({selectedProductIds.length})</>
                   )}
                 </Button>
               </div>
@@ -1301,6 +867,8 @@ function FeaturedProductsSection({
   );
 }
 
+// ─── Hero Banners Section ────────────────────────────────────────────────────
+
 interface HeroBannersSectionProps {
   heroBanners: HeroBanner[];
   onAddBanner: (banner: Partial<HeroBanner>, desktopFile?: File, mobileFile?: File) => Promise<boolean>;
@@ -1310,43 +878,52 @@ interface HeroBannersSectionProps {
   saving: boolean;
 }
 
-function HeroBannersSection({ 
-  heroBanners, 
-  onAddBanner, 
-  onUpdateBanners, 
-  onDeleteBanner, 
-  onClearAll, 
-  saving 
-}: HeroBannersSectionProps) {
-  const [newBanner, setNewBanner] = useState<Partial<HeroBanner>>({
-    title: "",
-    subtitle: "",
-    cta: "",
-    link: ""
-  });
+function HeroBannersSection({ heroBanners, onAddBanner, onDeleteBanner, onClearAll, saving }: HeroBannersSectionProps) {
+  const [newBanner, setNewBanner] = useState<Partial<HeroBanner>>({ title: "", subtitle: "", cta: "", link: "" });
   const [desktopFile, setDesktopFile] = useState<File | null>(null);
   const [mobileFile, setMobileFile] = useState<File | null>(null);
   const [desktopPreview, setDesktopPreview] = useState<string>("");
   const [mobilePreview, setMobilePreview] = useState<string>("");
 
+  // Revoke object URLs on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (desktopPreview) URL.revokeObjectURL(desktopPreview);
+      if (mobilePreview) URL.revokeObjectURL(mobilePreview);
+    };
+  }, []);
+
   const handleDesktopFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setDesktopFile(file);
-      const reader = new FileReader();
-      reader.onload = (e) => setDesktopPreview(e.target?.result as string);
-      reader.readAsDataURL(file);
-    }
+    if (!file) return;
+
+    if (desktopPreview) URL.revokeObjectURL(desktopPreview);
+
+    const previewUrl = URL.createObjectURL(file);
+    setDesktopFile(file);
+    setDesktopPreview(previewUrl);
   };
 
   const handleMobileFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      setMobileFile(file);
-      const reader = new FileReader();
-      reader.onload = (e) => setMobilePreview(e.target?.result as string);
-      reader.readAsDataURL(file);
-    }
+    if (!file) return;
+
+    if (mobilePreview) URL.revokeObjectURL(mobilePreview);
+
+    const previewUrl = URL.createObjectURL(file);
+    setMobileFile(file);
+    setMobilePreview(previewUrl);
+  };
+  const handleRemoveDesktop = () => {
+    if (desktopPreview) URL.revokeObjectURL(desktopPreview);
+    setDesktopFile(null);
+    setDesktopPreview("");
+  };
+
+  const handleRemoveMobile = () => {
+    if (mobilePreview) URL.revokeObjectURL(mobilePreview);
+    setMobileFile(null);
+    setMobilePreview("");
   };
 
   const handleAddBanner = async () => {
@@ -1354,15 +931,11 @@ function HeroBannersSection({
       toast.error("Please add at least a desktop image or title");
       return;
     }
-
     const success = await onAddBanner(newBanner, desktopFile || undefined, mobileFile || undefined);
-    
     if (success) {
       setNewBanner({ title: "", subtitle: "", cta: "", link: "" });
-      setDesktopFile(null);
-      setMobileFile(null);
-      setDesktopPreview("");
-      setMobilePreview("");
+      handleRemoveDesktop();
+      handleRemoveMobile();
     }
   };
 
@@ -1378,9 +951,8 @@ function HeroBannersSection({
           <CardDescription>Create a new hero banner with images and content</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Images Section */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Desktop Image */}
+            {/* Desktop Image Upload */}
             <div className="space-y-3">
               <Label className="flex items-center gap-2">
                 <Monitor className="h-4 w-4" />
@@ -1388,21 +960,16 @@ function HeroBannersSection({
               </Label>
               <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4">
                 {desktopPreview ? (
-                  <div className="space-y-3">
-                    <img 
-                      src={desktopPreview} 
-                      alt="Desktop preview" 
-                      className="w-full h-32 object-cover rounded"
+                  <div className="aspect-[16/5] w-full overflow-hidden rounded">
+                    <img
+                      src={desktopPreview}
+                      alt="Desktop preview"
+                      className="w-full h-full object-cover"
                     />
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => {
-                        setDesktopFile(null);
-                        setDesktopPreview("");
-                      }}
-                      className="w-full"
-                    >
+                    <p className="text-xs text-muted-foreground text-center">
+                      {desktopFile?.name} ({(desktopFile!.size / 1024).toFixed(1)} KB)
+                    </p>
+                    <Button variant="outline" size="sm" onClick={handleRemoveDesktop} className="w-full">
                       <Trash2 className="h-4 w-4 mr-2" />
                       Remove
                     </Button>
@@ -1410,9 +977,7 @@ function HeroBannersSection({
                 ) : (
                   <div className="text-center">
                     <ImageIcon className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground mb-2">
-                      Upload desktop banner image
-                    </p>
+                    <p className="text-sm text-muted-foreground mb-2">Upload desktop banner image</p>
                     <input
                       type="file"
                       accept="image/*"
@@ -1420,11 +985,7 @@ function HeroBannersSection({
                       className="hidden"
                       id="desktop-image"
                     />
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => document.getElementById('desktop-image')?.click()}
-                    >
+                    <Button variant="outline" size="sm" onClick={() => document.getElementById("desktop-image")?.click()}>
                       <Upload className="h-4 w-4 mr-2" />
                       Choose File
                     </Button>
@@ -1433,7 +994,7 @@ function HeroBannersSection({
               </div>
             </div>
 
-            {/* Mobile Image */}
+            {/* Mobile Image Upload */}
             <div className="space-y-3">
               <Label className="flex items-center gap-2">
                 <Smartphone className="h-4 w-4" />
@@ -1442,20 +1003,15 @@ function HeroBannersSection({
               <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4">
                 {mobilePreview ? (
                   <div className="space-y-3">
-                    <img 
-                      src={mobilePreview} 
-                      alt="Mobile preview" 
-                      className="w-full h-32 object-cover rounded"
+                    <img
+                      src={mobilePreview}
+                      alt="Mobile preview"
+                      className="w-full h-auto rounded object-contain"
                     />
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => {
-                        setMobileFile(null);
-                        setMobilePreview("");
-                      }}
-                      className="w-full"
-                    >
+                    <p className="text-xs text-muted-foreground text-center">
+                      {mobileFile?.name} ({(mobileFile!.size / 1024).toFixed(1)} KB)
+                    </p>
+                    <Button variant="outline" size="sm" onClick={handleRemoveMobile} className="w-full">
                       <Trash2 className="h-4 w-4 mr-2" />
                       Remove
                     </Button>
@@ -1463,9 +1019,7 @@ function HeroBannersSection({
                 ) : (
                   <div className="text-center">
                     <ImageIcon className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground mb-2">
-                      Upload mobile banner image
-                    </p>
+                    <p className="text-sm text-muted-foreground mb-2">Upload mobile banner image</p>
                     <input
                       type="file"
                       accept="image/*"
@@ -1473,11 +1027,7 @@ function HeroBannersSection({
                       className="hidden"
                       id="mobile-image"
                     />
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => document.getElementById('mobile-image')?.click()}
-                    >
+                    <Button variant="outline" size="sm" onClick={() => document.getElementById("mobile-image")?.click()}>
                       <Upload className="h-4 w-4 mr-2" />
                       Choose File
                     </Button>
@@ -1486,6 +1036,7 @@ function HeroBannersSection({
               </div>
             </div>
           </div>
+
           <div className="flex justify-end">
             <Button onClick={handleAddBanner} disabled={saving}>
               <Save className="h-4 w-4 mr-2" />
@@ -1504,12 +1055,7 @@ function HeroBannersSection({
               <CardDescription>Manage your current hero banners</CardDescription>
             </div>
             {heroBanners.length > 0 && (
-              <Button 
-                variant="destructive" 
-                size="sm" 
-                onClick={onClearAll}
-                disabled={saving}
-              >
+              <Button variant="destructive" size="sm" onClick={onClearAll} disabled={saving}>
                 <Trash2 className="h-4 w-4 mr-2" />
                 Clear All
               </Button>
@@ -1525,33 +1071,24 @@ function HeroBannersSection({
           ) : (
             <div className="space-y-4">
               {heroBanners.map((banner, index) => (
-                <div key={index} className="border rounded-lg p-4 space-y-4">
+                <div key={index} className="border rounded-lg p-4">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
+                      <div className="flex items-center gap-2 mb-3">
                         <Badge variant="secondary">Banner {index + 1}</Badge>
                         {banner.title && <span className="font-medium">{banner.title}</span>}
                       </div>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
                         {banner.desktopImg && (
                           <div>
-                            <p className="text-sm text-muted-foreground mb-1">Desktop Image:</p>
-                            <img 
-                              src={banner.desktopImg} 
-                              alt="Desktop" 
-                              className="w-full h-24 object-cover rounded"
-                            />
+                            <p className="text-sm text-muted-foreground mb-1">Desktop:</p>
                           </div>
                         )}
                         {banner.mobileImg && (
                           <div>
-                            <p className="text-sm text-muted-foreground mb-1">Mobile Image:</p>
-                            <img 
-                              src={banner.mobileImg} 
-                              alt="Mobile" 
-                              className="w-full h-24 object-cover rounded"
-                            />
+                            <p className="text-sm text-muted-foreground mb-1">Mobile:</p>
+                            <img src={banner.mobileImg} alt="Mobile" className="w-full h-auto rounded object-contain object-contain object-contain object-contain object-contain" />
                           </div>
                         )}
                       </div>
@@ -1559,22 +1096,15 @@ function HeroBannersSection({
                       {banner.subtitle && (
                         <p className="text-sm text-muted-foreground mb-2">{banner.subtitle}</p>
                       )}
-                      
                       {banner.cta && banner.link && (
                         <div className="flex items-center gap-2 text-sm">
                           <Badge variant="outline">{banner.cta}</Badge>
-                          <span className="text-muted-foreground">→</span>
-                          <span className="text-muted-foreground">{banner.link}</span>
+                          <span className="text-muted-foreground">→ {banner.link}</span>
                         </div>
                       )}
                     </div>
-                    
-                    <Button 
-                      variant="destructive" 
-                      size="sm"
-                      onClick={() => onDeleteBanner(index)}
-                      disabled={saving}
-                    >
+
+                    <Button variant="destructive" size="sm" onClick={() => onDeleteBanner(index)} disabled={saving} className="ml-4 shrink-0">
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
