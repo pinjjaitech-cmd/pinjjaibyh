@@ -601,7 +601,7 @@ function CategorySection({ allCategories, selectedCategories, onUpdateCategories
                             )}
                           </div>
                           {category.image && (
-                            <img src={category.image} alt={category.name} className="w-full h-auto rounded object-contain object-contain object-contain object-contain object-contain rounded mb-2" />
+                            <img src={category.image} alt={category.name} className="w-full h-auto object-contain rounded mb-2" />
                           )}
                           <div className="text-sm text-muted-foreground">
                             <p>Slug: {category.slug}</p>
@@ -738,7 +738,7 @@ function FeaturedProductsSection({ featuredProducts, onUpdateFeaturedProducts, s
               {featuredProducts.map((product, index) => (
                 <div key={product.productId || product._id} className="flex items-center gap-4 p-4 border rounded-lg">
                   {product.variants?.[0]?.images?.[0] && (
-                    <img src={product.variants[0].images[0]} alt={product.title} className="w-full h-auto rounded object-contain object-contain object-contain object-contain object-contain rounded shrink-0" />
+                    <img src={product.variants[0].images[0]} alt={product.title} className="w-full h-auto object-contain rounded shrink-0" />
                   )}
                   <div className="flex-1 min-w-0">
                     <h3 className="font-medium truncate">{product.title}</h3>
@@ -813,7 +813,7 @@ function FeaturedProductsSection({ featuredProducts, onUpdateFeaturedProducts, s
                       >
                         <div className="shrink-0">
                           {hasImages ? (
-                            <img src={product.variants[0].images[0]} alt={product.title} className="w-full h-auto rounded object-contain object-contain object-contain object-contain object-contain rounded" />
+                            <img src={product.variants[0].images[0]} alt={product.title} className="w-full h-auto object-contain rounded" />
                           ) : (
                             <div className="w-16 h-16 bg-muted rounded flex items-center justify-center">
                               <ImageIcon className="h-8 w-8 text-muted-foreground" />
@@ -960,11 +960,11 @@ function HeroBannersSection({ heroBanners, onAddBanner, onDeleteBanner, onClearA
               </Label>
               <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4">
                 {desktopPreview ? (
-                  <div className="aspect-[16/5] w-full overflow-hidden rounded">
+                  <div className="space-y-3">
                     <img
                       src={desktopPreview}
                       alt="Desktop preview"
-                      className="w-full h-full object-cover"
+                      className="w-full h-auto rounded object-contain"
                     />
                     <p className="text-xs text-muted-foreground text-center">
                       {desktopFile?.name} ({(desktopFile!.size / 1024).toFixed(1)} KB)
@@ -1083,12 +1083,13 @@ function HeroBannersSection({ heroBanners, onAddBanner, onDeleteBanner, onClearA
                         {banner.desktopImg && (
                           <div>
                             <p className="text-sm text-muted-foreground mb-1">Desktop:</p>
+                            <img src={banner.desktopImg} alt="Desktop" className="w-full h-auto rounded" />
                           </div>
                         )}
                         {banner.mobileImg && (
                           <div>
                             <p className="text-sm text-muted-foreground mb-1">Mobile:</p>
-                            <img src={banner.mobileImg} alt="Mobile" className="w-full h-auto rounded object-contain object-contain object-contain object-contain object-contain" />
+                            <img src={banner.mobileImg} alt="Mobile" className="w-full h-auto rounded" />
                           </div>
                         )}
                       </div>
