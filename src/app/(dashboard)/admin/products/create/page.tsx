@@ -30,6 +30,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { FileUpload } from "@/components/ui/file-upload";
 import {
   Plus,
   Trash2,
@@ -101,6 +102,7 @@ const CreateProductPage = () => {
   const [categories, setCategories] = useState<any[]>([]);
   const [categoriesLoading, setCategoriesLoading] = useState(true);
   const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({});
+  const [isDraggingOver, setIsDraggingOver] = useState<string | null>(null);
 
   const availableServices = [
     { id: "free-delivery", label: "Free Delivery" },
@@ -231,26 +233,8 @@ const CreateProductPage = () => {
     }
   };
 
-  const handleImageUpload = (variantId: string, files: FileList | null) => {
-    if (!files) return;
-    
-    const fileArray = Array.from(files);
-    const validFiles = fileArray.filter(file => {
-      const isValidType = file.type.startsWith('image/');
-      const isValidSize = file.size <= 5 * 1024 * 1024; // 5MB limit
-      
-      if (!isValidType) {
-        toast.error(`${file.name} is not a valid image file`);
-        return false;
-      }
-      if (!isValidSize) {
-        toast.error(`${file.name} is too large (max 5MB)`);
-        return false;
-      }
-      return true;
-    });
-
-    updateVariant(variantId, { images: [...formData.variants.find(v => v.id === variantId)?.images || [], ...validFiles] });
+  const handleImageUpload = (variantId: string, images: string[]) => {
+    updateVariant(variantId, { images });
   };
 
   const removeImage = (variantId: string, imageIndex: number) => {
@@ -711,7 +695,26 @@ const CreateProductPage = () => {
                     <div className="space-y-3">
                       <Label>Product Images</Label>
                       <div className="space-y-4">
-                        <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6">
+                        <div 
+                          className={`border-2 border-dashed rounded-lg p-6 transition-colors ${
+                            isDraggingOver === variant.id 
+                              ? 'border-primary bg-primary/5' 
+                              : 'border-muted-foreground/25'
+                          }`}
+                          onDragOver={(e) => {
+                            e.preventDefault();
+                            setIsDraggingOver(variant.id);
+                          }}
+                          onDragLeave={(e) => {
+                            e.preventDefault();
+                            setIsDraggingOver(null);
+                          }}
+                          onDrop={(e) => {
+                            e.preventDefault();
+                            setIsDraggingOver(null);
+                            handleImageUpload(variant.id, e.dataTransfer.files);
+                          }}
+                        >
                           <div className="text-center">
                             <Upload className="mx-auto h-12 w-12 text-muted-foreground" />
                             <div className="mt-4">
