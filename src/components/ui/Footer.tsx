@@ -196,9 +196,8 @@ const Footer = () => {
               {[
                 { label: "About Us", path: "/about" },
                 { label: "Our Story", path: "/story" },
-                { label: "Privacy Policy", path: "/privacy" },
-                { label: "Terms and Conditions", path: "/terms" },
-                { label: "Disclaimer", path: "/disclaimer" },
+                { label: "Terms & Conditions", path: "/terms-and-conditions" },
+                { label: "Privacy Policy", path: "/privacy-policy" },
               ].map((link, index) => (
                 <motion.div
                   key={link.path}
@@ -218,18 +217,19 @@ const Footer = () => {
             </div>
           </motion.div>
 
-          {/* Collections Section */}
+          {/* Services Section */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.55 }}
           >
-            <h4 className="text-sm tracking-[0.25em] uppercase mb-6 text-(--brand-primary) font-semibold">Collections</h4>
+            <h4 className="text-sm tracking-[0.25em] uppercase mb-6 text-(--brand-primary) font-semibold">Services</h4>
             <div className="flex flex-col gap-3">
               {[
-                { label: "Ziyabana Collection", path: "/collection/ziyabana-collection" },
-                { label: "Raffia Collection", path: "/collection/raffia-collection" },
-                { label: "Chromatic Minis Collection", path: "/collection/chromatic-minis-collection" },
+                { label: "Gifting Services", path: "/gifting-services" },
+                { label: "Work With Us", path: "/work-with-us" },
+                { label: "Orders & Shipping", path: "/orders-and-shipping" },
+                { label: "Returns & Exchanges", path: "/returns-and-exchanges" },
               ].map((link, index) => (
                 <motion.div
                   key={link.path}
@@ -255,7 +255,7 @@ const Footer = () => {
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.7 }}
           >
-            <h4 className="text-sm tracking-[0.25em] uppercase mb-6 text-(--brand-primary) font-semibold">Contact Information</h4>
+            <h4 className="text-sm tracking-[0.25em] uppercase mb-6 text-(--brand-primary) font-semibold">Connect</h4>
             <div className="flex flex-col gap-4">
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
@@ -263,12 +263,12 @@ const Footer = () => {
                 transition={{ duration: 0.5, delay: 0.7 }}
                 className="flex items-center gap-3 group"
               >
-                <Mail className="w-4 h-4 text-(--brand-white)/50 group-hover:text-(--brand-primary) transition-colors duration-300" />
+                <Mail className="w-4 h-4 text-(--brand-white)/50 group-hover:text-white transition-colors duration-300" />
                 <a 
-                  href="mailto:Pinjjaibyh@gmail.com" 
-                  className="text-sm text-(--brand-white)/70 hover:text-(--brand-primary) transition-colors duration-300"
+                  href="mailto:pinjjaibyh@gmail.com" 
+                  className="text-sm text-(--brand-white)/70 hover:text-white transition-colors duration-300"
                 >
-                  Pinjjaibyh@gmail.com
+                  pinjjaibyh@gmail.com
                 </a>
               </motion.div>
               
@@ -278,12 +278,44 @@ const Footer = () => {
                 transition={{ duration: 0.5, delay: 0.8 }}
                 className="flex items-center gap-3 group"
               >
-                <MapPin className="w-4 h-4 text-(--brand-white)/50 group-hover:text-(--brand-primary) transition-colors duration-300" />
+                <div className="w-4 h-4 text-(--brand-white)/50 group-hover:text-white transition-colors duration-300 flex items-center justify-center">
+                  📞
+                </div>
+                <a 
+                  href="tel:+919899187882" 
+                  className="text-sm text-(--brand-white)/70 hover:text-white transition-colors duration-300"
+                >
+                  +91 9899187882
+                </a>
+              </motion.div>
+              
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.9 }}
+                className="flex items-center gap-3 group"
+              >
+                <div className="w-4 h-4 text-(--brand-white)/50 group-hover:text-white transition-colors duration-300 flex items-center justify-center">
+                  🕐
+                </div>
+                <div className="text-sm text-(--brand-white)/70">
+                  <div>Monday - Saturday</div>
+                  <div>9:00 am - 5:00 pm IST</div>
+                </div>
+              </motion.div>
+              
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={isInView ? { opacity: 1, x: 0 } : {}}
+                transition={{ duration: 0.5, delay: 1.0 }}
+                className="flex items-center gap-3 group"
+              >
+                <MapPin className="w-4 h-4 text-(--brand-white)/50 group-hover:text-white transition-colors duration-300" />
                 <a 
                   href="https://maps.google.com" 
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-(--brand-white)/70 hover:text-(--brand-primary) transition-colors duration-300"
+                  className="text-sm text-(--brand-white)/70 hover:text-white transition-colors duration-300"
                 >
                   Delhi, India
                 </a>
