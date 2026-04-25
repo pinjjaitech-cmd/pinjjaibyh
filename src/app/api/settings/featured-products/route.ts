@@ -42,17 +42,27 @@ export async function PUT(request: Request) {
     .populate('categories', 'name slug')
     .lean()
 
-    // Transform products to required format
-    const featuredProductsData = products.map(product => ({
-      productId: product._id,
-      title: product.title,
-      slug: product.slug,
-      description: product.description,
-      categories: product.categories,
-      defaultVariantId: product.defaultVariantId,
-      variants: product.variants,
-      status: product.status
-    }))
+    // Create a map for quick lookup
+    const productMap = new Map(
+      products.map(product => [product._id.toString(), product])
+    )
+
+    // Transform products to required format while preserving order
+    const featuredProductsData = productIds.map((id: any) => {
+      const product = productMap.get(id)
+      if (!product) return null
+      
+      return {
+        productId: product._id,
+        title: product.title,
+        slug: product.slug,
+        description: product.description,
+        categories: product.categories,
+        defaultVariantId: product.defaultVariantId,
+        variants: product.variants,
+        status: product.status
+      }
+    }).filter(Boolean) // Remove any null entries
 
     const settings = await StoreSettings.findOneAndUpdate(
       {},

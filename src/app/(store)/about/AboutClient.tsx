@@ -2,7 +2,6 @@
 
 import { motion } from "framer-motion";
 import Image from 'next/image';
-import SocialMediaLinks from "@/components/SocialMediaLinks";
 
 const timelineEvents = [
   { year: "Roots", title: "The Art of Pinjana", desc: "Pinjjai by H is deeply rooted in the rural landscapes of Punjab, where tradition and craftsmanship are knitted into everyday life. Inspired by age-old techniques, the name Pinjjai is derived from “Pinjana”—a traditional term for the bow-shaped tool once used to clean cotton. Tt also refers to the process of carding, where raw cotton is gently transformed into soft, workable fibers—the very beginning of everythread. This process embodies patience, purity, and care—values that closely mirror the art of hand crochet, where each loop is shaped slowly and mindfully, one stitch at a time.At its core, Pinjjai by H is a tribute to these timeless practices and to the women who carry them forward, preserving their craft with quiet strength and skill." },

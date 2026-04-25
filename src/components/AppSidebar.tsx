@@ -59,12 +59,12 @@ const mainNavItems = [
   },
   {
     title: "Google Analytics",
-    url: "/admin/analytics",
+    url: "https://analytics.google.com/analytics/web/provision/#/a392590362p534541862/reports/intelligenthome",
     icon: BarChart3,
   },
   {
     title: "Google Search Console",
-    url: "/admin/analytics",
+    url: "https://search.google.com/search-console?resource_id=sc-domain%3Apinjjaibyh.com&after_verification_success=",
     icon: SearchCode,
   },
 ];

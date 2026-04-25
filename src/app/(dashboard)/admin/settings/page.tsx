@@ -19,7 +19,8 @@ import {
   Smartphone,
   MessageSquare,
   X,
-  Search
+  Search,
+  GripVertical
 } from "lucide-react";
 
 interface HeroBanner {
@@ -652,6 +653,8 @@ function FeaturedProductsSection({ featuredProducts, onUpdateFeaturedProducts, s
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   useEffect(() => {
     setSelectedProductIds(featuredProducts.map((p) => p.productId || p._id).filter(Boolean));
@@ -688,7 +691,8 @@ function FeaturedProductsSection({ featuredProducts, onUpdateFeaturedProducts, s
   };
 
   const handleRemoveProduct = (id: string) => {
-    setSelectedProductIds((prev) => prev.filter((x) => x !== id));
+    const newSelectedIds = selectedProductIds.filter((x) => x !== id);
+    setSelectedProductIds(newSelectedIds);
   };
 
   const handleModalOpen = () => {
@@ -704,6 +708,51 @@ function FeaturedProductsSection({ featuredProducts, onUpdateFeaturedProducts, s
     setSearchResults([]);
   };
 
+  const handleDragStart = (index: number) => {
+    setDraggedIndex(index);
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    setDragOverIndex(index);
+  };
+
+  const handleDragLeave = () => {
+    setDragOverIndex(null);
+  };
+
+  const handleDrop = (e: React.DragEvent, dropIndex: number) => {
+    e.preventDefault();
+    if (draggedIndex === null) return;
+
+    const newSelectedIds = [...selectedProductIds];
+    const draggedId = newSelectedIds[draggedIndex];
+    
+    // Remove from old position
+    newSelectedIds.splice(draggedIndex, 1);
+    // Insert at new position
+    newSelectedIds.splice(dropIndex, 0, draggedId);
+    
+    setSelectedProductIds(newSelectedIds);
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null);
+    setDragOverIndex(null);
+  };
+
+  // Get product details by ID
+  const getProductById = (id: string) => {
+    return featuredProducts.find(p => (p.productId || p._id) === id);
+  };
+
+  // Get current featured products in the selected order
+  const currentFeaturedProducts = selectedProductIds
+    .map(id => getProductById(id))
+    .filter(Boolean);
+
   return (
     <div className="space-y-6">
       <Card>
@@ -714,7 +763,7 @@ function FeaturedProductsSection({ featuredProducts, onUpdateFeaturedProducts, s
                 <Plus className="h-5 w-5" />
                 Featured Products
               </CardTitle>
-              <CardDescription>Select products to feature on the homepage</CardDescription>
+              <CardDescription>Select products to feature on the homepage. Drag to reorder.</CardDescription>
             </div>
             <div className="flex gap-2">
               <Button onClick={handleModalOpen} disabled={saving}>
@@ -729,14 +778,31 @@ function FeaturedProductsSection({ featuredProducts, onUpdateFeaturedProducts, s
           </div>
         </CardHeader>
         <CardContent>
-          {featuredProducts.length === 0 ? (
+          {currentFeaturedProducts.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               <p>No featured products yet. Click "Add Products" to select products.</p>
             </div>
           ) : (
             <div className="space-y-4">
-              {featuredProducts.map((product, index) => (
-                <div key={product.productId || product._id} className="flex items-center gap-4 p-4 border rounded-lg">
+              {currentFeaturedProducts.map((product, index) => (
+                <div
+                  key={product.productId || product._id}
+                  className={`flex items-center gap-4 p-4 border rounded-lg cursor-move transition-all ${
+                    draggedIndex === index ? 'opacity-50' : ''
+                  } ${
+                    dragOverIndex === index ? 'border-primary bg-primary/5' : 'border-border'
+                  }`}
+                  draggable
+                  onDragStart={() => handleDragStart(index)}
+                  onDragOver={(e) => handleDragOver(e, index)}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, index)}
+                  onDragEnd={handleDragEnd}
+                >
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <GripVertical className="h-4 w-4" />
+                    <Badge variant="outline">{index + 1}</Badge>
+                  </div>
                   {product.variants?.[0]?.images?.[0] && (
                     <img src={product.variants[0].images[0]} alt={product.title} className="w-[80px] h-auto object-contain rounded shrink-0" />
                   )}
@@ -746,7 +812,6 @@ function FeaturedProductsSection({ featuredProducts, onUpdateFeaturedProducts, s
                     {product.category?.name && <Badge variant="secondary" className="mt-1">{product.category.name}</Badge>}
                   </div>
                   <div className="flex items-center gap-2">
-                    <Badge variant="outline">{index + 1}</Badge>
                     <Button variant="destructive" size="icon" onClick={() => handleRemoveProduct(product.productId || product._id)} disabled={saving}>
                       <Trash2 className="h-4 w-4" />
                     </Button>
