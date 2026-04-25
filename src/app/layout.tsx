@@ -97,6 +97,19 @@ export default async function RootLayout({
       <head>
         <StructuredData type="organization" />
         <StructuredData type="website" />
+        
+        {/* Google Analytics */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-VKMEG1C5LB"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-VKMEG1C5LB');
+            `
+          }}
+        />
       </head>
       <body
         className={`${lexendDeca.variable} ${cormorantGaramond.variable} ${geistSans.variable} ${geistMono.variable} antialiased flex`}

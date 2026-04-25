@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import UserModel from '@/models/User';
+import { sendOTPEmail } from '@/lib/email';
 
 // In-memory OTP storage (in production, use Redis or database)
 const otpStore = new Map<string, { otp: string; expires: number; email: string }>();
@@ -60,7 +61,14 @@ export async function POST(request: Request) {
 
     await user.save();
 
-    console.log(`OTP for ${email}: ${otp}`);
+    // Send OTP via email
+    const emailResult = await sendOTPEmail(email, otp, fullName);
+    
+    if (!emailResult.success) {
+      console.error('Failed to send OTP email:', emailResult.error);
+      // In production, you might want to handle this more gracefully
+      // For now, we'll continue but log the error
+    }
 
     return NextResponse.json({
       message: 'User created successfully. Please verify your email with the OTP sent.',
@@ -175,7 +183,14 @@ export async function PATCH(request: Request) {
 
     otpStore.set(email, { otp, expires, email });
 
-    console.log(`New OTP for ${email}: ${otp}`);
+    // Send new OTP via email
+    const emailResult = await sendOTPEmail(email, otp, user.fullName);
+    
+    if (!emailResult.success) {
+      console.error('Failed to send OTP email:', emailResult.error);
+      // In production, you might want to handle this more gracefully
+      // For now, we'll continue but log the error
+    }
 
     return NextResponse.json({
       message: 'New OTP sent successfully',

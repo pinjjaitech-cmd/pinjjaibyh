@@ -738,7 +738,7 @@ function FeaturedProductsSection({ featuredProducts, onUpdateFeaturedProducts, s
               {featuredProducts.map((product, index) => (
                 <div key={product.productId || product._id} className="flex items-center gap-4 p-4 border rounded-lg">
                   {product.variants?.[0]?.images?.[0] && (
-                    <img src={product.variants[0].images[0]} alt={product.title} className="w-full h-auto object-contain rounded shrink-0" />
+                    <img src={product.variants[0].images[0]} alt={product.title} className="w-[80px] h-auto object-contain rounded shrink-0" />
                   )}
                   <div className="flex-1 min-w-0">
                     <h3 className="font-medium truncate">{product.title}</h3>
@@ -747,7 +747,7 @@ function FeaturedProductsSection({ featuredProducts, onUpdateFeaturedProducts, s
                   </div>
                   <div className="flex items-center gap-2">
                     <Badge variant="outline">{index + 1}</Badge>
-                    <Button variant="destructive" size="sm" onClick={() => handleRemoveProduct(product.productId || product._id)} disabled={saving}>
+                    <Button variant="destructive" size="icon" onClick={() => handleRemoveProduct(product.productId || product._id)} disabled={saving}>
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
@@ -813,7 +813,7 @@ function FeaturedProductsSection({ featuredProducts, onUpdateFeaturedProducts, s
                       >
                         <div className="shrink-0">
                           {hasImages ? (
-                            <img src={product.variants[0].images[0]} alt={product.title} className="w-full h-auto object-contain rounded" />
+                            <img src={product.variants[0].images[0]} alt={product.title} className="w-[80px] h-auto object-contain rounded" />
                           ) : (
                             <div className="w-16 h-16 bg-muted rounded flex items-center justify-center">
                               <ImageIcon className="h-8 w-8 text-muted-foreground" />

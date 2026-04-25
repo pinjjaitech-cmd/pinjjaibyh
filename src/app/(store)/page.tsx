@@ -5,6 +5,7 @@ import { getHomepageData } from '@/lib/homepage'
 import Link from 'next/link'
 import { Metadata } from 'next'
 import StitchEveryThread from '@/components/store/StitchEveryThread'
+import OfferMarquee from '@/components/OfferMarquee'
 
 export const metadata: Metadata = {
   title: 'Home - Handcrafted Crochet Bags & Artisan Crafts',
@@ -28,8 +29,11 @@ export const metadata: Metadata = {
 const Homepage = async () => {
   const homepageData = await getHomepageData()
 
+  console.log(homepageData)
+
   return (
     <div className='w-full font-sans h-full bg-(--brand-white) text-black'>
+      <OfferMarquee marqueeTexts={homepageData.storeSettings.marqueeTexts || []} />
       <div className='px-2 '>
 
         <FeaturedBanner slides={homepageData.heroBanners} />
@@ -71,9 +75,7 @@ const Homepage = async () => {
             <div className="section-divider mx-0! mb-6" />
 
 
-            <p className='text-body text-muted-foreground mb-3'>The word Pinjjai finds its roots in Pinjana—a traditional term for the bow-shaped tool once used to clean cotton. It also refers to the process of carding, where raw cotton is gently separated into soft, workable fibers—the beginning of every thread.</p>
-
-
+            <p className='text-body text-muted-foreground mb-3'>Pinjjai takes its name from “Pinjana,” the traditional process of cleaning cotton—symbolizing patience, purity, and heritage. At Pinjjai, we work closely with women artisans from rural Punjab, preserving the beauty of hand crochet while empowering them through sustainable livelihoods. Every bag is made slowly and thoughtfully, blending heritage techniques with modern design sensibilities.</p>
             <p className='text-body text-muted-foreground mb-3'>Pinjjai was born from a simple yet powerful idea—that the threads of tradition can shape the future. Rooted in Punjab, our story is inspired by generations of women who transformed everyday handcraft into a meaningful form of expression, where every loop and knot carries purpose.</p>
 
             <p className='text-body text-muted-foreground mb-3'>At Pinjjai, we work closely with skilled artisans from rural Punjab, preserving the beauty of hand crochet while reimagining it for today. Every bag is made slowly and thoughtfully, blending heritage techniques with modern design sensibilities.</p>

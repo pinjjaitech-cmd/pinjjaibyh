@@ -298,14 +298,14 @@ export default function ProductDetailClient({ productSlug }: ProductDetailClient
                 src={currentImages[selectedImage]}
                 alt={`${product.title} - Image ${selectedImage + 1}`}
                 fill
-                className="object-cover"
+                className="object-contain"
                 priority
               />
-              {selectedVariant.cuttedPrice && selectedVariant.cuttedPrice > selectedVariant.price && (
+              {/* {selectedVariant.cuttedPrice && selectedVariant.cuttedPrice > selectedVariant.price && (
                 <div className="absolute top-4 left-4 bg-red-500 text-white px-3 py-1 rounded-md text-sm font-medium">
                   Sale
                 </div>
-              )}
+              )} */}
             </div>
             
             {/* Thumbnail Gallery */}

@@ -48,7 +48,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             priority={product.priority}
             style={{ objectFit: 'cover' }}
-            className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 bg-(--brand-primary)/20'
+            className='w-full h-full object-contain group-hover:scale-105 transition-transform duration-700 bg-(--brand-primary)/20'
             loading={product.priority ? "eager" : "lazy"}
           />
 

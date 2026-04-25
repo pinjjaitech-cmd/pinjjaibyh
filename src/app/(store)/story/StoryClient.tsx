@@ -25,7 +25,7 @@ const StoryClient = () => {
             transition={{ duration: 1, delay: 0.8 }}
             className="text-lg md:text-xl text-white/70 text-center "
           >
-            A documentary of heritage, hands, and hope knit into every stitch
+            A documentary of heritage, hands, and hope knit into every loop
           </motion.p>
         </div>
       </section>
@@ -221,7 +221,7 @@ const StoryClient = () => {
               viewport={{ once: true }}
               className="text-(--brand-white)/60 text-sm"
             >
-              #PinjjaiByH #HandcraftedWithPurpose #ArtisanStories
+              #PinjjaiByH #HandcraftedWithPurpose #WomenEmpowerment
             </motion.div>
           </motion.div>
         </div>
