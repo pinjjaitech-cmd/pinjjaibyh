@@ -74,9 +74,7 @@ const Homepage = async () => {
 
 
             <p className='text-body text-muted-foreground mb-3'>Pinjjai takes its name from “Pinjana,” the traditional process of cleaning cotton—symbolizing patience, purity, and heritage. At Pinjjai, we work closely with women artisans from rural Punjab, preserving the beauty of hand crochet while empowering them through sustainable livelihoods. Every bag is made slowly and thoughtfully, blending heritage techniques with modern design sensibilities.</p>
-            <p className='text-body text-muted-foreground mb-3'>Pinjjai was born from a simple yet powerful idea—that the threads of tradition can shape the future. Rooted in Punjab, our story is inspired by generations of women who transformed everyday handcraft into a meaningful form of expression, where every loop and knot carries purpose.</p>
-
-            <p className='text-body text-muted-foreground mb-3'>At Pinjjai, we work closely with skilled artisans from rural Punjab, preserving the beauty of hand crochet while reimagining it for today. Every bag is made slowly and thoughtfully, blending heritage techniques with modern design sensibilities.</p>
+            
             <Link
               href="/story"
               className="inline-block text-xs tracking-[0.25em] uppercase text-[#5D4432] border-b border-[#5D4432]/30 pb-1 hover:border-[#5D4432] transition-colors duration-300"
