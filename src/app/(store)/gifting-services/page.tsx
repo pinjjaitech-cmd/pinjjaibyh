@@ -27,49 +27,49 @@ export const metadata: Metadata = {
 export default function GiftingServicesPage() {
   const occasions = [
     {
-      icon: <Heart className="w-8 h-8" />,
+      icon: <Heart className="w-8 h-8 text-(--brand-primary)" />,
       title: "Weddings & Mehendi",
       description: "Handcrafted gifts for wedding celebrations and mehendi ceremonies",
-      color: "bg-pink-100 text-pink-600"
+      color: "bg-(--brand-primary)/10"
     },
     {
-      icon: <Users className="w-8 h-8" />,
+      icon: <Users className="w-8 h-8 text-(--brand-primary)" />,
       title: "Parties & Events",
       description: "Unique gifts for birthday parties and special celebrations",
-      color: "bg-purple-100 text-purple-600"
+      color: "bg-(--brand-primary)/10"
     },
     {
-      icon: <Briefcase className="w-8 h-8" />,
+      icon: <Briefcase className="w-8 h-8 text-(--brand-primary)" />,
       title: "Corporate Gifting",
       description: "Professional gifts for corporate events and employee recognition",
-      color: "bg-blue-100 text-blue-600"
+      color: "bg-(--brand-primary)/10"
     },
     {
-      icon: <Star className="w-8 h-8" />,
+      icon: <Star className="w-8 h-8 text-(--brand-primary)" />,
       title: "Anniversaries",
       description: "Thoughtful gifts to celebrate special milestones and memories",
-      color: "bg-amber-100 text-amber-600"
+      color: "bg-(--brand-primary)/10"
     }
   ]
 
   const features = [
     {
-      icon: <Sparkles className="w-6 h-6" />,
+      icon: <Sparkles className="w-6 h-6 text-(--brand-primary)" />,
       title: "Handcrafted",
       description: "Each piece is carefully crafted by skilled women artisans"
     },
     {
-      icon: <Heart className="w-6 h-6" />,
+      icon: <Heart className="w-6 h-6 text-(--brand-primary)" />,
       title: "Sustainable",
       description: "Eco-friendly materials and traditional crafting techniques"
     },
     {
-      icon: <Package className="w-6 h-6" />,
+      icon: <Package className="w-6 h-6 text-(--brand-primary)" />,
       title: "Customization",
       description: "Personalized options to make each gift truly special"
     },
     {
-      icon: <Star className="w-6 h-6" />,
+      icon: <Star className="w-6 h-6 text-(--brand-primary)" />,
       title: "Timeless Design",
       description: "Classic designs that never go out of style"
     }
@@ -78,19 +78,19 @@ export default function GiftingServicesPage() {
   return (
     <div className="w-full">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-[#5D4432]/10 to-[#5D4432]/5 py-20">
+      <section className="relative bg-linear-to-br from-(--brand-primary)/10 to-(--brand-primary)/5 py-20">
         <div className="container mx-auto px-4">
           <div className="text-center max-w-4xl mx-auto">
             <div className="mb-6">
-              <Gift className="w-16 h-16 text-[#5D4432] mx-auto" />
+              <Gift className="w-16 h-16 text-(--brand-primary) mx-auto" />
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-[#5D4432] mb-6">
+            <h1 className="font-serif text-5xl md:text-6xl font-bold text-(--brand-dark) mb-6">
               GIFTING SERVICE
             </h1>
-            <p className="text-2xl md:text-3xl text-[#5D4432]/80 font-light mb-8">
+            <p className="text-2xl md:text-3xl text-(--brand-primary)/80 font-light mb-8">
               Let's create something timeless together
             </p>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg text-(--brand-dark)/70 max-w-2xl mx-auto leading-relaxed">
               At Pinjjai By H, we curate thoughtful gifting experiences for every occasion—festive, personal, or corporate. Discover unique, handcrafted, and sustainable products tailored to your style and budget, with customization options to make each gift truly special.
             </p>
           </div>
@@ -101,10 +101,10 @@ export default function GiftingServicesPage() {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#5D4432] mb-4">
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-(--brand-dark) mb-4">
               Perfect for Every Occasion
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-(--brand-dark)/70 max-w-2xl mx-auto">
               From intimate celebrations to grand events, we have the perfect handcrafted gift
             </p>
           </div>
@@ -116,10 +116,10 @@ export default function GiftingServicesPage() {
                   <div className={`w-20 h-20 ${occasion.color} rounded-full flex items-center justify-center mx-auto mb-6`}>
                     {occasion.icon}
                   </div>
-                  <h3 className="text-xl font-semibold text-[#5D4432] mb-3">
+                  <h3 className="font-serif text-xl text-(--brand-primary) mb-3">
                     {occasion.title}
                   </h3>
-                  <p className="text-muted-foreground">
+                  <p className="text-(--brand-dark)/70">
                     {occasion.description}
                   </p>
                 </CardContent>
@@ -130,13 +130,13 @@ export default function GiftingServicesPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-gradient-to-br from-[#5D4432]/5 to-transparent">
+      <section className="py-20 bg-linear-to-br from-(--brand-primary)/5 to-transparent">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-[#5D4432] mb-4">
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-(--brand-dark) mb-4">
               Why Choose Our Gifting Service
             </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg text-(--brand-dark)/70 max-w-2xl mx-auto">
               We help you make every moment memorable with thoughtful details
             </p>
           </div>
@@ -144,15 +144,15 @@ export default function GiftingServicesPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
               <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-[#5D4432]/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <div className="text-[#5D4432]">
+                <div className="w-16 h-16 bg-(--brand-primary)/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <div className="text-(--brand-primary)">
                     {feature.icon}
                   </div>
                 </div>
-                <h3 className="text-lg font-semibold text-[#5D4432] mb-3">
+                <h3 className="font-serif text-lg text-(--brand-primary) mb-3">
                   {feature.title}
                 </h3>
-                <p className="text-muted-foreground text-sm">
+                <p className="text-(--brand-dark)/70 text-sm">
                   {feature.description}
                 </p>
               </div>
@@ -164,9 +164,9 @@ export default function GiftingServicesPage() {
       {/* CTA Section */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <Card className="max-w-4xl mx-auto bg-gradient-to-br from-[#5D4432] to-[#5D4432]/80 text-white border-0">
+          <Card className="max-w-4xl mx-auto bg-linear-to-br from-(--brand-primary) to-(--brand-primary)/80 text-white border-0">
             <CardContent className="p-12 text-center">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              <h2 className="font-serif text-3xl md:text-4xl font-bold mb-6">
                 Get in Touch for Wholesale Enquiries
               </h2>
               <p className="text-xl mb-8 text-white/90">
@@ -202,11 +202,11 @@ export default function GiftingServicesPage() {
               </div>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="bg-white text-[#5D4432] hover:bg-white/90">
+                <Button size="lg" className="bg-white text-(--brand-primary) hover:bg-white/90">
                   <Phone className="w-5 h-5 mr-2" />
                   Call Now
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-[#5D4432]">
+                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-(--brand-primary)">
                   <Mail className="w-5 h-5 mr-2" />
                   Send Email
                 </Button>
@@ -217,15 +217,15 @@ export default function GiftingServicesPage() {
       </section>
 
       {/* Bottom CTA */}
-      <section className="py-16 bg-[#5D4432]/5">
+      <section className="py-16 bg-(--brand-primary)/5">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl font-bold text-[#5D4432] mb-4">
+          <h2 className="font-serif text-2xl font-bold text-(--brand-dark) mb-4">
             Ready to Create Something Special?
           </h2>
-          <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
+          <p className="text-lg text-(--brand-dark)/70 mb-6 max-w-2xl mx-auto">
             Let us help you craft the perfect gifting experience that will be cherished for years to come.
           </p>
-          <Button size="lg" className="bg-[#5D4432] hover:bg-[#5D4432]/90">
+          <Button size="lg" className="bg-(--brand-primary) hover:bg-(--brand-primary)/90">
             <Gift className="w-5 h-5 mr-2" />
             Start Your Gifting Journey
           </Button>
