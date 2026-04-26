@@ -46,7 +46,7 @@ interface Product {
 interface Review {
   _id: string;
   productId: string;
-  userId: {
+  userId?: {
     _id: string;
     fullName: string;
     email: string;
@@ -725,14 +725,14 @@ export default function ProductDetailClient({ productSlug }: ProductDetailClient
                     <CardContent className="pt-6">
                       <div className="flex items-start gap-4">
                         <Avatar className="h-10 w-10">
-                          <AvatarImage src={review.userId.avatar} />
+                          <AvatarImage src={review.userId?.avatar} />
                           <AvatarFallback>
-                            {review.userId.fullName.charAt(0).toUpperCase()}
+                            {review.userId?.fullName?.charAt(0).toUpperCase() || 'U'}
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
-                            <span className="font-medium">{review.userId.fullName}</span>
+                            <span className="font-medium">{review.userId?.fullName || 'Anonymous User'}</span>
                             {renderStars(review.rating)}
                             {review.isVerified && (
                               <Badge variant="outline" className="text-xs">
