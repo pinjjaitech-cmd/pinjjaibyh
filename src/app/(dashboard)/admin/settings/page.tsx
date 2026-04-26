@@ -130,7 +130,6 @@ export default function SettingsPage() {
     try {
       setSaving(true);
       const formData = new FormData();
-      console.log("bannerData", bannerData)
       formData.append('banner', JSON.stringify(bannerData));
       if (desktopFile) formData.append('desktopImg', desktopFile);
       if (mobileFile) formData.append('mobileImg', mobileFile);

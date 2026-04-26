@@ -29,8 +29,6 @@ export const metadata: Metadata = {
 const Homepage = async () => {
   const homepageData = await getHomepageData()
 
-  console.log(homepageData)
-
   return (
     <div className='w-full font-sans h-full bg-(--brand-white) text-black'>
       <OfferMarquee marqueeTexts={homepageData.storeSettings.marqueeTexts || []} />

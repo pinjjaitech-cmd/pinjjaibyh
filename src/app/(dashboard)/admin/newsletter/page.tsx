@@ -90,7 +90,6 @@ const NewsletterManagementPage = () => {
       }
     } catch (error) {
       toast.error("Error fetching subscribers");
-      console.log(error)
     } finally {
       setLoading(false);
     }

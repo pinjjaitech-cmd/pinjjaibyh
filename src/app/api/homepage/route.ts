@@ -10,9 +10,6 @@ export async function GET() {
     // fetch the store settings first document to and sent the homepage data
     const storeSettings = await StoreSettings.findOne().sort({ createdAt: -1 })
 
-    console.log("storeSettings",storeSettings)
-
-
     return NextResponse.json({
       success: true,
       data: storeSettings

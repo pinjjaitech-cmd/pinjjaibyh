@@ -26,7 +26,6 @@ export const metadata: Metadata = {
 export default async function CategoriesPage() {
   await connectDB()
   let categories = await Category.find({ isActive: true }).sort({ order: 1, name: 1 }).lean() as any[]
-  console.log(categories)
   categories = categories.filter((category) => category.order >= 10)
 
   return (

@@ -122,8 +122,6 @@ const CreateProductPage = () => {
       .trim();
   };
 
-  console.log(formData)
-
   const handleTitleChange = (value: string) => {
     const slug = generateSlug(value);
     setFormData(prev => ({

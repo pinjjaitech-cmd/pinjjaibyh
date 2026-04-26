@@ -25,7 +25,6 @@ export default function ProductSearchClient() {
 
     const res = await fetch(`/api/products/search?${params.toString()}`)
     const json = await res.json()
-    console.log(json)
     setProducts(json.data || [])
     setLoading(false)
   }
@@ -52,7 +51,6 @@ export default function ProductSearchClient() {
 
     const res = await fetch(`/api/products/search?${params.toString()}`)
     const json = await res.json()
-    console.log(json)
     setProducts(prev => [...prev, ...(json.data || [])])
     setLoading(false)
   }

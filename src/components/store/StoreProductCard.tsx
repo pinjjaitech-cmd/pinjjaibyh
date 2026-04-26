@@ -3,7 +3,6 @@ import Image from 'next/image'
 import { Product } from '@/types'
 
 export default function StoreProductCard({ product }: { product: Product & { categories?: { _id: string; name: string; slug: string }[] } }) {
-  console.log("product coming",product)
   // Handle defaultVariantId - it could be an index (number as string) or skuCode
   let defaultVariant = null
   
