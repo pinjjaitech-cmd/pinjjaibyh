@@ -45,13 +45,13 @@ const AboutClient = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="relative overflow-hidden rounded-lg w-full md:w-1/2"
+            className="relative overflow-hidden rounded-lg w-full flex-1 md:w-1/2"
           >
             <div className="relative w-full h-[60vh] md:h-[70vh]">
-              <Image 
-                src="/harman-seera.jpeg" 
-                alt="Harman Seera" 
-                fill 
+              <Image
+                src="/harman-seera.jpg"
+                alt="Harman Seera"
+                fill
                 className="object-contain object-center"
                 sizes="(max-width: 768px) 100vw, 70vw"
                 priority
@@ -64,6 +64,7 @@ const AboutClient = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
+            className="flex-1"
           >
             <div className="mb-6">
               <span className="text-xs tracking-[0.3em] uppercase text-(--brand-primary) font-semibold">The Founder</span>
@@ -73,13 +74,30 @@ const AboutClient = () => {
             </h2>
             <div className="w-16 h-0.5 bg-(--brand-primary) mb-6" />
             <p className="text-(--brand-dark)/70 leading-relaxed mb-4">
-              Growing up between the bustling streets of modern India and the quiet rhythms of her ancestral village,
-              Harman always felt the pull of two worlds. Her mother's hands, weathered and wise, taught her that
-              every thread carries a story.
-            </p>
-            <p className="text-(--brand-dark)/70 leading-relaxed">
-              Pinjjai was born from the desire to give these stories a platform—to transform the invisible labor of
-              women artisans into visible, celebrated art. Each bag is an act of preservation, empowerment, and love.
+              Harman Seera, founder of Pinjjai By H, a brand established in 2020, is a Textile Designer trained
+              at Pearl Academy of Fashion, Delhi. With over a decade of experience, she seamlessly blends
+              formal design education with a deep-rooted connection to traditional craftsmanship. Her work
+              spans diverse textile surfaces and traditional embroidery techniques, shaped through years of
+              hands-on collaboration with artisans.
+            </p><p className="text-(--brand-dark)/70 leading-relaxed mb-4">
+              She has worked with organizations and NGOs dedicated to women’s empowerment, including
+              PPES and Fair Trade Refuges, experiences that deepened her commitment to creating
+              sustainable opportunities for women artisans while preserving traditional skills. Harman has
+              also worked with renowned designers such as Ashdeen Lilowala and Aneeth Arora, further
+              refining her design sensibility.
+            </p><p className="text-(--brand-dark)/70 leading-relaxed mb-4">
+              Inspired by nature and the quiet traditions of her ancestral village, her aesthetic reflects a
+              thoughtful balance between contemporary design and heritage craft. Guided early on by her
+              mother’s skilled hands, she grew up understanding that every thread carries a story—of
+              patience, resilience, and artistry.
+            </p><p className="text-(--brand-dark)/70 leading-relaxed mb-4">
+              Pinjjai was born from this belief: to bring these stories to light. Through her brand, Harman
+              transforms the often-unseen labor of women artisans into work that is visible, valued, and
+              celebrated.
+            </p><p className="text-(--brand-dark)/70 leading-relaxed mb-4">
+              Each creation goes beyond being a product—it is a symbol of preservation, empowerment, and
+              care, reflecting her enduring commitment to honoring craft and supporting artisan
+              communities.
             </p>
           </motion.div>
         </div>
