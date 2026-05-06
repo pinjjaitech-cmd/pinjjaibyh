@@ -79,7 +79,8 @@ export default function GiftingServicesPage() {
     <div className="w-full">
       {/* Hero Section */}
       <section className="relative bg-linear-to-br from-(--brand-primary)/10 to-(--brand-primary)/5 py-20">
-        <div className="container mx-auto px-4">
+          <img src="/Gifting.png" alt="Gifting Services Hero" className="object-cover opacity-20 absolute inset-0 w-full h-full" />
+        <div className="container mx-auto px-4 relative">
           <div className="text-center max-w-4xl mx-auto">
             <div className="mb-6">
               <Gift className="w-16 h-16 text-(--brand-primary) mx-auto" />
@@ -185,7 +186,7 @@ export default function GiftingServicesPage() {
                   <Clock className="w-8 h-8 mx-auto mb-3" />
                   <h3 className="font-semibold mb-2">Office Hours</h3>
                   <p className="text-lg">Monday - Friday</p>
-                  <p className="text-sm text-white/70">11:00 am - 5:00 pm IST</p>
+                  <p className="text-sm text-white/70">09:00 am - 5:00 pm IST</p>
                 </div>
                 
                 <div className="text-center">
@@ -206,7 +207,7 @@ export default function GiftingServicesPage() {
                   <Phone className="w-5 h-5 mr-2" />
                   Call Now
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-(--brand-primary)">
+                <Button size="lg" variant="outline" className="bg-white text-(--brand-primary) hover:bg-white/90">
                   <Mail className="w-5 h-5 mr-2" />
                   Send Email
                 </Button>
