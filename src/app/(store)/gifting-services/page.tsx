@@ -79,7 +79,6 @@ export default function GiftingServicesPage() {
     <div className="w-full">
       {/* Hero Section */}
       <section className="relative bg-linear-to-br from-(--brand-primary)/10 to-(--brand-primary)/5 py-20">
-          <img src="/Gifting.png" alt="Gifting Services Hero" className="object-cover opacity-20 absolute inset-0 w-full h-full" />
         <div className="container mx-auto px-4 relative">
           <div className="text-center max-w-4xl mx-auto">
             <div className="mb-6">
@@ -99,7 +98,10 @@ export default function GiftingServicesPage() {
       </section>
 
       {/* Occasions Section */}
-      <section className="py-20 bg-white">
+      <section className="pt-10 flex items-center justify-center bg-white">
+        <img src="/Gifting.png" alt="Gifting Services Hero" className="object-cover inset-0 w-[400px] h-auto" />
+      </section>
+      <section className="pt-10 pb-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-(--brand-dark) mb-4">
