@@ -13,28 +13,6 @@ export const metadata: Metadata = {
 }
 
 export default function WorkWithUsPage() {
-  const internshipAreas = [
-    {
-      icon: <Palette className="w-8 h-8 text-(--brand-primary)" />,
-      title: "Graphic Design",
-      description: "Create visual narratives that celebrate craftsmanship and tell our brand story"
-    },
-    {
-      icon: <Users className="w-8 h-8 text-(--brand-primary)" />,
-      title: "Visual Merchandising",
-      description: "Design beautiful displays that showcase our handcrafted pieces"
-    },
-    {
-      icon: <Package className="w-8 h-8 text-(--brand-primary)" />,
-      title: "Product Design",
-      description: "Develop new crochet designs and explore material possibilities"
-    },
-    {
-      icon: <PenTool className="w-8 h-8 text-(--brand-primary)" />,
-      title: "Content Creation",
-      description: "Craft compelling stories that highlight our artisans and craft"
-    }
-  ]
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
@@ -61,26 +39,6 @@ export default function WorkWithUsPage() {
             </p>
           </CardContent>
         </Card>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          {internshipAreas.map((area, index) => (
-            <Card key={index} className="hover:shadow-lg transition-shadow duration-300">
-              <CardHeader className="text-center">
-                <div className="mx-auto mb-4 p-3 bg-[#5D4432]/10 rounded-full w-fit">
-                  {area.icon}
-                </div>
-                <CardTitle className="text-xl font-semibold text-[#5D4432]">
-                  {area.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-muted-foreground">
-                  {area.description}
-                </p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
 
         <Card className="bg-linear-to-br from-(--brand-primary)/5 to-transparent">
           <CardHeader>
