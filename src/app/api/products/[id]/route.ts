@@ -5,6 +5,35 @@ import { requireAdmin } from '@/lib/admin-auth'
 import { uploadImage } from '@/lib/cloudinary'
 import { z } from 'zod'
 
+// Helper function to get changed fields between two objects
+function getChangedFields(original: any, updated: any): any {
+  const changed: any = {}
+  
+  for (const key in updated) {
+    if (updated[key] !== undefined) {
+      // Handle arrays (like categories, services, variants)
+      if (Array.isArray(updated[key])) {
+        if (JSON.stringify(updated[key]) !== JSON.stringify(original[key])) {
+          changed[key] = updated[key]
+        }
+      }
+      // Handle objects (like nested objects)
+      else if (typeof updated[key] === 'object' && updated[key] !== null) {
+        const nestedChanged = getChangedFields(original[key] || {}, updated[key])
+        if (Object.keys(nestedChanged).length > 0) {
+          changed[key] = nestedChanged
+        }
+      }
+      // Handle primitive values
+      else if (updated[key] !== original[key]) {
+        changed[key] = updated[key]
+      }
+    }
+  }
+  
+  return changed
+}
+
 // Product update schema
 const productUpdateSchema = z.object({
   title: z.string().min(1).max(200).optional(),
@@ -182,18 +211,24 @@ export async function PUT(
       }
     }
 
+    // Store original product data for comparison
+    const originalProduct = product.toObject()
+
     // Update the product
     Object.assign(product, validatedData)
     await product.save()
 
-    // Populate the product with categories details
-    const populatedProduct = await Product.findById(product._id)
+    // Get the updated product
+    const updatedProduct = await Product.findById(product._id)
       .populate('categories', 'name slug')
       .lean()
 
+    // Get only the changed fields
+    const changedFields = getChangedFields(originalProduct, updatedProduct)
+
     return NextResponse.json({
       success: true,
-      data: populatedProduct,
+      data: changedFields,
       message: 'Product updated successfully',
     })
   } catch (error: any) {
