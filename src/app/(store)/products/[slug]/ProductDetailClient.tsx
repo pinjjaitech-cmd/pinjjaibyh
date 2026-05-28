@@ -485,6 +485,12 @@ export default function ProductDetailClient({ productSlug }: ProductDetailClient
               </div>
             )}
 
+            <button className="w-16 h-16 fixed md:bottom-1/2 translate-y-1/2 bottom-5 md:right-10 right-5 bg-green-500 hover:bg-green-600 text-white font-semibold py-4 rounded-full flex items-center justify-center text-lg transition-all hover:shadow-lg">
+              <div className="relative">
+                <MessageCircle className="h-6 w-6" />
+              </div>
+            </button>
+
             {/* Actions */}
             <div className="space-y-4">
               {/* WhatsApp Booking Button */}
@@ -508,10 +514,6 @@ export default function ProductDetailClient({ productSlug }: ProductDetailClient
                   className="flex-1"
                 />
                 
-                <Button variant="outline" size="sm" className="hover:bg-muted transition-all">
-                  <Share2 className="h-4 w-4 mr-2" />
-                  Share
-                </Button>
               </div>
 
               {/* Stock Info */}
