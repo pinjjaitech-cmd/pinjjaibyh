@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Pinjjai by H - Handcrafted Crochet Bags | Empowering Women Artisans',
     description: 'Discover handcrafted crochet bags made by women artisans in Punjab. Each bag tells a story of tradition, empowerment, and sustainable craftsmanship.',
-    url: '/',
+    url: 'https://pinjjaibyh.com/',
     images: [
       {
         url: '/og-homepage.jpg',
