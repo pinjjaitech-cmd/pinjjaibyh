@@ -38,6 +38,10 @@ export function generateProductMetadata(product: Product): Metadata {
   const originalPrice = defaultVariant?.cuttedPrice;
   const hasDiscount = originalPrice && originalPrice > price;
   const discount = hasDiscount ? Math.round(((originalPrice - price) / originalPrice) * 100) : 0;
+
+
+  console.log("GENERATING SEO...")
+  console.log(product)
   
   const title = product.title;
   const description = product.description || 
