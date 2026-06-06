@@ -485,7 +485,7 @@ export default function ProductDetailClient({ productSlug }: ProductDetailClient
               </div>
             )}
 
-            <button className="w-16 h-16 fixed md:bottom-1/2 translate-y-1/2 bottom-5 md:right-10 right-5 bg-green-500 hover:bg-green-600 text-white font-semibold py-4 rounded-full flex items-center justify-center text-lg transition-all hover:shadow-lg">
+            <button onClick={handleWhatsAppBooking} className="w-16 h-16 fixed md:bottom-1/2 translate-y-1/2 bottom-5 md:right-10 right-5 bg-green-500 hover:bg-green-600 text-white font-semibold py-4 rounded-full flex items-center justify-center text-lg transition-all hover:shadow-lg">
               <div className="relative">
                 <MessageCircle className="h-6 w-6" />
               </div>
